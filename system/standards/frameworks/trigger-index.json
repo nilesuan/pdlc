@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "evaluation": "Match the calling command's brief (task description, changed-file paths, diff metadata) against each trigger's keyword list (case-insensitive substring on whole tokens). For every match, load the named spec file and set max_passes = 5. Spec paths are relative to the system root (the directory containing CLAUDE.md and MAPPING.md).",
+  "default_max_passes": 3,
+  "escalated_max_passes": 5,
+  "triggers": [
+    {
+      "id": "stride-threat-modeling",
+      "phases": [
+        "design"
+      ],
+      "keywords": [
+        "auth",
+        "authentication",
+        "PII",
+        "payment",
+        "billing",
+        "internet-facing",
+        "trust-boundary",
+        "STRIDE",
+        "threat-model"
+      ],
+      "spec": "standards/frameworks/STRIDE_THREAT_MODELING.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "characterization-testing",
+      "phases": [
+        "build"
+      ],
+      "keywords": [
+        "legacy-code",
+        "no-tests",
+        "refactor",
+        "behavior-preservation",
+        "untested"
+      ],
+      "spec": "standards/frameworks/CHARACTERIZATION_TESTING.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "contract-regression",
+      "phases": [
+        "build",
+        "test"
+      ],
+      "keywords": [
+        "public-API",
+        "shared-library",
+        "cross-team",
+        "consumer",
+        "provider",
+        "contract",
+        "Pact"
+      ],
+      "spec": "standards/frameworks/CONTRACT_REGRESSION.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "feature-flags",
+      "phases": [
+        "build",
+        "ship"
+      ],
+      "keywords": [
+        "behavior-change",
+        "phased-rollout",
+        "canary",
+        "percentage",
+        "flag",
+        "toggle"
+      ],
+      "spec": "standards/frameworks/FEATURE_FLAGS.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "experimentation",
+      "phases": [
+        "discover",
+        "ship",
+        "evolve"
+      ],
+      "keywords": [
+        "A/B-test",
+        "A/B test",
+        "experiment",
+        "hypothesis",
+        "primary-metric",
+        "hypothesis-ledger",
+        "holdout",
+        "stopping-rule"
+      ],
+      "spec": "standards/frameworks/EXPERIMENTATION.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "performance-budget",
+      "phases": [
+        "build",
+        "test"
+      ],
+      "keywords": [
+        "latency",
+        "p99",
+        "p95",
+        "hot-path",
+        "bundle-size",
+        "database-query",
+        "load-test"
+      ],
+      "spec": "standards/frameworks/PERFORMANCE_BUDGET.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "failure-injection",
+      "phases": [
+        "build",
+        "run"
+      ],
+      "keywords": [
+        "external-service",
+        "retry",
+        "circuit-breaker",
+        "availability",
+        "chaos",
+        "fault-injection"
+      ],
+      "spec": "standards/frameworks/FAILURE_INJECTION.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "composition-verification",
+      "phases": [
+        "build",
+        "test"
+      ],
+      "keywords": [
+        "wire",
+        "entry-point",
+        "daemon",
+        "lifecycle",
+        "register",
+        "multi-component",
+        "main()"
+      ],
+      "spec": "standards/frameworks/COMPOSITION_VERIFICATION.md",
+      "escalate_to_passes": 5
+    }
+  ]
+}

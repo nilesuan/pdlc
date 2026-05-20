@@ -1,0 +1,98 @@
+{
+  "$comment": "PDLC system — example Claude Code settings. Copy to .claude/settings.json and adjust paths. Documentation: https://docs.claude.com/en/docs/claude-code/settings",
+
+  "model": {
+    "$comment": "Default model for the main session. Sub-agents pick their own model per agent definition (opus / sonnet / haiku).",
+    "default": "claude-sonnet-4-6"
+  },
+
+  "permissions": {
+    "$comment": "Allow common read/edit operations without prompting. Anything writing to a shared system (push, terraform apply, slack) still prompts.",
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git show*)",
+      "Bash(rg*)",
+      "Bash(fd*)",
+      "Bash(ls*)",
+      "Bash(cat*)",
+      "Bash(pwd*)"
+    ],
+    "ask": [
+      "Bash(git push*)",
+      "Bash(git commit*)",
+      "Bash(gh pr*)",
+      "Bash(terraform apply*)",
+      "Bash(terraform destroy*)",
+      "Bash(aws*)",
+      "Bash(kubectl*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(:(){ :|:& };:)",
+      "Bash(curl * | bash*)",
+      "Bash(curl * | sh*)",
+      "Bash(wget * | bash*)",
+      "Bash(wget * | sh*)"
+    ]
+  },
+
+  "hooks": {
+    "$comment": "Hooks live in scripts/ — copy or symlink them into a path that fits your repo.",
+
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/system/scripts/context-monitor.sh"
+          }
+        ]
+      }
+    ],
+
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/system/scripts/context-monitor.sh"
+          }
+        ]
+      }
+    ],
+
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_DIR}/system/scripts/audit-log.sh"
+          }
+        ]
+      }
+    ]
+  },
+
+  "env": {
+    "$comment": "Tunables read by the scripts.",
+    "PDLC_CONTEXT_SOFT_LIMIT": "120000",
+    "PDLC_CONTEXT_HARD_LIMIT": "180000",
+    "PDLC_AUDIT_LOG": "${HOME}/.pdlc/audit.log"
+  },
+
+  "statusLine": {
+    "type": "command",
+    "command": "echo \"PDLC | $(git branch --show-current 2>/dev/null) | $(date -u +%H:%MZ)\""
+  }
+}
