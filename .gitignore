@@ -1,2 +1,34 @@
+# Editor / OS
 .vscode/
 .DS_Store
+
+# Claude Code runtime state (written into ~/.claude when this repo IS ~/.claude)
+/history.jsonl
+/.last-cleanup
+/sessions/
+/projects/
+/tasks/
+/todos/
+/plans/
+/shell-snapshots/
+/file-history/
+/paste-cache/
+/session-env/
+/cache/
+/ide/
+/backups/
+/logs/
+/statsig/
+/plugins/
+
+# Live, machine-specific settings — user-owned, never committed.
+# Start from settings.example.json; keep your own permission posture here.
+/settings.json
+/settings.local.json
+
+# Generated artifacts and pipeline state
+cdocs/
+.pipeline.json
+
+# Local audit log target (see settings env PDLC_AUDIT_LOG)
+.pdlc/

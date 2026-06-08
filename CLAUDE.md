@@ -1,157 +1,80 @@
-# CLAUDE.md — Research Rules (PDLC)
+# CLAUDE.md — Global Rules
 
-This repository is a **research workspace**, not a code project. The goal is to document the industry-grade Product Development Life Cycle for software (ideation → production → maintenance → iteration). See `VISION.md`.
+These rules apply to **every** Claude Code session running this system. Re-read at the start of every session.
 
-The output of this research will be used to make real decisions. **Accuracy is the only thing that matters.** A short, verified document beats a long, plausible one. Speed is irrelevant; correctness is everything.
-
-These rules are non-negotiable. Re-read them at the start of every session.
+The rules are short on purpose. Every rule has a one-line **Why** so you can apply judgment at the edges instead of pattern-matching the literal wording. The detailed standards live under `standards/`; this file is the index of non-negotiables.
 
 ---
 
-## 1. Core Principles (read first, every time)
+## 1. Truthfulness
 
-1. **Facts only.** Every claim in `research/` must be either (a) directly cited to a verifiable source, or (b) explicitly labeled as synthesis/inference with the reasoning shown.
-2. **Never fabricate.** Do not invent statistics, framework names, company practices, author names, dates, quotes, URLs, study titles, or version numbers. If you cannot find it, say so.
-3. **Never assume.** If something is unclear, ambiguous, or underspecified, do more research — or write "Unknown" / "Not verified." Assumptions silently become facts; do not allow it.
-4. **When in doubt, stop.** Do not write the sentence. Research the point, or mark it explicitly as unverified.
-5. **Sources are mandatory.** No claim ships without a source — or an explicit `[UNVERIFIED]` tag.
-6. **Verify before citing.** Read the source before citing it. Do not cite a URL you have not actually fetched and read in this session.
+- **Never assert a fact you have not verified.** If you have not read the file, fetched the URL, or run the command, you do not know what is in it. Mark unknowns explicitly with `[UNVERIFIED]`. *Why: hallucinated facts compound silently across a session and corrupt every downstream decision.*
+- **Never invent identifiers.** Function names, file paths, ARNs, URLs, ticket IDs, version numbers, error codes — search before naming. *Why: a plausible-looking identifier that doesn't exist sends the user on a fruitless investigation.*
+- **Quote the source verbatim when accuracy matters.** For policies, error messages, IAM statements, and SQL DDL, paraphrase only when you are certain the meaning is preserved. *Why: paraphrase erodes specificity that the user is depending on.*
+- **Match the source's confidence.** If the source says "may", do not write "will". *Why: confidence drift accumulates into false certainty.*
+- **Record mistakes the moment they are detected.** When the system is wrong — cross-verifier `REJECTED` vote, pre-output gate broken link, auto-rejected finding, or user correction — write a candidate lesson at `lessons/<YYYY>/LESSON-NNNN-candidate.md` per [`standards/process/LEARNING.md`](standards/process/LEARNING.md). *Why: lessons evaporate if recorded "later"; the durable record is what prevents repeat failures.*
+- **Findings are weighted by confidence and calibrated by history.** Every finding carries a numeric `confidence: 0-100`. The pass-runner applies per-prefix historical accuracy (`cdocs/review-calibration/calibration.json`) before scoring. Below the severity-gated minimum (`blocker ≥80, major ≥70, minor ≥60, nit ≥50, info ≥30`), a finding is auto-rejected. *Why: a high-severity claim with low confidence is a hallucination risk; the calibration loop also detects systematic agent drift over time. See [`standards/process/CALIBRATION.md`](standards/process/CALIBRATION.md).*
 
----
+## 2. Verification
 
-## 2. Anti-Hallucination Rules
+- **Read before editing.** Always Read a file in this conversation before invoking Edit or Write on it. *Why: stale memory of a file is worse than no memory.*
+- **Cross-verify load-bearing claims.** Findings from a sub-agent that the user will act on must pass the cross-verifier before being surfaced. *Why: this is the single highest-leverage hallucination control we have evidence for.*
+- **Run the command to confirm a behavior.** "I think `terraform plan` would catch this" is not a substitute for running it. *Why: terraform/AWS/CI behavior is not always what the docs imply.*
+- **Pre-output gate every authored artifact.** Any `.md` deliverable (ADR, runbook, problem statement, design doc) goes through `scripts/verify-artifact.sh` before the pass-runner reports completion. Broken relative links and unverified-tag ratios above `0.3` become findings. *Why: the cross-verifier checks findings; without the artifact gate, hallucinated links inside an authored doc reach the user unchecked. See `standards/ANTI_HALLUCINATION.md`.*
 
-These are the failure modes to actively guard against:
+## 3. Output discipline
 
-- **Plausible-but-fake citations.** Do not cite books, papers, articles, or specs unless you have fetched them or can point to a real, accessible URL. "Fowler wrote about this" is not allowed unless you found the specific Fowler piece and link it.
-- **Plausible-but-fake numbers.** No statistics, percentages, survey results, or "studies show…" without a fetched source and the methodology noted. If a number sounds reasonable, that is not evidence it is real.
-- **Plausible-but-fake frameworks.** Do not name methodologies, ceremonies, roles, or stages unless they are documented in a real source. "The 5 stages of X" must come from somewhere specific.
-- **Composite memories.** Do not blend several half-remembered sources into a single confident claim. Each claim → one (or more) specific, verifiable source.
-- **Authority laundering.** "Industry standard," "widely used," "most teams" are claims that need evidence (surveys, reports, multiple primary sources). Do not use these phrases to dodge sourcing.
-- **Date drift.** Practices and tools change. Note the date of every source. Prefer sources from the last 3 years for tooling/practice claims; older sources are fine for foundational concepts but flag the age.
-- **Self-citation.** Do not cite content generated earlier in the session as if it were a source. Synthesis can build on prior synthesis, but the underlying facts must trace back to external evidence.
+- **No invented files.** Do not create `*.md` files, README files, or "summary" files unless the user asks. *Why: it pollutes the workspace and trains the user to ignore your output.*
+- **No marketing tone, no emojis (unless asked).** Match the workspace's house style: terse, technical, citation-bearing. *Why: the user is making real decisions from this output.*
+- **Generated artifacts go under `cdocs/`.** Anything you generate that isn't source code or a tracked deliverable goes in a `cdocs/` directory; ensure that directory is gitignored. *Why: ad-hoc output isolation prevents Claude-generated files from creeping into git.*
+- **End-of-turn summary is one or two sentences.** What changed, what's next. Nothing else. *Why: long summaries encourage the user to skip them.*
 
-If you catch yourself writing something you "just know" — stop and verify. Training data is not a source.
+## 4. Workflow
 
----
+- **Work in feature branches; never push to main directly.** Use trunk-based development with short-lived branches and PR review. See `standards/development/TRUNK_BASED.md`. *Why: direct-to-main is the single largest correlate with production incidents in DORA data.*
+- **Commit logical chunks, not snapshots.** Each commit should be reviewable on its own. *Why: a 600-line "everything" commit cannot be reverted or reviewed.*
+- **Rebase before push.** Squash fixup commits; keep history linear. *Why: linear history is searchable; a merge-commit forest is not.*
+- **Code tasks run in worktrees; MRs auto-merge and delete the source branch.** When a sub-agent is spawned to produce code, it works in an isolated git worktree (`isolation: "worktree"`). At end-of-task it commits, pushes, opens an MR with auto-merge enabled AND source-branch deletion enabled (GitLab `--remove-source-branch`; GitHub `gh pr merge --auto --delete-branch`). The auto-merge gates in `standards/platform/AUTO_MERGE.md` still apply — auto-merge waits on them. *Why: worktrees prevent task interference; auto-merge with delete-branch keeps the trunk clean and prevents stale feature branches from accumulating.*
+- **Never run `--auto-approve` on `terraform apply` from your local machine.** That gate exists to prevent the worst class of accidents. *Why: a wrong PROD apply at your laptop is irrecoverable.*
+- **Never use `--no-verify` to bypass hooks.** If a hook fails, fix the underlying issue. *Why: hooks exist because someone got burned without them.*
+- **Never `git push --force` to a shared branch without explicit user approval.** *Why: force-push to a branch others are working on destroys their work.*
 
-## 3. Source Rules
+## 5. Tooling
 
-### What counts as a source
-- **Primary (preferred):** official documentation (e.g., Scrum Guide, IEEE/ISO standards, NIST SP, OWASP), vendor docs (GitHub, GitLab, AWS, Atlassian), peer-reviewed research, books with authors and editions, reports from named organizations (DORA/Google, Stack Overflow Developer Survey, State of DevOps), conference talks with speaker + venue + year.
-- **Secondary (acceptable with care):** reputable engineering blogs from named companies (Google, Netflix, Stripe, Shopify engineering blogs), Martin Fowler's site, ThoughtWorks Tech Radar, named-author posts on InfoQ / IEEE Software.
-- **Weak (use sparingly, flag explicitly):** Wikipedia (use for orientation, then chase its citations), Medium posts (only if author has verifiable expertise), aggregator sites.
-- **Not allowed as primary evidence:** AI-generated content, SEO content farms, undated blog posts, anonymous Stack Overflow answers, marketing pages making unsupported claims, ChatGPT/Claude/etc. screenshots.
+- **Use the dedicated tool, not Bash.** Read for reading, Edit for editing, Write for new files. *Why: Bash for these operations bypasses safety checks and is harder for the user to review.*
+- **Parallel calls when independent.** When you have multiple tool calls with no dependencies between them, send them in a single message. *Why: round-trip latency dominates throughput in this UX.*
+- **Sub-agents only via the pass-runner.** Any command that needs a sub-agent goes through `pass-runner` so the pass-loop and scoring stay coherent. *Why: ad-hoc agent spawning has no scoring, no retry, no cross-verification.*
+- **Sub-agents write their own output files.** When you spawn a sub-agent for a written artifact, brief it to Write/Edit directly at named target paths and return a single-line summary (≤25 words). Never accept long content back for the orchestrator to re-emit. *Why: re-emission duplicates work, wastes orchestrator context, and bloats history.*
 
-### How to cite
-Every claim that is not common knowledge gets an inline citation. Format:
+## 6. Scope
 
-```
-Claim. [Source Title — Author/Org, Year](URL) (accessed YYYY-MM-DD)
-```
+- **Do exactly what the user asked. No more.** No surprise refactors, no preemptive cleanup, no "while I was in there" changes. *Why: the user is approving a specific change; uninvited extras turn each PR into a negotiation.*
+- **Don't add error handling, fallbacks, or validation for impossible cases.** Trust framework guarantees. Validate at boundaries (user input, external API). *Why: defensive code at internal boundaries is dead weight that hides real bugs.*
+- **No backwards-compatibility hacks for code you control.** If something is unused, delete it. Don't rename it `_unused`. *Why: zombie code becomes load-bearing surprisingly fast.*
+- **Default to no comments.** Only when the *why* is non-obvious (a constraint, a workaround, a surprising invariant). Don't restate what the code does. *Why: comments rot; identifiers don't, if they're well chosen.*
 
-Each research document ends with a **Sources** section listing every URL fetched, with access date. If a source is paywalled or behind login, note that.
+## 7. Memory
 
-### When sources disagree
-Document the disagreement. Do not pick a winner silently. Format:
-> **Note:** Source A says X (link). Source B says Y (link). Difference appears to stem from [reason / unknown].
+- See `MEMORY.md` for the index of pointers to memory files. Build memory over time. Save user preferences, project context, and corrections — never code patterns or git history (those are derivable).
 
----
+## 8. Escalation
 
-## 4. Uncertainty & Honesty
+When in doubt:
 
-Use these tags explicitly in research documents — do not bury uncertainty in soft language.
-
-- `[VERIFIED]` — claim is directly supported by a fetched source cited inline.
-- `[SYNTHESIS]` — claim is your inference combining multiple cited sources. Show the sources and the reasoning.
-- `[UNVERIFIED]` — claim is included for completeness but no source was found. Must be flagged; reader needs to know.
-- `[CONTESTED]` — sources disagree; both views documented.
-- `[OUT OF DATE]` — source exists but is older than ~3 years and the area moves quickly.
-
-If a section would be mostly `[UNVERIFIED]`, do not write it. Either research further or omit.
-
-Forbidden hedges that hide uncertainty: "generally," "typically," "most teams," "it is well known that," "industry standard," "best practice" — unless backed by a specific cited source that uses the same framing.
+- For **reversible** decisions (file edits, branch creation, draft commits): proceed with reasonable assumptions.
+- For **shared-state** actions (push, PR creation, slack post, terraform apply, dropping a table): ask the user first, every time. Authorization once does not authorize again.
+- For **policy conflicts** (this file vs. user instruction): user instruction wins **for that specific scope**. Do not generalize.
 
 ---
 
-## 5. Research Workflow
+## 9. The standards
 
-For each topic / PDLC stage:
+Detailed rules live in `standards/`. The agents load the standards relevant to their role; you don't need to read all of them up front. The most-loaded ones:
 
-1. **Scope the question.** Write the specific question being researched at the top of the document. Vague questions produce vague answers.
-2. **Find primary sources first.** Start with standards bodies, official guides, and named-author canonical works. Use search to locate them; fetch and read them.
-3. **Read before quoting.** Use `WebFetch` / `WebSearch` to actually retrieve the page. Do not cite a URL you have only seen referenced elsewhere. If a fetch fails, note the failure rather than guessing the contents.
-4. **Cross-reference.** A claim is stronger with multiple independent sources. For any load-bearing claim (e.g., "the standard stages are X"), find at least 2 independent sources or mark as `[SYNTHESIS]`.
-5. **Take notes verbatim where it matters.** For definitions, stage names, and precise terms, quote the source exactly. Paraphrase only when the meaning is preserved and is clearly the author's view.
-6. **Record what you searched and what you found.** Each research file should include a `## Methodology` section listing search queries used and sources consulted (including ones rejected and why).
-7. **Re-read your draft against the sources.** Before saving, verify every cited claim is actually in its source. Hallucinated citations of real URLs are a common failure mode.
+- [`standards/AGENT_PREAMBLE.md`](standards/AGENT_PREAMBLE.md) — what every agent acknowledges before working
+- [`standards/ANTI_HALLUCINATION.md`](standards/ANTI_HALLUCINATION.md) — the unified anti-hallucination protocol (six-layer defense-in-depth)
+- [`standards/EVIDENCE.md`](standards/EVIDENCE.md) — claim schemas
+- [`standards/QUALITY.md`](standards/QUALITY.md) — the scoring rubric
+- [`standards/process/CALIBRATION.md`](standards/process/CALIBRATION.md) — per-prefix historical-accuracy calibration applied by the pass-runner during scoring
 
----
-
-## 6. Writing Rules
-
-- **No filler.** Do not pad with generic introductions ("In today's fast-paced software industry…"). Get to the verified content.
-- **Specific over general.** "Google's DORA report (2023) measured X" beats "studies have shown."
-- **Show the reasoning.** When synthesizing, write the inference chain so a reader can audit it.
-- **Distinguish description from prescription.** "Scrum defines X" (descriptive, citable) is different from "teams should do X" (prescriptive, opinion). Do not slide between them.
-- **Match the source's confidence.** If a source says "some teams," do not upgrade it to "teams." If it says "may," do not write "will."
-- **No emojis. No marketing tone.** This is technical research.
-
----
-
-## 7. Output Structure
-
-All research outputs go into `research/`. Suggested layout (create as needed; do not over-engineer up front):
-
-```
-research/
-  README.md                  — index of research documents and current status
-  00-overview/               — what PDLC is, scope of this research
-  01-ideation/               — discovery, problem validation, requirements
-  02-planning/               — roadmaps, prioritization, estimation
-  03-design/                 — architecture, UX, technical design
-  04-development/            — coding practices, version control, code review
-  05-testing/                — testing strategies, QA
-  06-release/                — CI/CD, deployment, release management
-  07-operations/             — monitoring, incident response, SRE
-  08-maintenance/            — support, iteration, deprecation
-  sources/                   — saved copies / notes from key references
-```
-
-Each document should include:
-- **Question:** what this document answers.
-- **Status:** Draft / Reviewed / Verified.
-- **Last updated:** YYYY-MM-DD.
-- **Body** with inline citations and uncertainty tags.
-- **Sources** section.
-- **Open questions** — what is still unverified or unknown.
-
-Do not write code in this repo unless the user explicitly asks.
-
----
-
-## 8. Self-Check Before Saving
-
-Before writing any research file to disk, verify:
-
-- [ ] Every factual claim has an inline citation OR an `[UNVERIFIED]` / `[SYNTHESIS]` tag.
-- [ ] Every cited URL was actually fetched and read in this session.
-- [ ] No invented authors, books, statistics, or framework names.
-- [ ] Numbers and dates match the source exactly.
-- [ ] Disagreements between sources are documented, not hidden.
-- [ ] Uncertainty is explicit, not hedged.
-- [ ] Sources section lists every URL with access date.
-- [ ] Open questions section captures what remains unverified.
-
-If any box cannot be checked, fix it or remove the affected content.
-
----
-
-## 9. When to Ask the User
-
-Ask, do not guess, when:
-- A topic could mean very different things (e.g., "release process" — for SaaS web app vs. mobile app vs. embedded firmware).
-- Scope is unclear (depth, audience, target organization size).
-- Sources conflict in ways that change the conclusion meaningfully.
-
-Do not ask for things you can find through research. The bias is: research first, ask only when research cannot resolve it.
+If a standard contradicts this file, this file wins. Update the standard.

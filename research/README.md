@@ -2,7 +2,7 @@
 
 **Scope:** Document the industry-grade end-to-end life cycle for building, shipping, operating, and maintaining software products.
 
-**Rules:** All content in this folder must follow [`../CLAUDE.md`](../CLAUDE.md): verified sources only, explicit uncertainty tags, no fabrication. Any claim without a fetched source is tagged `[UNVERIFIED]`, `[SYNTHESIS]`, `[CONTESTED]`, or `[OUT OF DATE]`.
+**Rules:** All content in this folder must follow [`../CLAUDE.md`](CLAUDE.md): verified sources only, explicit uncertainty tags, no fabrication. Any claim without a fetched source is tagged `[UNVERIFIED]`, `[SYNTHESIS]`, `[CONTESTED]`, or `[OUT OF DATE]`.
 
 **Last updated:** 2026-04-24
 **Overall status:** Draft — initial research pass complete. Each stage has been researched against primary sources; remaining open questions are consolidated below for a verification pass.
@@ -86,7 +86,7 @@
 
 - **51 documents**, ~75,000 words across 9 stages.
 - **Primary sources fetched and cited** in this research pass: ~220 unique URLs across agents (aggregate, with some overlap across stages).
-- Every factual claim is either cited inline to a URL fetched in this pass, or tagged with an explicit uncertainty marker per [`../CLAUDE.md`](../CLAUDE.md).
+- Every factual claim is either cited inline to a URL fetched in this pass, or tagged with an explicit uncertainty marker per [`../CLAUDE.md`](CLAUDE.md).
 
 ## Key open questions (verification pass needed)
 

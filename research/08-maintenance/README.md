@@ -112,7 +112,7 @@ Details (full formulas, respondent handling, comparison) are in `feedback-loops.
 
 ## Sources
 
-- [CLAUDE.md — local project rules, 2026](file:///Users/nile/Projects/pdlc/CLAUDE.md) (accessed 2026-04-24).
+- [CLAUDE.md — local research rules, 2026](../CLAUDE.md) (accessed 2026-04-24).
 - [Lehman's laws of software evolution — Wikipedia](https://en.wikipedia.org/wiki/Lehman%27s_laws_of_software_evolution) (accessed 2026-04-24).
 - [Software maintenance — Wikipedia](https://en.wikipedia.org/wiki/Software_maintenance) (accessed 2026-04-24).
 - [ISO/IEC/IEEE 14764:2022 — iso.org catalogue entry, via search metadata](https://www.iso.org/standard/80710.html) (accessed 2026-04-24; full standard not fetched, catalogue entry only).
