@@ -74,6 +74,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 |---|---|
 | `standards/operations/OBSERVABILITY.md` | `platform-team/developer-guidelines.md` §6 (Observability requirements); `research/07-operations/observability.md`; Google SRE Book; OpenTelemetry semantic conventions |
 | `standards/operations/ON_CALL.md` | `handbook/07-run.md`; `platform-team/on-call-operations.md`; `research/07-operations/incident-response.md`; `research/07-operations/sre.md`; Google SRE Book; Allspaw debriefing guide |
+| `standards/operations/SCHEDULED_WORK.md` | `handbook/07-run.md` §"Automate toil out"; `research/07-operations/sre.md` §"Toil"; Google SRE *Eliminating Toil* chapter; `CLAUDE.md` §5 + §8. The mapping of harness primitives (`/schedule` / `/loop` / `ScheduleWakeup` / background agents) onto the toil test is a system codification, flagged `[UNVERIFIED]` against any single named source. |
 
 ### Security
 
