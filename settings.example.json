@@ -47,7 +47,7 @@
   },
 
   "hooks": {
-    "$comment": "Hooks live in ~/.claude/scripts/ and are referenced by absolute ${HOME} path so they resolve from any working project. verify-artifact-hook.sh is the layer-6 pre-output gate (standards/ANTI_HALLUCINATION.md) wired at the tool boundary: it runs verify-artifact.sh on authored Markdown and feeds broken-link findings back to Claude (it self-filters to *.md and fails open). Hook entries also accept an `if` field (permission-rule syntax, e.g. \"if\": \"Edit(*.md)\") to narrow when they fire.",
+    "$comment": "Hooks live in ~/.claude/scripts/ and are referenced by absolute ${HOME} path so they resolve from any working project. verify-artifact-hook.sh is the layer-6 pre-output gate (standards/ANTI_HALLUCINATION.md) wired at the tool boundary: it runs verify-artifact.sh on authored Markdown and feeds broken-link findings back to Claude (it self-filters to *.md and fails open). Hook entries also accept an `if` field (permission-rule syntax, e.g. \"if\": \"Edit(*.md)\") to narrow when they fire. guard-dangerous-bash.sh is a PreToolUse Bash guard that hard-blocks the CLAUDE.md §4 non-negotiables (terraform/tofu auto-approve, --no-verify, force-push to main/master/develop) by exiting 2; it tokenizes with shlex so flags are told apart from quoted text, and fails open.",
 
     "SessionStart": [
       {
@@ -56,6 +56,18 @@
           {
             "type": "command",
             "command": "bash ${HOME}/.claude/scripts/context-monitor.sh"
+          }
+        ]
+      }
+    ],
+
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/scripts/guard-dangerous-bash.sh"
           }
         ]
       }
