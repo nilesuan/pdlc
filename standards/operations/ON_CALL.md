@@ -34,7 +34,7 @@ Every alert links to a runbook with:
 3. **Common causes (ranked by frequency).**
 4. **Mitigation steps** — including rollback (always option 1 if recent deploy).
 5. **Escalation path** — who to call if mitigation doesn't work in 15 min.
-6. **Last updated date** + author. Stale runbooks (> 6 months untouched) are flagged.
+6. **Last updated date** + author. Stale runbooks (> 6 months untouched) are flagged. The > 6-month / > 12-month stale-runbook flagging is a fixed-cadence `/schedule` candidate - see [`SCHEDULED_WORK.md`](SCHEDULED_WORK.md).
 
 A runbook that just says "investigate" is not a runbook.
 

@@ -21,7 +21,7 @@ Task-executing sub-agents work in isolated git worktrees (Claude Code's `Agent` 
 
 Auto-merge here is "set up the merge to proceed when gates pass" — not "merge regardless." The six gates in [`## The policy`](#the-policy) above still apply: CI green, CODEOWNERS satisfied, automated reviews ≤ minors, no unresolved threads, branch up-to-date, no freeze. If any gate fails or any trigger in [`## When auto-merge is NOT allowed`](#when-auto-merge-is-not-allowed) fires, auto-merge waits or is rejected per the same rules.
 
-The orchestrator (see [`../../agents/pass-runner.md`](../../agents/pass-runner.md) §"Briefing sub-agents") spawns code-changing sub-agents with worktree isolation. Each sub-agent follows [`../AGENT_PREAMBLE.md`](../AGENT_PREAMBLE.md) §"Working on code tasks (worktree + MR workflow)" for the commit / push / MR steps.
+The orchestrator (see [`../../agents/pass-runner.md`](../../agents/pass-runner.md) §"Briefing sub-agents") spawns code-changing sub-agents with worktree isolation. Each sub-agent follows [`../AGENT_PREAMBLE.md`](../AGENT_PREAMBLE.md) §"Working on code tasks (worktree + MR workflow)" for the commit / push / MR steps. Long-running worktree/MR sub-agents are awaited with the bounded-wait + liveness discipline in [`../operations/SCHEDULED_WORK.md`](../operations/SCHEDULED_WORK.md) - the worktree path and the background path share one wait discipline; never wait open-ended on the auto-merge gate.
 
 ## When auto-merge is NOT allowed
 

@@ -104,6 +104,16 @@ These three practices converge on the same operational claim: the mechanism for 
 
 The `/evolve` quarterly audit ([`../../commands/evolve.md`](../../commands/evolve.md)) reviews the active lessons in `lessons/INDEX.md` and confirms any due for retirement (≥ 1 year inactive AND structural-change criterion met) are retired. Lessons are recorded continuously by the pass-runner; they are retired in the periodic review. The two halves of the loop close in different cadences and that is intentional — recording must be fast, retirement must be deliberate.
 
+## Scheduled candidate sweep
+
+Candidate stubs are written continuously (on detection) but only reviewed in the quarterly `/evolve` pass, so a candidate can sit unseen for up to a quarter. A weekly `/schedule` routine shortens that latency without violating the no-auto-promote rule:
+
+1. Scan `lessons/<YYYY>/*-candidate.md`.
+2. Surface each stub's "What went wrong" and draft "How to prevent it" as a **digest only** - a single report the user reviews.
+3. Promote nothing, rename nothing. The routine never converts a candidate to `LESSON-NNNN-<slug>.md`; the user does, per Hard rule #2.
+
+The sweep is additive to, not a replacement for, the quarterly retirement pass above. It is digest-only because auto-promotion would let one bad correction become a permanent rule. Mechanism and approval per [`../operations/SCHEDULED_WORK.md`](../operations/SCHEDULED_WORK.md) and [`../../CLAUDE.md`](../../CLAUDE.md) §8.
+
 ## Hard rules
 
 1. **Record on detection, not later.** The pass-runner and cross-verifier write candidate stubs as part of their normal flow. A stub written "after the next pass" is a stub that does not exist.

@@ -101,9 +101,21 @@ Outcomes that stay `pending` for more than 30 days are excluded from the next re
 
 ---
 
+## Scheduled maintenance
+
+The in-pass recompute (every 5 resolved rows) is the fast path, but it only fires when a `/review` or phase command runs. Between sporadic runs, pending rows age and the snapshot drifts. A nightly `/schedule` cloud routine (`CronCreate`) closes that gap when no session is open:
+
+1. Read `cdocs/review-calibration/history.jsonl`. Flip rows whose outcome has been `pending` for more than 30 days to `expired` (excluded from recomputation, per §"Outcome resolution UX").
+2. Recompute `calibration.json` per §"Recomputation cadence", refreshing `_meta.computed_at`.
+3. Terminate in a deterministic artifact: a short log of rows expired and prefixes recomputed, or an explicit no-op when nothing changed.
+
+The routine is the pass-runner invoked headlessly - the same single recompute authority as Hard rule #1, not a second writer. `cdocs/` is gitignored, so it mutates local state only. Creating or changing the routine follows the unattended/autonomous escalation class in [`../../CLAUDE.md`](../../CLAUDE.md) §8; the mechanism choice follows [`../operations/SCHEDULED_WORK.md`](../operations/SCHEDULED_WORK.md).
+
+---
+
 ## Hard rules
 
-1. **No agent may write to `calibration.json` directly.** Only the pass-runner recomputes it, and only at the 5-row cadence. *Why: a sub-agent that can rewrite its own accuracy is no longer being audited.*
+1. **No agent may write to `calibration.json` directly.** Only the pass-runner recomputes it - at the 5-row cadence in-pass, or as the nightly scheduled-maintenance routine, which is the pass-runner invoked headlessly and not a new writer (see §"Scheduled maintenance"). *Why: a sub-agent that can rewrite its own accuracy is no longer being audited; the scheduled writer is the same authority, not a second one.*
 2. **The default 0.75 is per-prefix, not global.** A new prefix starts at default and graduates to per-prefix accuracy after 5 resolved rows. *Why: a global default would mask per-prefix asymmetry, which is the entire point of calibration.*
 3. **Calibration applies after cross-verifier `adjusted_confidence`, before scoring.** Never the other order. *Why: see "How the pass-runner applies it" — reordering double-counts the cross-verifier's correction.*
 4. **`calibration.json` must include `_meta.computed_at`.** *Why: a stale snapshot is worse than no snapshot; the timestamp lets the pass-runner detect drift.*
