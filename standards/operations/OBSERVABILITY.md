@@ -37,7 +37,7 @@ If a service does not have these four panels, the dashboard is incomplete.
 2. **Structured logs (JSON).** Required fields: `timestamp`, `level`, `service`, `trace_id`, `span_id`, `message`, plus domain fields. No string-formatted log lines.
 3. **No PII in logs without explicit redaction policy.** Email, phone, name → redact or hash. Per [`../security/AUTH.md`](../security/AUTH.md) and compliance.
 4. **Every alert has a runbook link.** No alert without an answer to "what does the on-call do?"
-5. **Alerts are actionable.** Symptom-based (user-impact) preferred over cause-based (CPU 90%). Cause-based alerts that have not fired for 60 days → archive.
+5. **Alerts are actionable.** Symptom-based (user-impact) preferred over cause-based (CPU 90%). Cause-based alerts that have not fired for 60 days → archive. The 60-day archival sweep and the quarterly SLO review (§"SLOs" rule 4) are fixed-cadence `/schedule` candidates - see [`SCHEDULED_WORK.md`](SCHEDULED_WORK.md).
 6. **Dashboards are versioned in code.** Grafana JSON / Datadog terraform / CloudWatch dashboards in `infra/` with the rest of the stack.
 
 ## Auto-rejection (used by platform-engineer)
