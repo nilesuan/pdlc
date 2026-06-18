@@ -7,7 +7,7 @@
   },
 
   "permissions": {
-    "$comment": "Allow common read/edit operations without prompting. Anything writing to a shared system (push, terraform apply, slack) still prompts.",
+    "$comment": "Allow common read/edit operations without prompting. Write/Edit are allowed deliberately: a sub-agent spawned to author files must never block on a write-approval prompt - a blocked write produces no output and hangs the whole pass (see lessons/2026 LESSON-0001). Spawn writing sub-agents with mode acceptEdits or rely on this allow-list. Anything writing to a shared system (push, terraform apply, slack) still prompts.",
     "allow": [
       "Read",
       "Edit",
