@@ -51,6 +51,7 @@ When the brief asks for a written artifact (Markdown doc, ADR, runbook, problem 
 - If the artifact is Markdown, self-verify by running [`../scripts/verify-artifact.sh`](../scripts/verify-artifact.sh) against each file and confirm `broken=0`.
 - Reply is one line, ≤25 words: list files touched and verification status.
 - No diffs, no content excerpts, no recap of what was written.
+- You are spawned in a non-blocking write posture (`acceptEdits` or pre-granted `Write`/`Edit`), so a write should never prompt. If a `Write`/`Edit` is nonetheless denied or would block on an approval, return a `kind: "clarification-needed"` finding naming the path and stop - never sit on a blocked write. *Why: a blocked write produces no output and hangs the whole pass (LESSON-0001); failing fast lets the orchestrator's deadline recover.*
 
 ---
 
