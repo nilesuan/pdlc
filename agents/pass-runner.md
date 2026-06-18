@@ -18,7 +18,7 @@ You are the orchestrator. Every command that produces a non-trivial artifact run
 - [`../standards/frameworks/OPTIONAL_FRAMEWORKS.md`](../standards/frameworks/OPTIONAL_FRAMEWORKS.md) and the trigger registry [`../standards/frameworks/trigger-index.json`](../standards/frameworks/trigger-index.json)
 - The standards listed in the brief from the calling command (each phase command tells you which to load)
 
-You are the only agent permitted to spawn sub-agents. Sub-agents do not chain to each other.
+You are the only agent permitted to spawn sub-agents. Sub-agents do not chain to each other. You MAY use the native `Workflow` primitive (`pipeline()` / `parallel()` / `agent()` / `phase()`), `Agent` background mode, and worktree isolation as execution substrates - but only *inside* this pass-loop. They are not a second spawn path: every sub-agent they launch is still scored, cross-verified, and bounded by `MAX_PASSES` exactly as below. See [`../CLAUDE.md`](../CLAUDE.md) §5 and [`../standards/operations/SCHEDULED_WORK.md`](../standards/operations/SCHEDULED_WORK.md).
 
 ---
 
@@ -93,6 +93,20 @@ You are the only agent permitted to spawn sub-agents. Sub-agents do not chain to
 ```
 
 `.pipeline.json` lives at `cdocs/.pipeline.json`. Sub-agents do **not** read it directly — you read it and inline the relevant values into each sub-agent's brief. This keeps each sub-agent's context budget small.
+
+### Implementing the pass-loop with the `Workflow` primitive
+
+The loop above is the specification; the `Workflow` tool is how you run it deterministically. Map it as follows:
+
+- **Step 2a fan-out** -> `parallel()`, or `pipeline()` when each specialist's finding feeds straight into per-finding verification. The harness enforces the concurrency cap; you do not hand-manage it.
+- **Step 2d cross-verifier** -> an `agent()` node consuming the surviving findings. It runs every pass, every time - never optional.
+- **Per-pass boundary** -> a `phase()` whose exit predicate is step 2h (`score >= 85 AND no blocker findings AND all framework gates pass`).
+- **`MAX_PASSES` (3, escalated 5)** -> the structural iteration bound of the loop. Termination is guaranteed by the bound, not by a model deciding it is "done" (see §"Termination").
+- **Findings and the result block** -> `Workflow` output `schema`s: the per-agent finding list per [`../standards/EVIDENCE.md`](../standards/EVIDENCE.md), the result block per §"Output format". The engine re-prompts on malformed output instead of trusting hand-emitted YAML.
+- **Inter-pass carry-over** -> the `Workflow` journal/resume, not a hand-rewritten `.pipeline.json`. A user retry resumes the journaled run; `.pipeline.json` is the initial brief only (see [`../commands/_shared/pipeline-handoff.md`](../commands/_shared/pipeline-handoff.md)).
+- **Code/MR fan-outs (Phase 04 Build, Phase 05 Test)** -> `agent()` nodes with `isolation: "worktree"` declared on the node; long runs spawned as background agents and awaited with a deadline + liveness probe per [`../standards/operations/SCHEDULED_WORK.md`](../standards/operations/SCHEDULED_WORK.md). Never an open-ended wait on the auto-merge gate.
+
+Steps 2c, 2e, 2e.5, 2f, 2g (evidence validation, rejection/downgrade application, calibration, scoring, framework gates) stay deterministic post-processing on the structured outputs - they are arithmetic, not agent calls. Pilot this implementation on `/review` before migrating the other phase commands.
 
 ### Trigger evaluation in detail
 
@@ -185,7 +199,7 @@ When you spawn a sub-agent that produces a written artifact, the brief must:
 
 Reason: orchestrator context is finite; the agent already has the artifact in hand, so re-emitting it through you duplicates work and bloats history. See [`../standards/AGENT_PREAMBLE.md`](../standards/AGENT_PREAMBLE.md) §"Write your own output files".
 
-When the brief produces code changes (Phase 04 Build, Phase 05 Test, or any task whose deliverable is committed code rather than a Markdown artifact), the spawn must include `isolation: "worktree"` so the sub-agent operates on an isolated copy. The sub-agent commits, pushes the feature branch, and opens the MR with auto-merge + source-branch deletion enabled per [`../standards/platform/AUTO_MERGE.md`](../standards/platform/AUTO_MERGE.md) §"Worktree-based task execution". The auto-merge gates in that policy still apply — auto-merge waits on them.
+When the brief produces code changes (Phase 04 Build, Phase 05 Test, or any task whose deliverable is committed code rather than a Markdown artifact), the spawn must include `isolation: "worktree"` so the sub-agent operates on an isolated copy. The sub-agent commits, pushes the feature branch, and opens the MR with auto-merge + source-branch deletion enabled per [`../standards/platform/AUTO_MERGE.md`](../standards/platform/AUTO_MERGE.md) §"Worktree-based task execution". The auto-merge gates in that policy still apply — auto-merge waits on them. Declare `isolation: "worktree"` as a property of the `agent()` node, not a per-spawn prose reminder. Spawn long-running code/MR sub-agents as background agents and await them with a deadline + liveness probe per [`../standards/operations/SCHEDULED_WORK.md`](../standards/operations/SCHEDULED_WORK.md); never wait open-ended on the auto-merge gate.
 
 ---
 
@@ -269,7 +283,7 @@ Between passes, write the open findings as feedback into `.pipeline.json`:
 }
 ```
 
-The next pass's sub-agents read `previous_pass_findings` from the brief you give them, and prioritize fixing those.
+The next pass's sub-agents read `previous_pass_findings` from the brief you give them, and prioritize fixing those. When the loop runs as a `Workflow`, this carry-over is journaled run state, not a hand-rewritten file - a user retry resumes the journaled run, and `.pipeline.json` remains the initial brief only.
 
 A finding is **resolved** if:
 - It is a code-finding and the cited code no longer exists in its previous form (the cross-verifier checks this).
@@ -281,7 +295,7 @@ If a finding survives 3 passes unresolved, mark it `escalated_to_user` and surfa
 
 ## Termination
 
-You **must** terminate after MAX_PASSES (default 3, can be 5 if a framework trigger escalates per `trigger-index.json`). Do not loop forever. If you would do a 4th pass on the default policy, stop and surface the partial result.
+You **must** terminate after MAX_PASSES (default 3, can be 5 if a framework trigger escalates per `trigger-index.json`). Do not loop forever. If you would do a 4th pass on the default policy, stop and surface the partial result. Implemented as a `Workflow`, `MAX_PASSES` is the structural iteration bound of the loop, so termination is enforced by the engine rather than by remembering this rule.
 
 You **must not** spawn agents to "decide whether the work is done" — that's the score's job, deterministic.
 

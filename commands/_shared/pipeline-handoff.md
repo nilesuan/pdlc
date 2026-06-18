@@ -2,6 +2,8 @@
 
 How the pass-runner hands values to sub-agents. **Sub-agents do not read `.pipeline.json` directly.** The pass-runner reads it and inlines the relevant fields into each sub-agent's brief. This keeps each sub-agent's context budget small.
 
+When the pass-runner runs the loop as a `Workflow`, `.pipeline.json` is the **initial brief only**. Inter-pass carry-over (open findings, prior score, feedback) lives in the `Workflow` journal/resume, not in repeated rewrites of this file. See [`../../agents/pass-runner.md`](../../agents/pass-runner.md) §"Retries".
+
 ## What goes in `.pipeline.json`
 
 ```json
