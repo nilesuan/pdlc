@@ -30,6 +30,15 @@ Audit the test suite (or a portion of it) against pyramid/trophy shape, coverage
 - Repo accessible, test runner installed.
 - The user named the scope (default: full repo).
 
+## Scheduling
+
+Two "Done when" obligations are inherently recurring and belong on a schedule, not a manual `/test`:
+
+- **Nightly DAST + weekly quarantine burn-down.** Wire the nightly DAST-against-staging and the weekly flake-quarantine burn-down as `/schedule` cloud routines. This makes the Pass-3 "wired into the recurring schedule" criterion concrete.
+- **In-session flake watch.** While triaging flakes, use `/loop` or `ScheduleWakeup` to re-poll CI flake history rather than re-running `/test` by hand.
+
+Routines are read-only / report-producing and approval-gated per [`../CLAUDE.md`](../CLAUDE.md) §8; mechanism choice per [`../standards/operations/SCHEDULED_WORK.md`](../standards/operations/SCHEDULED_WORK.md).
+
 ## Dependency Gate
 
 | Artifact | Path | Required by |

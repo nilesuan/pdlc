@@ -37,6 +37,15 @@ Audit the operations surface for reliability: SLOs measured and observed, observ
 - Observability platform identified (Datadog / Honeycomb / Grafana stack / CloudWatch).
 - On-call tool identified (PagerDuty / Opsgenie / GitLab on-call).
 
+## Scheduling
+
+Reliability is continuous, but this audit only fires on a manual `/run`. Move the recurring checks onto a schedule:
+
+- **Weekly run-readiness routine.** A `/schedule` routine that invokes `/run <service>` for SLO burn-rate evaluation and postmortem aging (the "> 30 days unclosed: surface" check), producing the audit artifact when no session is open.
+- **In-session burn-rate watch.** While working an incident or a budget question, poll burn rate with `ScheduleWakeup` (bounded) rather than a foreground wait.
+
+A scheduled agent **audits, it does not page.** PagerDuty / Opsgenie still owns the live rotation and alerting; the routine surfaces findings, it never replaces the on-call path. Read-only and approval-gated per [`../CLAUDE.md`](../CLAUDE.md) §8 and [`../standards/operations/SCHEDULED_WORK.md`](../standards/operations/SCHEDULED_WORK.md).
+
 ## Dependency Gate
 
 | Artifact | Path | Required by |

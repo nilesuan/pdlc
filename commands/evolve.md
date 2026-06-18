@@ -35,6 +35,15 @@ Confirm the team has live feedback loops, controlled tech debt, clean dependenci
 - The product is post-launch (Phase 06 complete on at least one release).
 - Some quarter has elapsed (this command is a recurring quarterly audit; running it on day 30 of launch is premature).
 
+## Scheduling
+
+This audit is recurring by definition. Register it as a `/schedule` cloud routine rather than relying on someone remembering each quarter:
+
+- **Quarterly full audit.** A `/schedule` routine on the first business day of each quarter that invokes `/evolve <service>` - the routine runs the command (and therefore the pass-runner, scoring, and cross-verifier), never raw sub-agents.
+- **Weekly dependency + CVE sweep.** A separate, lighter routine for the "Dependencies + Security" checks below, so a 7-day critical-CVE SLA is not first noticed on day 89 of the quarter.
+
+Both are read-only / report-producing and gated by the unattended/autonomous escalation class in [`../CLAUDE.md`](../CLAUDE.md) §8; mechanism choice per [`../standards/operations/SCHEDULED_WORK.md`](../standards/operations/SCHEDULED_WORK.md).
+
 ## Dependency Gate
 
 | Artifact | Path | Required by |
