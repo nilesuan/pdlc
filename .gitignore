@@ -20,11 +20,15 @@
 /logs/
 /statsig/
 /plugins/
+/.claude/
+/teams/
+/.caveman-active
 
-# Live, machine-specific settings — user-owned, never committed.
+# Live, machine-specific settings - user-owned, never committed.
 # Start from settings.example.json; keep your own permission posture here.
 /settings.json
 /settings.local.json
+/.claude.json
 
 # Generated artifacts and pipeline state
 cdocs/
