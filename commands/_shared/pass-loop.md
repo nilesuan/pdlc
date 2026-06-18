@@ -31,4 +31,4 @@ Shared snippet: every phase command dispatches the same way once it has assemble
    .pipeline.json that includes user_response and prior findings.
 ```
 
-This pattern is reused verbatim by every command. If you need a different orchestration shape, write a new shared snippet rather than diverging silently.
+This pattern is reused verbatim by every command. The pass-runner MAY implement it via the native `Workflow` primitive (schema-validated fan-out + concurrency cap + journal/resume); background agents handle long detached runs; the in-line pass-loop is the default synchronous shape. If you need a different orchestration shape, consult [`../../standards/operations/SCHEDULED_WORK.md`](../../standards/operations/SCHEDULED_WORK.md) and write a new shared snippet rather than diverging silently.
