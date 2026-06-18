@@ -1,10 +1,12 @@
 {
-  "$comment": "PDLC system — annotated settings template. This repo is ~/.claude; scripts resolve under ${HOME}/.claude/scripts. The live file is settings.json. Docs: https://docs.claude.com/en/docs/claude-code/settings",
+  "$comment": "PDLC system - annotated settings template. This repo is ~/.claude; scripts resolve under ${HOME}/.claude/scripts. The live file is settings.json. Verified opt-in keys (exact syntax per code.claude.com/docs/en/settings): fallbackModel (array of model-ids tried in order on overload); skillOverrides ({\"<skill>\": \"on|name-only|user-invocable-only|off\"}); disableSkillShellExecution (boolean, blocks inline shell in skills/commands/plugins); autoMemoryDirectory (absolute or ~/-prefixed path). requiredMinimumVersion/requiredMaximumVersion are managed-settings-only, not user settings. Docs: https://docs.claude.com/en/docs/claude-code/settings",
 
   "model": {
     "$comment": "Default model for the main session. Sub-agents pick their own model per agent definition (opus / sonnet / haiku).",
     "default": "claude-sonnet-4-6"
   },
+
+  "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"],
 
   "permissions": {
     "$comment": "Allow common read/edit operations without prompting. Write/Edit are allowed deliberately: a sub-agent spawned to author files must never block on a write-approval prompt - a blocked write produces no output and hangs the whole pass (see lessons/2026 LESSON-0001). Spawn writing sub-agents with mode acceptEdits or rely on this allow-list. Anything writing to a shared system (push, terraform apply, slack) still prompts.",
