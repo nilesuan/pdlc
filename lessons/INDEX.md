@@ -6,6 +6,7 @@ This file is the index the pass-runner reads before pass 1 to load matched lesso
 
 | ID | Date | Trigger | Phases | Keywords | Status | Title |
 |---|---|---|---|---|---|---|
+| LESSON-0002 | 2026-06-12 | xv-rejected | 01 | verbatim-quote, fabricated-quote, spliced-quote, paraphrase-as-verbatim, interpolated-parenthetical, miscited-source, one-quote-one-source, byte-identical, SOURCES-array, corroboration, cross-verifier | active | Verbatim-quote integrity: a quote must appear verbatim on its single cited source |
 
 ## Retired
 
