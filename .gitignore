@@ -23,6 +23,12 @@
 /.claude/
 /teams/
 /.caveman-active
+/chrome/
+/daemon/
+/daemon.log
+/jobs/
+/telemetry/
+/mcp-needs-auth-cache.json
 
 # Live, machine-specific settings - user-owned, never committed.
 # Start from settings.example.json; keep your own permission posture here.
