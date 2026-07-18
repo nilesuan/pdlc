@@ -36,6 +36,7 @@ The rules are short on purpose. Every rule has a one-line **Why** so you can app
 - **Commit logical chunks, not snapshots.** Each commit should be reviewable on its own. *Why: a 600-line "everything" commit cannot be reverted or reviewed.*
 - **Rebase before push.** Squash fixup commits; keep history linear. *Why: linear history is searchable; a merge-commit forest is not.*
 - **Code tasks run in worktrees; MRs auto-merge and delete the source branch.** When a sub-agent is spawned to produce code, it works in an isolated git worktree (`isolation: "worktree"`). At end-of-task it commits, pushes, opens an MR with auto-merge enabled AND source-branch deletion enabled (GitLab `--remove-source-branch`; GitHub `gh pr merge --auto --delete-branch`). The auto-merge gates in `standards/platform/AUTO_MERGE.md` still apply — auto-merge waits on them. *Why: worktrees prevent task interference; auto-merge with delete-branch keeps the trunk clean and prevents stale feature branches from accumulating.*
+- **Worktrees branch from a fresh `main`.** Agent worktrees are created from an up-to-date `origin/main` (the harness `worktree.baseRef: fresh` default), not a stale local checkout. *Why: branching a task off a stale trunk reintroduces already-fixed bugs and manufactures avoidable merge conflicts.*
 - **Never run `--auto-approve` on `terraform apply` from your local machine.** That gate exists to prevent the worst class of accidents. *Why: a wrong PROD apply at your laptop is irrecoverable.*
 - **Never use `--no-verify` to bypass hooks.** If a hook fails, fix the underlying issue. *Why: hooks exist because someone got burned without them.*
 - **Never `git push --force` to a shared branch without explicit user approval.** *Why: force-push to a branch others are working on destroys their work.*
@@ -54,6 +55,7 @@ The rules are short on purpose. Every rule has a one-line **Why** so you can app
 ## 6. Scope
 
 - **Do exactly what the user asked. No more.** No surprise refactors, no preemptive cleanup, no "while I was in there" changes. *Why: the user is approving a specific change; uninvited extras turn each PR into a negotiation.*
+- **Spotted out-of-scope issues are recorded, not fixed inline.** When you notice a minor defect unrelated to the current task, capture it as a tracked ticket or backlog item and fix it in its own scoped change. *Why: the Boy Scout Rule's opportunistic cleanup is deliberately not adopted here - it inflates PRs and breaks small-PR discipline; capturing the issue keeps it from being lost without smuggling it into an unrelated diff. See `standards/development/PRINCIPLES.md`.*
 - **Don't add error handling, fallbacks, or validation for impossible cases.** Trust framework guarantees. Validate at boundaries (user input, external API). *Why: defensive code at internal boundaries is dead weight that hides real bugs.*
 - **No backwards-compatibility hacks for code you control.** If something is unused, delete it. Don't rename it `_unused`. *Why: zombie code becomes load-bearing surprisingly fast.*
 - **Default to no comments.** Only when the *why* is non-obvious (a constraint, a workaround, a surprising invariant). Don't restate what the code does. *Why: comments rot; identifiers don't, if they're well chosen.*
@@ -82,5 +84,6 @@ Detailed rules live in `standards/`. The agents load the standards relevant to t
 - [`standards/EVIDENCE.md`](standards/EVIDENCE.md) — claim schemas
 - [`standards/QUALITY.md`](standards/QUALITY.md) — the scoring rubric
 - [`standards/process/CALIBRATION.md`](standards/process/CALIBRATION.md) — per-prefix historical-accuracy calibration applied by the pass-runner during scoring
+- [`standards/development/PRINCIPLES.md`](standards/development/PRINCIPLES.md) - cross-cutting design principles (KISS, DRY/AHA, YAGNI, composition-over-inheritance, CQS, PoLE, fail-fast, zero-trust) and their precedence
 
 If a standard contradicts this file, this file wins. Update the standard.
