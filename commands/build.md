@@ -31,7 +31,7 @@ Implement a single feature on a short-lived feature branch using TDD where possi
 
 ## Pre-flight
 
-- Issue exists in tracker (Linear / Jira / GitHub Issues) with acceptance criteria.
+- Issue exists in tracker (Linear / Jira / GitHub Issues) with acceptance criteria, or a `/split` story file (`planning/<release>/stories/NNN-epic/NNN-story.md`) supplies them.
 - A design exists or this is small enough to not warrant one (handbook: "non-trivial" threshold).
 - Working tree clean. On a feature branch (or about to create one).
 
@@ -39,7 +39,7 @@ Implement a single feature on a short-lived feature branch using TDD where possi
 
 | Artifact | Path | Required by |
 |---|---|---|
-| Issue with acceptance criteria | tracker (URL recorded in PR description) | Pass 1 |
+| Acceptance-criteria source | tracker issue (URL recorded in PR description) or `/split` story file (`planning/<release>/stories/NNN-epic/NNN-story.md`) | Pass 1 |
 | Design ADR (when non-trivial) | `docs/adr/NNNN-*.md` | Pass 1 |
 | Threat model entry (when touching auth/PII/payments) | `docs/threat-models/<feature>.md` | Pass 1 (escalates STRIDE framework) |
 | Feature branch off main | `git symbolic-ref HEAD` ≠ `refs/heads/main` | Pass 1 |

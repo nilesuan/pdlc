@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Execution Plan",
+  "description": "Wave-based story execution plan produced by /split. Each story is a build-ready unit for /build. No JIRA fields; dependencies are a plain list of story ids.",
+  "type": "object",
+  "required": ["release", "waves"],
+  "properties": {
+    "release": {
+      "type": "string",
+      "description": "Release name; matches the planning/<release-name>/ directory."
+    },
+    "totalStories": {
+      "type": "integer",
+      "description": "Count of story records across all waves."
+    },
+    "totalEstimateHours": {
+      "type": "number",
+      "description": "Sum of every story estimateHours."
+    },
+    "max_parallel": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 4,
+      "description": "Maximum number of stories to dispatch concurrently within a wave. Stories beyond this limit queue and run as earlier ones finish."
+    },
+    "epics": {
+      "type": "array",
+      "description": "Epics in this release.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "summary", "path"],
+        "properties": {
+          "id": { "type": "string", "description": "Epic identifier (e.g., epic-001)." },
+          "name": { "type": "string", "description": "Epic name." },
+          "summary": { "type": "string", "description": "One-to-three sentence statement of what the epic delivers." },
+          "path": { "type": "string", "description": "Path to the epic.md file, relative to the release directory." }
+        }
+      }
+    },
+    "waves": {
+      "type": "array",
+      "description": "Dependency-ordered waves. All stories in a wave may run in parallel up to max_parallel.",
+      "items": {
+        "type": "object",
+        "required": ["wave", "stories"],
+        "properties": {
+          "wave": {
+            "type": "integer",
+            "description": "1-based wave number; determines execution order."
+          },
+          "max_parallel": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Per-wave override of the top-level max_parallel."
+          },
+          "stories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "epic", "title", "estimateHours", "path", "type"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Story identifier (e.g., story-001-001)."
+                },
+                "epic": {
+                  "type": "string",
+                  "description": "Parent epic id."
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Story title; mirrors the story.md H1."
+                },
+                "estimateHours": {
+                  "type": "number",
+                  "description": "Effort estimate in hours. Target ~1 (low end of the 1-2h band in standards/process/TASK_SIZING.md); 2 is the hard ceiling before splitting into sub-tasks."
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path to the story.md file, relative to the release directory."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["Story", "Task", "Sub-task"],
+                  "description": "Story delivers user or operator-visible value; Task is technical work with no direct visible value; Sub-task is a split of a parent story that exceeded the 2h ceiling."
+                },
+                "dependencies": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Story ids that must complete before this story starts. The full set must form a DAG (no cycles)."
+                },
+                "acceptanceCriteria": {
+                  "type": "array",
+                  "description": "Acceptance criteria in given/when/then form. One primary criterion per story (see standards/process/TASK_SIZING.md).",
+                  "items": {
+                    "type": "object",
+                    "required": ["given", "when", "then"],
+                    "properties": {
+                      "given": { "type": "string" },
+                      "when": { "type": "string" },
+                      "then": { "type": "string" }
+                    }
+                  }
+                },
+                "subtasks": {
+                  "type": "array",
+                  "description": "Present only when a story exceeded the 2h ceiling and was split. Ids use the parent id plus a letter suffix (e.g., story-001-001a).",
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "title", "estimateHours"],
+                    "properties": {
+                      "id": { "type": "string" },
+                      "title": { "type": "string" },
+                      "estimateHours": { "type": "number" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
