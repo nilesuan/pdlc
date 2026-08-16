@@ -36,6 +36,12 @@
 /settings.local.json
 /.claude.json
 
+# Live persistent memory - user-owned, never committed. Memory files hold
+# machine-specific and private detail (hostnames, account identifiers,
+# resource IDs). Start from MEMORY.example.md.
+/MEMORY.md
+/memory/
+
 # Generated artifacts and pipeline state
 cdocs/
 .pipeline.json

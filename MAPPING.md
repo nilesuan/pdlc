@@ -134,7 +134,7 @@ These specs are loaded by `pass-runner` only when a brief contains the activatio
 |---|---|---|
 | `README.md` | Architecture overview, install, layout | This system; `SYSTEM.md` analysis |
 | `CLAUDE.md` | Global rules (truthfulness, verification, scope, etc.) | This system; `research/CLAUDE.md` research-rules; `platform-team/engineering-policy.md` |
-| `MEMORY.md` | Index of memory pointers | This system pattern |
+| `MEMORY.example.md` | Template for the memory-pointer index; the live `MEMORY.md` and `memory/` are gitignored (machine-specific, private) | This system pattern |
 | `MAPPING.md` | This file | This system |
 | `standards/AGENT_PREAMBLE.md` | Non-negotiables every agent loads | This system |
 | `standards/ANTI_HALLUCINATION.md` | Unified six-layer anti-hallucination protocol; defines the pre-output gate (layer 6), hallucination KPIs, and escalation thresholds | This system; research/CLAUDE.md (research rules) §§1–4; CLAUDE.md (global rules) §§1–2; cross-verifier; EVIDENCE.md; QUALITY.md |

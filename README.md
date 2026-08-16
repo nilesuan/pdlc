@@ -33,7 +33,7 @@ The handbook tells a human *what* to do. The research tells a human *why*. The p
 ```
 ~/.claude/                  (this repository)
   CLAUDE.md                 global operating rules (loaded every session)
-  MEMORY.md                 index of persistent memory pointers
+  MEMORY.example.md         template for the memory index (live MEMORY.md and memory/ are gitignored)
   MAPPING.md                system file → handbook chapter → research file index
   README.md                 this file
   VISION.md  NOTES.md       project intent and raw decision notes
