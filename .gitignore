@@ -29,6 +29,7 @@
 /daemon.lock
 /daemon.status.json
 /gh-pr-status-cache.json
+/image-cache/
 /jobs/
 /telemetry/
 /mcp-needs-auth-cache.json
