@@ -14,7 +14,10 @@
 
 set -uo pipefail
 
-PIPELINE_FILE="${CLAUDE_PROJECT_DIR:-$PWD}/.pipeline.json"
+# Authoritative location is cdocs/.pipeline.json (agents/pass-runner.md line 95,
+# commands/_shared/pass-loop.md). This previously pointed at the project root,
+# where the file is never written, so the context-budget warning never fired.
+PIPELINE_FILE="${CLAUDE_PROJECT_DIR:-$PWD}/cdocs/.pipeline.json"
 SOFT_LIMIT_TOKENS=${PDLC_CONTEXT_SOFT_LIMIT:-120000}
 HARD_LIMIT_TOKENS=${PDLC_CONTEXT_HARD_LIMIT:-180000}
 

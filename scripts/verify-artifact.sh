@@ -71,9 +71,16 @@ LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 # External URL pattern (used for listing only).
 URL_RE = re.compile(r"https?://[^\s)>\]]+")
 
-# Uncertainty tags. We match the literal bracketed forms.
+# Uncertainty tags. Match the bare bracketed form AND the qualified forms this
+# repo actually writes - "[UNVERIFIED - reason]" and "[UNVERIFIED: reason]".
+# Matching only "[UNVERIFIED]" made the tally silently report 0 for most of the
+# repo, which disabled the unverified-ratio check in CLAUDE.md section 2.
+# The leading "\[" anchor still keeps [VERIFIED] from matching [UNVERIFIED].
 TAG_NAMES = ["VERIFIED", "UNVERIFIED", "SYNTHESIS", "CONTESTED", "OUT OF DATE"]
-TAG_PATTERNS = {name: re.compile(r"\[" + re.escape(name) + r"\]") for name in TAG_NAMES}
+TAG_PATTERNS = {
+    name: re.compile(r"\[" + re.escape(name) + r"(?:\s*[-:][^\]]*)?\]")
+    for name in TAG_NAMES
+}
 
 broken = []
 resolved = []

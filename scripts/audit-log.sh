@@ -8,7 +8,7 @@
 #
 # Record fields:
 #   ts          ISO-8601 timestamp
-#   session_id  Claude Code session ID (from CLAUDE_SESSION_ID, if set)
+#   session_id  Claude Code session ID (from the hook payload; env fallback)
 #   tool        Tool name
 #   ok          0 / 1 — success
 #   summary     One-line summary if available (e.g., file path, command name)
@@ -23,7 +23,10 @@ LOG_FILE="${PDLC_AUDIT_LOG:-$HOME/.pdlc/audit.log}"
 mkdir -p "$(dirname "$LOG_FILE")" 2>/dev/null || true
 
 ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-session_id="${CLAUDE_SESSION_ID:-unknown}"
+# The hook payload carries session_id. The env var is CLAUDE_CODE_SESSION_ID,
+# NOT CLAUDE_SESSION_ID - that name does not exist and always fell back to
+# "unknown", silently destroying session correlation in every record.
+session_id="${CLAUDE_CODE_SESSION_ID:-unknown}"
 
 # Read the hook payload from stdin; fall back to an empty object if absent.
 payload=$(cat 2>/dev/null || echo '{}')
@@ -32,6 +35,8 @@ payload=$(cat 2>/dev/null || echo '{}')
 if command -v jq >/dev/null 2>&1; then
   tool=$(printf '%s' "$payload" | jq -r '.tool_name // "unknown"' 2>/dev/null || echo "unknown")
   ok=$(printf '%s' "$payload" | jq -r 'if (.tool_response.error // false) then 0 else 1 end' 2>/dev/null || echo 1)
+  payload_sid=$(printf '%s' "$payload" | jq -r '.session_id // ""' 2>/dev/null || echo "")
+  [[ -n "$payload_sid" ]] && session_id="$payload_sid"
   summary=$(printf '%s' "$payload" | jq -r '
     .tool_input.file_path
     // .tool_input.command
