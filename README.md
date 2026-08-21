@@ -38,7 +38,7 @@ The handbook tells a human *what* to do. The research tells a human *why*. The p
   README.md                 this file
   VISION.md  NOTES.md       project intent and raw decision notes
 
-  agents/                   specialist sub-agents (opus/sonnet/haiku per role)
+  agents/                   specialist sub-agents (opus/sonnet per role)
     pass-runner.md          multi-pass orchestrator (only agent that spawns others)
     cross-verifier.md       hallucination killer — confirms claims against sources
     systems-architect.md    architecture and design review

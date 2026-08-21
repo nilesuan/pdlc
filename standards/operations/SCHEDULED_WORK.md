@@ -4,7 +4,7 @@
 
 ## What this standard governs
 
-Recurring, long-running, and time-driven work has several execution mechanisms now: `/schedule` cloud routines (cron), `/loop` (in-session interval), `ScheduleWakeup` (in-session self-paced/bounded wait), and background agents (`Agent` background mode / `TaskCreate` / `Monitor`). This standard says which mechanism fits which work, and the discipline every mechanism must follow.
+Recurring, long-running, and time-driven work has several execution mechanisms now: `/schedule` cloud routines (cron), `/loop` (in-session interval), `ScheduleWakeup` (in-session self-paced/bounded wait), and background agents (`Agent` background mode / `Bash(run_in_background: true)` / `Monitor`). This standard says which mechanism fits which work, and the discipline every mechanism must follow.
 
 The decision filter is the **toil test**. The *Eliminating Toil* chapter gives an enumerable definition: toil is work that is **manual, repetitive, automatable, tactical, devoid of enduring value, and scales linearly with the service** ([`../../research/07-operations/sre.md`](../../research/07-operations/sre.md) §"Toil"). Google's target is keeping toil below 50% of an SRE's time. Work that matches the toil test is a candidate to automate onto a schedule or a loop rather than re-doing it by hand each session. The handbook frames automation as "the principal way to reduce repetitive operational work" ([`../../handbook/07-run.md`](../../handbook/07-run.md) §"Automate toil out").
 
@@ -16,7 +16,7 @@ The decision filter is the **toil test**. The *Eliminating Toil* chapter gives a
 | One-time work at a **future** time | `/schedule` one-shot | Same cron substrate, single fire. |
 | Recurring **in-session** check (poll a sub-agent's output files, watch a deploy/CI/SLO signal while you work) | `/loop` (fixed interval) | Lightweight; re-runs the prompt each interval until the session ends. |
 | Bounded **condition-wait** or self-paced poll within a session (wait on an auto-merge gate, wait for a background fan-out to land) | `ScheduleWakeup` | Self-paces wake-ups with a deadline; no foreground `sleep`. |
-| A **single long-running task** that should detach and re-invoke on completion | Background agent (`Agent` background / `TaskCreate` + `Monitor`) | Detached execution with a completion signal, still scored. |
+| A **single long-running task** that should detach and re-invoke on completion | Background agent (`Agent` background / `Bash(run_in_background: true)` + `Monitor`) | Detached execution with a completion signal, still scored. |
 | Deterministic **multi-agent fan-out** (review dimensions, migration sites) | `Workflow` primitive, **inside** the pass-runner | Schema-validated fan-out + retry + resume; see [`../../agents/pass-runner.md`](../../agents/pass-runner.md). |
 
 The hard line: `/loop` and `ScheduleWakeup` are **session-scoped** and die with the session. `/schedule` survives session close. Choose by that lifetime first, then by shape.
