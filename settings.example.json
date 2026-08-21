@@ -1,15 +1,12 @@
 {
-  "$comment": "PDLC system - annotated settings template. This repo is ~/.claude; scripts resolve under ${HOME}/.claude/scripts. The live file is settings.json. Verified opt-in keys (exact syntax per code.claude.com/docs/en/settings): fallbackModel (array of model-ids tried in order on overload); skillOverrides ({\"<skill>\": \"on|name-only|user-invocable-only|off\"}); disableSkillShellExecution (boolean, blocks inline shell in skills/commands/plugins); autoMemoryDirectory (absolute or ~/-prefixed path). requiredMinimumVersion/requiredMaximumVersion are managed-settings-only, not user settings. Docs: https://docs.claude.com/en/docs/claude-code/settings",
-
-  "model": {
-    "$comment": "Default model for the main session. Sub-agents pick their own model per agent definition (opus / sonnet / haiku).",
-    "default": "claude-sonnet-4-6"
-  },
-
-  "fallbackModel": ["claude-sonnet-4-6", "claude-haiku-4-5"],
-
+  "$comment": "PDLC system - annotated settings template. This repo is ~/.claude; scripts resolve under ${HOME}/.claude/scripts. The live file is settings.json. Verified opt-in keys (exact syntax per code.claude.com/docs/en/settings): fallbackModel (array of model-ids tried in order on overload); skillOverrides ({\"<skill>\": \"on|name-only|user-invocable-only|off\"}); disableSkillShellExecution (boolean, blocks inline shell in skills/commands/plugins); autoMemoryDirectory (absolute or ~/-prefixed path). requiredMinimumVersion/requiredMaximumVersion are managed-settings-only, not user settings. Docs: https://docs.claude.com/en/docs/claude-code/settings MODEL: `model` must be a STRING (an object fails validation); aliases (opus/sonnet/haiku/fable) track the latest model and avoid pinning to a superseded generation. HOOKS: `$comment` is NOT valid inside `hooks` - every key there is parsed as a hook event name and an unknown one is silently ignored, so the hooks explanation lives here instead: Hooks live in ~/.claude/scripts/ and are referenced by absolute ${HOME} path so they resolve from any working project. verify-artifact-hook.sh is the layer-6 pre-output gate (standards/ANTI_HALLUCINATION.md) wired at the tool boundary: it runs verify-artifact.sh on authored Markdown and feeds broken-link findings back to Claude (it self-filters to *.md and fails open). Hook entries also accept an `if` field (permission-rule syntax, e.g. \"if\": \"Edit(*.md)\") to narrow when they fire. guard-dangerous-bash.sh is a PreToolUse Bash guard that hard-blocks the CLAUDE.md \u00a74 non-negotiables (terraform/tofu auto-approve, --no-verify, force-push to main/master/develop) by exiting 2; it tokenizes with shlex so flags are told apart from quoted text, and fails open.",
+  "model": "sonnet",
+  "fallbackModel": [
+    "sonnet",
+    "haiku"
+  ],
   "permissions": {
-    "$comment": "Allow common read/edit operations without prompting. Write/Edit are allowed deliberately: a sub-agent spawned to author files must never block on a write-approval prompt - a blocked write produces no output and hangs the whole pass (see lessons/2026 LESSON-0001). Spawn writing sub-agents with mode acceptEdits or rely on this allow-list. Anything writing to a shared system (push, terraform apply, slack) still prompts.",
+    "$comment": "Allow common read/edit operations without prompting. Write/Edit are allowed deliberately: a sub-agent spawned to author files must never block on a write-approval prompt - a blocked write produces no output and hangs the whole pass (see lessons/2026 LESSON-0001). Spawn writing sub-agents with mode acceptEdits or rely on this allow-list. Anything writing to a shared system (push, terraform apply, slack) still prompts. The fork-bomb deny rule was removed: `Bash(:(){ :|:& };:)` is rejected by the permission-rule parser (\"Empty parentheses\") and was SKIPPED, so it never blocked anything. Fork bombs and the other CLAUDE.md \u00a74 non-negotiables are enforced by scripts/guard-dangerous-bash.sh (PreToolUse, exit 2).",
     "allow": [
       "Read",
       "Edit",
@@ -38,17 +35,13 @@
     ],
     "deny": [
       "Bash(rm -rf /*)",
-      "Bash(:(){ :|:& };:)",
       "Bash(curl * | bash*)",
       "Bash(curl * | sh*)",
       "Bash(wget * | bash*)",
       "Bash(wget * | sh*)"
     ]
   },
-
   "hooks": {
-    "$comment": "Hooks live in ~/.claude/scripts/ and are referenced by absolute ${HOME} path so they resolve from any working project. verify-artifact-hook.sh is the layer-6 pre-output gate (standards/ANTI_HALLUCINATION.md) wired at the tool boundary: it runs verify-artifact.sh on authored Markdown and feeds broken-link findings back to Claude (it self-filters to *.md and fails open). Hook entries also accept an `if` field (permission-rule syntax, e.g. \"if\": \"Edit(*.md)\") to narrow when they fire. guard-dangerous-bash.sh is a PreToolUse Bash guard that hard-blocks the CLAUDE.md §4 non-negotiables (terraform/tofu auto-approve, --no-verify, force-push to main/master/develop) by exiting 2; it tokenizes with shlex so flags are told apart from quoted text, and fails open.",
-
     "SessionStart": [
       {
         "matcher": "*",
@@ -60,7 +53,6 @@
         ]
       }
     ],
-
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -72,7 +64,6 @@
         ]
       }
     ],
-
     "UserPromptSubmit": [
       {
         "matcher": "*",
@@ -84,7 +75,6 @@
         ]
       }
     ],
-
     "PostToolUse": [
       {
         "matcher": "Bash|Edit|Write|MultiEdit",
@@ -106,14 +96,12 @@
       }
     ]
   },
-
   "env": {
     "$comment": "Tunables read by the scripts.",
     "PDLC_CONTEXT_SOFT_LIMIT": "120000",
     "PDLC_CONTEXT_HARD_LIMIT": "180000",
     "PDLC_AUDIT_LOG": "${HOME}/.pdlc/audit.log"
   },
-
   "statusLine": {
     "type": "command",
     "command": "echo \"PDLC | $(git branch --show-current 2>/dev/null) | $(date -u +%H:%MZ)\""
