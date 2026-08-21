@@ -38,7 +38,7 @@ Audit (or design) the deploy path to be automatic, fast, and reversible. Continu
 
 The canary "monitor → promote or rollback" window (Done-when; Pass-loop step 10) is an inherently long-running bounded-decision watch, not a manual dashboard stare:
 
-- **Canary watch.** Watch the canary with a bounded background agent (`TaskCreate` + `Monitor`) or a short-interval `/loop` with a hard deadline; it surfaces the promote-or-rollback decision when the metric window closes.
+- **Canary watch.** Watch the canary with a bounded background agent (`Agent` background mode + `Monitor`) or a short-interval `/loop` with a hard deadline; it surfaces the promote-or-rollback decision when the metric window closes.
 - The watch is **deadline-bounded with a cheap status poll** per [`../standards/operations/SCHEDULED_WORK.md`](../standards/operations/SCHEDULED_WORK.md); never an open-ended wait.
 - **Promote / rollback stays a human gate.** The agent surfaces the decision; the actual promote or rollback is a shared-state action requiring user approval per [`../CLAUDE.md`](../CLAUDE.md) §8.
 
