@@ -6,7 +6,7 @@
 # the layer-6 gate from standards/ANTI_HALLUCINATION.md, mechanized at the tool boundary
 # instead of left to the pass-runner to remember.
 #
-# Wiring (settings.json): a PostToolUse hook with matcher "Write|Edit|MultiEdit".
+# Wiring (settings.json): a PostToolUse hook with matcher "Write|Edit".
 # Input: the PostToolUse JSON on stdin (tool_input.file_path holds the absolute path).
 # Output: on a broken link, exit 0 with {"decision":"block","reason":...} which surfaces
 # the finding to Claude. PostToolUse cannot undo the write; this is feedback, not a veto.
