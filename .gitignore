@@ -33,6 +33,7 @@
 /jobs/
 /telemetry/
 /mcp-needs-auth-cache.json
+/uploads/
 
 # Live, machine-specific settings - user-owned, never committed.
 # Start from settings.example.json; keep your own permission posture here.
