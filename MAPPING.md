@@ -92,6 +92,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 | `standards/platform/GITLAB_SECURITY.md` | `platform-team/developer-guidelines.md` §11 (Repository standards), §9 (Deployment requirements), §10 (Security baseline); `NOTES.md`; OWASP CI/CD Top 10; SLSA |
 | `standards/platform/AUTO_MERGE.md` | `NOTES.md`; `platform-team/engineering-policy.md` §8 |
 | `standards/platform/AWS_NAMING.md` | `platform-team/developer-guidelines.md` §1 (Master naming schema), §2 (AWS resource naming & limits), §3 (Required tags) |
+| `standards/platform/MULTI_PRODUCT_FRONTEND.md` | `platform-team/developer-guidelines.md` "External exposure" (lines 501-506); `standards/security/AUTH.md` (Sessions / OIDC / Authorization); `handbook/03-design.md` line 412 (frontend default, micro-frontend threshold); CloudFront service model `2020-05-31` and the `next` npm package, re-checked by `scripts/verify-multi-product-frontend-claims.sh` |
 
 ### Documentation
 
