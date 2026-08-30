@@ -9,7 +9,7 @@ type: policy
 **Audience:** All engineers who ship code on the platform (product engineering + platform engineering).
 **Status:** Binding. Every clause is a hard rule unless explicitly marked "Default." Deviations require a recorded ADR per §12.
 **Scope:** software engineering practices — branching, integration, delivery, testing, design, architecture, code review, commits, refactoring, measurement. Platform delivery machinery (GitLab repo configuration, Terraform workflow, container tagging, deploy gates, auto-merge rules) is **out of scope** for Phase 1 and will be published as a Phase 2 companion document (see `NOTES.md`).
-**Last updated:** 2026-04-24.
+**Last updated:** 2026-08-30 (amended: §1.5 pointer, §3.4 flag-by-default, §3.5 deployability test, §3.6). Prior revision 2026-04-24.
 
 ---
 
@@ -38,6 +38,7 @@ type: policy
 
 **Hard rule 1.5.** Incomplete work is hidden behind **feature flags** or **branch-by-abstraction**, not behind long-lived branches. If work cannot be shipped behind a flag, split it smaller.
 `[VERIFIED]` Fowler lists "hide work-in-progress" (e.g., behind flags) as one of the eleven CI practices (same source).
+This clause covers *incomplete* work. §3.4 extends flagging to **all** features, complete or not, and fixes the default state at off.
 
 **Hard rule 1.6.** No code freezes, no integration phases.
 `[VERIFIED]` DORA TBD capability: high performers "don't have code freezes and don't have integration phases" ([DORA — Trunk-Based Development capability](https://dora.dev/capabilities/trunk-based-development/) accessed 2026-04-24).
@@ -85,6 +86,34 @@ type: policy
 
 **Default 3.3.** Continuous **Deployment** (every passing trunk commit automatically deploys to production) is an optional extension on top of Continuous Delivery. Adopt only when canary strategy, feature flags, and observability are strong enough that the loss of the human gate does not raise the change failure rate (§11).
 `[VERIFIED]` Distinction documented in `research/06-release/cicd.md` §2, citing continuousdelivery.com (on-demand, gated) and [Continuous deployment — Wikipedia](https://en.wikipedia.org/wiki/Continuous_deployment) (accessed 2026-04-24) ("a more complete form of automation than continuous delivery").
+
+**Hard rule 3.4 (flag-by-default).** **Every feature ships behind a feature flag, and the flag's default state is off.** A *feature* is any new or changed user-reachable behavior. Concretely:
+
+1. The flag exists and is referenced in code before the feature's first commit merges. No feature reaches trunk on an unflagged code path.
+2. The default is **off in every environment, production included**. The off path is the path a fresh deploy of main takes.
+3. Enabling is a **separate, deliberate, revertible action** - a flag change, never a merge and never a deploy.
+4. When flag state cannot be resolved (flag service unreachable, config missing, evaluation error), the code takes the **off** path. Fail-closed to the old behavior, never fail-open to the new one.
+5. The **off path is tested**: an automated test asserts the default-off behavior, so "off" is a supported state and not an untried branch.
+6. Deletion is planned at creation: release toggles carry a cleanup ticket and a deadline of **30 days post-100% rollout** (`standards/frameworks/FEATURE_FLAGS.md`).
+
+Non-features are out of scope for this clause: behavior-preserving refactors, bug fixes that restore already-specified behavior, and changes with no user-reachable surface. Ops and permissioning toggles default to their **safe** state rather than literally off (a kill switch defaults to "service enabled"); "safe" means the state production is already running in. Any other deviation requires an ADR per §12.
+
+`[SYNTHESIS]` This is a local strengthening of Hodgson's release-toggle category, not a claim Hodgson makes in this form. Hodgson supplies the mechanism (the release-toggle category, whose purpose is to let incomplete code ship to production as dormant functionality) and its cost model: teams should "view their Feature Toggles as inventory which comes with a carrying cost, and work to keep that inventory as low as possible" ([Feature Toggles - Pete Hodgson, 2017](https://martinfowler.com/articles/feature-toggles.html); that sentence is recorded verbatim and marked `[VERIFIED]` in `research/06-release/feature-flags.md` §1, fetched 2026-04-24). Making it universal-and-off-by-default is this organization's choice: it applies the merge / deploy / release / expose decoupling (`research/06-release/README.md` §"The four levels of release decoupling") to every change, and it is what makes §3.1's "releasable" claim survivable, since a merged-but-off feature cannot break a production release. Clause 6 is the direct answer to Hodgson's carrying-cost warning.
+
+**Hard rule 3.5 (the deployability test).** §3.1 and §3.2 are claims about trunk. **A test proves them on every commit to main.** A **prod-deployability gate** runs post-merge on `main` and fails when the commit could not go to production as it stands. At minimum it asserts:
+
+1. The release artifact builds, and it is the same artifact production would run (same digest, no per-environment rebuild).
+2. A **deploy dry-run against production configuration** succeeds: task/manifest renders, `terraform plan` on the prod workspace succeeds, every config value and secret reference resolves.
+3. The artifact passes a **smoke test in a production-equivalent environment with every new flag off** - the exact state a prod deploy would land in per §3.4.
+4. Schema changes apply forward against a production-shaped schema, and the **previous** code revision still runs against the migrated schema (expand/contract).
+5. The **rollback path is exercised**: the prior artifact can be redeployed and passes the same smoke test.
+
+**A red deployability gate is a stop-the-line event under §2.3.** Merges pause until trunk is deployable again. The gate is never `allow_failure`, never skipped for speed, and never satisfied by a human assertion that it "would probably deploy". Pipeline mechanics for the gate are in `standards/release/DEPLOYMENT_PIPELINE.md` (Phase 2 territory per the scope note); the *requirement that it exist and block* is Phase 1 policy.
+
+`[SYNTHESIS]` Humble's definition supplies the standard - deployments should be "predictable, routine affairs that can be performed on demand" ([Continuous Delivery - continuousdelivery.com](https://continuousdelivery.com/) accessed 2026-04-24, quoted in §3.1) - and Fowler's practice 3 supplies the shape: "make the build self-testing", with a broken build fixed immediately (practice 6) ([Continuous Integration - Fowler, 2024 rev.](https://martinfowler.com/articles/continuousIntegration.html) accessed 2026-04-24, §2.2). Naming deployability as a specific self-test with the five assertions above is this organization's codification; no cited source enumerates that list.
+
+**Hard rule 3.6.** The two clauses above are a pair, and neither works alone. Flag-by-default (§3.4) is what lets an unfinished feature sit on a deployable trunk; the deployability gate (§3.5) is what stops the trunk from silently drifting out of that state. A team that adopts one without the other gets either a trunk full of half-live features or a green pipeline that has never checked the thing it claims.
+`[SYNTHESIS]` Follows from §3.1-§3.5; stated explicitly because the two clauses are usually adopted separately.
 
 ---
 
