@@ -13,6 +13,7 @@
 6. Publish      — push image to ECR with digest, attach SBOM, sign
 7. Deploy dev   — auto, on every main merge
 8. Smoke test   — health checks, synthetic transactions in dev
+8b. Deployability gate - prod-config dry-run, flags-off smoke, migration compat, rollback rehearsal (blocking; see CONTINUOUS_DELIVERY.md)
 9. Manual gate  — preprod
 10. Deploy prep — same digest, preprod env config
 11. Validate    — integration tests against preprod
@@ -34,6 +35,8 @@ A red stage stops the pipeline. No bypass paths.
 6. **Auto-rollback on canary failure.** Defined error/latency thresholds trigger rollback without human action.
 7. **GitLab MR pipeline runs `terraform plan`; merge to main runs `terraform apply`.** (Single-runner OIDC model — see [`../platform/TERRAFORM_DISCIPLINE.md`](../platform/TERRAFORM_DISCIPLINE.md).)
 8. **Pipeline definition lives in repo.** `.gitlab-ci.yml` (or equivalent) is reviewed alongside code. No "click-to-edit" pipeline state.
+9. **The prod-deployability gate is a required job on `main`.** It runs after the dev smoke test and before any promotion is offered, and it asserts the five items in [`CONTINUOUS_DELIVERY.md`](CONTINUOUS_DELIVERY.md) §"The prod-deployability gate": artifact identity, prod-config dry-run, flags-off smoke, migration compatibility, rollback rehearsal. Red gate = stop-the-line; no `allow_failure`, no skip. Assertion 2's prod dry-run is **read-only**: it is a `terraform plan` against the prod workspace under a plan-scoped OIDC role, and it neither performs nor authorizes an apply. It does not replace rule 7's apply-on-merge flow for the infrastructure repo - it is a check that a *service* commit would render and resolve against prod config (see [`../platform/TERRAFORM_DISCIPLINE.md`](../platform/TERRAFORM_DISCIPLINE.md)).
+10. **Deploys land with new flags off.** A promotion never changes flag state. Enabling a feature is a separate flag action, taken after the deploy is healthy (see [`../frameworks/FEATURE_FLAGS.md`](../frameworks/FEATURE_FLAGS.md) §"Baseline mandate").
 
 ## Auto-rejection (used by platform-engineer)
 
@@ -47,6 +50,11 @@ A red stage stops the pipeline. No bypass paths.
 | Pipeline defined outside the repo (UI-edited) | Major |
 | Secrets passed as plain env vars in pipeline definition | Blocker |
 | `terraform apply --auto-approve` from a non-pipeline runner | Blocker |
+| No prod-deployability gate on the main pipeline | Blocker |
+| Deployability gate is `allow_failure` / skippable / not required | Blocker |
+| Promotion offered while the deployability gate is red | Blocker |
+| Deploy job flips feature flags on as part of the deploy | Major |
+| Gate's prod dry-run uses a role that can apply, not just plan | Blocker |
 
 ## Environment promotion model
 
@@ -57,6 +65,8 @@ prod     ← manual trigger; same digest as the preprod that passed validation
 ```
 
 Promotions skip stages → blocker. (You cannot promote a digest to prod that has not run in preprod.)
+
+The deployability gate sits on the `main` pipeline itself, not on a promotion: it answers "could this commit go to prod?" on every commit, including the ones nobody intends to promote today. That is what keeps the answer honest on the day someone needs it.
 
 ## Anti-patterns to flag
 
@@ -69,5 +79,6 @@ Promotions skip stages → blocker. (You cannot promote a digest to prod that ha
 
 - [`../../platform-team/developer-guidelines.md`](../../platform-team/developer-guidelines.md) §9 (Deployment).
 - [`../../NOTES.md`](../../NOTES.md) — explicit user policy on environment auto/manual gating.
+- [`../../platform-team/engineering-policy.md`](../../platform-team/engineering-policy.md) §3.5 - binding text for the deployability gate (marked `[SYNTHESIS]` there); §3.4 for flags-off deploys.
 - Humble & Farley, *Continuous Delivery* — pipeline-as-code, build-once-promote.
 - Research: [`../../research/06-release/`](../../research/06-release/).

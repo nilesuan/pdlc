@@ -16,7 +16,10 @@ This checklist is run before each promotion (dev → preprod → prod) and as a 
 - [ ] **Canary / progressive rollout** configured for prod. Auto-rollback on canary failure thresholds.
 - [ ] **Rollback path verified** in this pipeline run; rollback < 5 min from decision.
 - [ ] **Migration is expand/contract** (if schema change). Old code runs against new schema; new code runs against old schema during rollout.
-- [ ] **Feature flag default off** for new user-visible behavior. Documented who has access to flip it.
+- [ ] **Every feature behind a flag, default off** in every environment including prod. Documented who has access to flip it, and how to flip it back. See [`../frameworks/FEATURE_FLAGS.md`](../frameworks/FEATURE_FLAGS.md) §"Baseline mandate" (policy §3.4).
+- [ ] **The deploy does not change flag state.** Promotion ships the artifact; enabling is a separate action taken after the deploy is healthy.
+- [ ] **Prod-deployability gate green** on the commit being promoted, all five assertions run. See [`../release/CONTINUOUS_DELIVERY.md`](../release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate" (policy §3.5).
+- [ ] **Gate is wired on `main`, required, and blocking** - it runs on every commit, not only on the ones being promoted.
 - [ ] **Release notes / changelog** generated from Conventional Commits.
 - [ ] **OIDC used for cloud access** in pipeline (no long-lived AWS keys). See [`../platform/AWS_ECS_TERRAFORM.md`](../platform/AWS_ECS_TERRAFORM.md).
 - [ ] **Branch protection respected** — merge through MR, required approvals, no force-push.
@@ -39,11 +42,18 @@ This checklist is run before each promotion (dev → preprod → prod) and as a 
 | Image not signed before prod | Major |
 | SBOM missing | Major |
 | Direct push to prod environment skipping pipeline | Blocker |
+| No prod-deployability gate on main | Blocker |
+| Gate `allow_failure` / muted / skipped | Blocker |
+| Promotion while the gate is red | Blocker |
+| Feature promoted on an unflagged path, or with its flag defaulting on | Blocker |
+| Deploy job flips flags on as part of the deploy | Major |
+| Gate's prod dry-run role can apply, not just plan | Blocker |
 
 ## What good looks like
 
 - Pipeline is boring: same shape every release, no surprises, no manual heroics.
 - Rollback is exercised regularly (e.g., as part of game-day or by deliberate canary failures), not only in incidents.
+- Every prod deploy is a non-event: the artifact carries new code that is off, and the release is a later flag flip with its own decision and its own rollback.
 - Release cadence matches DORA Elite (multiple deploys per day for active services).
 - Time from PR-merged to in-prod measured and visible (lead time for changes — DORA).
 
@@ -66,3 +76,4 @@ The above are the published Elite thresholds in DORA's *Accelerate State of DevO
 - AWS ECS Best Practices Guide on deployments.
 - Sigstore / cosign documentation; SLSA framework (slsa.dev).
 - Handbook: [`../../handbook/06-ship.md`](../../handbook/06-ship.md).
+- Flag and deployability items: [`../../platform-team/engineering-policy.md`](../../platform-team/engineering-policy.md) §3.4, §3.5 (both `[SYNTHESIS]` there).
