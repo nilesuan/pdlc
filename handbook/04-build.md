@@ -87,6 +87,8 @@ Take him at his word. Modern SaaS products deploy continuously and do not mainta
 
 **Long-lived feature branches are the single biggest anti-pattern here.** Martin Fowler's "Feature Branch" bliki notes they "prevent early detection of problems" and "discourage refactoring." A branch that lives two weeks will have merge conflicts, missed refactors, and latent integration bugs. If a feature is too big for a day or two, split it and hide incomplete state behind a feature flag (Phase 06 covers flags). Ship the plumbing before you ship the product.
 
+> **House rule.** Flags are not only for *incomplete* work here. Every feature ships behind a flag that defaults to **off**, and every commit on main is proven deployable to prod by a blocking deployability gate. See [`../platform-team/engineering-policy.md`](../platform-team/engineering-policy.md) §3.4-§3.5.
+
 ### Commits
 
 Commits are how future-you reads the history. Treat them as communication.

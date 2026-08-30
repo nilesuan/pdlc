@@ -18,7 +18,8 @@ Audit (or design) the deploy path to be automatic, fast, and reversible. Continu
 - Container image is built ONCE and promoted by digest. Dev/preprod/prod use the same image, retagged. **Never rebuild between environments.**
 - Main auto-deploys to dev. Preprod and prod are manual.
 - Canary stage exists for any user-facing change (1–5% traffic; metrics monitored).
-- Feature flags configured per [`../standards/release/`](../standards/release/) (Pete Hodgson's four-category taxonomy); release toggles removed within 2–4 weeks of 100%.
+- Every feature is behind a flag that **defaults to off**, categorized per Hodgson's four-category taxonomy; the deploy does not change flag state; release toggles removed within 30 days of 100%. Per [`../standards/frameworks/FEATURE_FLAGS.md`](../standards/frameworks/FEATURE_FLAGS.md) §"Baseline mandate".
+- Prod-deployability gate is wired on `main`, required (never `allow_failure`), and green on the commit being promoted; all five assertions run. Per [`../standards/release/CONTINUOUS_DELIVERY.md`](../standards/release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate".
 - Rollback plan: `< 5 minutes`. Tested in last 90 days.
 - Database changes use expand/contract pattern.
 - Release cadence: small changes per deploy, many times daily, no release windows.
@@ -54,7 +55,8 @@ The canary "monitor → promote or rollback" window (Done-when; Pass-loop step 1
 | OIDC trust to AWS | IAM identity provider + role | Pass 2 |
 | Image signing | cosign keys / ECR signed manifests | Pass 2 |
 | Rollback runbook | `docs/runbooks/rollback.md` (or equivalent) tested in last 90 days | Pass 3 |
-| (If feature-flagged) Flag registry entry | `flags/<name>.md` with cleanup ticket | Pass 3 (FEATURE_FLAGS framework) |
+| Flag registry entry (every feature has one) | `flags/<name>.md` with category, default off, kill switch, cleanup ticket | Pass 1 (baseline mandate); deeper checks Pass 3 (FEATURE_FLAGS framework) |
+| Prod-deployability gate job | pipeline definition; required + blocking on `main` | Pass 1 |
 
 ## Run Config
 
@@ -79,7 +81,8 @@ The canary "monitor → promote or rollback" window (Done-when; Pass-loop step 1
         "standards/platform/TERRAFORM_DISCIPLINE.md",
         "standards/platform/AUTO_MERGE.md",
         "standards/platform/AWS_NAMING.md",
-        "standards/platform/GITLAB_SECURITY.md"
+        "standards/platform/GITLAB_SECURITY.md",
+        "standards/frameworks/FEATURE_FLAGS.md"
       ]
     },
     "security-reviewer": {
@@ -99,9 +102,9 @@ The canary "monitor → promote or rollback" window (Done-when; Pass-loop step 1
 
 | Pass | Focus | Question |
 |---|---|---|
-| 1 | Correctness | Is the pipeline order correct (build → lint → test → scan → image build → sign → deploy), is the image built ONCE and promoted by digest, and is main→dev auto with preprod/prod manual? |
-| 2 | Proof & Safety | Is OIDC used (no long-lived AWS keys in CI), are images signed (cosign / ECR signed manifests) with SBOM archived, and is there a canary stage with metric monitoring for user-facing changes? |
-| 3 | Ship Readiness | Is rollback documented, automated, and tested within the last 90 days at `< 5 min`, do migrations follow expand/contract, and do feature flags carry cleanup tickets with deadlines (release toggles ≤ 30 days post-100%)? |
+| 1 | Correctness | Is the pipeline order correct (build → lint → test → scan → image build → sign → deploy), is the image built ONCE and promoted by digest, is main→dev auto with preprod/prod manual, and is the prod-deployability gate wired on `main` as a required, non-`allow_failure`, blocking job? |
+| 2 | Proof & Safety | Is OIDC used (no long-lived AWS keys in CI), are images signed (cosign / ECR signed manifests) with SBOM archived, is there a canary stage with metric monitoring for user-facing changes, and is every feature gated by a flag defaulting to **off** in all environments (the deploy never flips a flag; unresolvable flag state fails closed)? |
+| 3 | Ship Readiness | Is rollback documented, automated, and tested within the last 90 days at `< 5 min`, do migrations follow expand/contract, do feature flags carry cleanup tickets with deadlines (release toggles ≤ 30 days post-100%), and does the deployability gate actually run all five assertions (artifact identity, prod-config dry-run, flags-off smoke, migration compatibility, rollback rehearsal)? |
 
 ## Standards to load
 
@@ -111,6 +114,7 @@ standards:
   - standards/EVIDENCE.md
   - standards/QUALITY.md
   - standards/release/CONTINUOUS_DELIVERY.md
+  - standards/frameworks/FEATURE_FLAGS.md   # baseline mandate is unconditional; escalation still keyword-triggered
   - standards/release/DEPLOYMENT_PIPELINE.md
   - standards/release/CONTAINER_TAGGING.md
   - standards/release/VERSIONING.md
@@ -145,8 +149,9 @@ Pass-runner produces a **ship-readiness report**. Per pass:
 9. **SBOM.** Generated and archived per release.
 10. **Canary.** User-facing changes have a 1–5% canary stage with metric monitoring.
 11. **Rollback.** Documented; tested within 90 days; takes < 5 min.
-12. **Feature flags.** If used: taxonomy correct, release toggles have a removal date, ops toggles separately tracked.
+12. **Feature flags.** Every feature is flagged and defaults **off**; taxonomy correct; release toggles have a removal date; ops toggles separately tracked; the deploy never flips a flag on.
 13. **Migrations.** Expand/contract for any schema change. The "drop old column" stage is a separate deploy.
+14. **Deployability gate.** Present on `main`, required, blocking, all five assertions run, prod dry-run role is plan-scoped. A muted or `allow_failure` gate is a blocker.
 
 ## Hard blockers (per the user's policy)
 
@@ -157,6 +162,8 @@ These come from NOTES.md and [`../platform-team/engineering-policy.md`](../platf
 - Direct push to main on a service repo: blocker.
 - Production deploy from a `latest` tag (mutable): blocker.
 - Long-lived secrets in CI variables: blocker.
+- No prod-deployability gate on `main`, or a gate that is `allow_failure` / muted / skipped: blocker (policy §3.5).
+- Feature shipped on an unflagged path, or with its flag defaulting on: blocker (policy §3.4).
 
 ## Output
 

@@ -219,6 +219,8 @@ Hodgson: "Feature Toggles (often also referred to as Feature Flags) are a powerf
 
 The value is the decoupling, not the flag. Without flags, deploy = release: the moment code runs, it is reachable. With flags, deploy and release are separate events. Deploy Monday, turn on for internal users Tuesday, 10% Wednesday, 100% Friday, remove the flag next week. Each step is reversible in seconds.
 
+> **House rule (binding, stronger than the general guidance below).** In this organization flags are not optional and their default is not a judgment call: **every feature ships behind a feature flag, and the flag defaults to off** in every environment including production. Enabling is a separate flag change, never the merge and never the deploy; unresolvable flag state falls back to off; the off path carries a test. See [`../platform-team/engineering-policy.md`](../platform-team/engineering-policy.md) §3.4 and [`../standards/frameworks/FEATURE_FLAGS.md`](../standards/frameworks/FEATURE_FLAGS.md) §"Baseline mandate". Cleanup deadline here is **30 days** post-100%, tighter than the 2-4 weeks quoted below.
+
 ### Categories (Pete Hodgson taxonomy)
 
 Hodgson identifies four categories of flag, each with distinct dynamism and lifetime:
@@ -443,9 +445,10 @@ A spreadsheet or SQL query against your GitHub / CI / PagerDuty exports is enoug
 Before you close the loop on a deploy:
 
 - [ ] CI green — all tests passing, all scans clean
+- [ ] Prod-deployability gate green on the commit being promoted (house rule; see [`../standards/release/CONTINUOUS_DELIVERY.md`](../standards/release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate")
 - [ ] Canary deployed and healthy for the configured duration
 - [ ] Metrics unchanged or improved — error rate, latency p99, business SLIs
-- [ ] Feature flag gated if user-facing
+- [ ] Feature flag gated, defaulting to off, and the deploy did not change flag state (house rule)
 - [ ] Rollback plan documented (which mechanism, who triggers it, under what conditions)
 - [ ] On-call aware — see Phase 07
 
