@@ -19,6 +19,8 @@ Audit the test suite (or a portion of it) against pyramid/trophy shape, coverage
 - E2E suite is small, reliable, and covers the core user journeys (not branch coverage).
 - Test-double choices documented: fakes preferred over mocks for internal seams.
 - WCAG 2.2 AA baseline on UI (axe-core green + manual keyboard test).
+- Every feature flag has a default-off test, a flag-on test, and a fail-closed test; flip-back test where the feature writes persistent state. Per [`../standards/testing/TEST_STRATEGY.md`](../standards/testing/TEST_STRATEGY.md) §"Flag-state testing".
+- Prod-deployability gate exists on `main`, is required and blocking, and runs all five assertions (artifact identity, prod-config dry-run, flags-off smoke, migration compatibility, rollback rehearsal). Per [`../standards/release/CONTINUOUS_DELIVERY.md`](../standards/release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate".
 - Every authored Markdown artifact passes through `scripts/verify-artifact.sh` (the pre-output gate, layer 6 of the anti-hallucination protocol — see [`../standards/ANTI_HALLUCINATION.md`](../standards/ANTI_HALLUCINATION.md)) before the pass-runner reports completion. Broken relative links auto-block; unverified-tag ratio > 0.3 auto-majors.
 
 ## Phase
@@ -47,6 +49,8 @@ Routines are read-only / report-producing and approval-gated per [`../CLAUDE.md`
 | Coverage tool configured | `coverage.json`/`.coveragerc`/etc. | Pass 1 |
 | Recent CI history (≥ 100 runs) | CI provider API or local cache at `.cdocs/ci-history.json` | Pass 2 (flake-rate analysis) |
 | Test inventory | `find tests/ specs/` returns ≥ 1 file | Pass 1 |
+| Flag registry (if any flags exist) | `flags/*.md` or the repo's flag registry | Pass 2 (flag-state test coverage) |
+| Prod-deployability gate job | pipeline definition; required + blocking on `main` | Pass 1 |
 | (If perf surface) Perf budget | `perf/<surface>/budget.md` | Pass 3 (PERFORMANCE_BUDGET framework) |
 
 ## Run Config
@@ -64,7 +68,9 @@ Routines are read-only / report-producing and approval-gated per [`../CLAUDE.md`
         "standards/AGENT_PREAMBLE.md",
         "standards/EVIDENCE.md",
         "standards/testing/TEST_STRATEGY.md",
-        "standards/development/TDD.md"
+        "standards/development/TDD.md",
+        "standards/frameworks/FEATURE_FLAGS.md",
+        "standards/release/CONTINUOUS_DELIVERY.md"
       ]
     },
     "code-reviewer": {
@@ -84,8 +90,8 @@ Routines are read-only / report-producing and approval-gated per [`../CLAUDE.md`
 | Pass | Focus | Question |
 |---|---|---|
 | 1 | Correctness | Does the suite run end-to-end, is the shape right (pyramid for backend / trophy for SPA), and do tests assert behavior rather than implementation? |
-| 2 | Proof & Safety | Are coverage gates met across project + sensitive paths, is the flake rate < 1% with quarantine queue burned weekly, and are mocks confined to external boundaries (not internal seams)? |
-| 3 | Ship Readiness | Are SAST / SCA / secrets / DAST / a11y / perf in CI for every relevant PR, do E2E tests cover only critical user journeys (not branch coverage), and is non-functional coverage wired into the recurring schedule? |
+| 2 | Proof & Safety | Are coverage gates met across project + sensitive paths, is the flake rate < 1% with quarantine queue burned weekly, are mocks confined to external boundaries (not internal seams), and does every flag have default-off, flag-on, and fail-closed tests? |
+| 3 | Ship Readiness | Are SAST / SCA / secrets / DAST / a11y / perf in CI for every relevant PR, do E2E tests cover only critical user journeys (not branch coverage), is non-functional coverage wired into the recurring schedule, and is the prod-deployability gate present on `main`, required, blocking, and running all five assertions? |
 
 ## Standards to load
 
@@ -96,6 +102,7 @@ standards:
   - standards/QUALITY.md
   - standards/testing/TEST_STRATEGY.md
   - standards/development/TDD.md
+  - standards/release/CONTINUOUS_DELIVERY.md  # prod-deployability gate
   # Conditional language standards (loaded by file extension in the test scope)
   - standards/development/PYTHON.md     # if scope includes *.py
   - standards/development/TYPESCRIPT.md # if scope includes *.ts / *.tsx

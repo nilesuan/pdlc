@@ -24,6 +24,9 @@ This checklist is run at the end of `/test` — typically before merge to main a
 - [ ] **Perf smoke (k6)** for endpoints with NFRs. Full perf suite before launch.
 - [ ] **Contract tests** green for any service-to-service interface change.
 - [ ] **Failure-mode tests** for new failure paths (timeout, retry, circuit breaker, partial degradation).
+- [ ] **Flag-state tests** for every flag touched: default-off, flag-on, and fail-closed (unresolvable state falls back to off). Flip-back test where the feature writes persistent state. See [`../testing/TEST_STRATEGY.md`](../testing/TEST_STRATEGY.md) §"Flag-state testing".
+- [ ] **Prod-deployability gate green** on this commit, with all five assertions run (artifact identity, prod-config dry-run, flags-off smoke, migration compatibility, rollback rehearsal). See [`../release/CONTINUOUS_DELIVERY.md`](../release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate".
+- [ ] **Gate is required, not advisory** - not `allow_failure`, not skipped, not muted for flakiness.
 
 ## Auto-rejection
 
@@ -39,6 +42,11 @@ This checklist is run at the end of `/test` — typically before merge to main a
 | Unaddressed Critical CVE in production dependency | Major |
 | New UI without axe-core run | Major |
 | Test asserts on private state / internal helper calls | Major (brittle) |
+| Flag introduced without a default-off test | Major |
+| No fail-closed test for flag resolution failure | Major |
+| Prod-deployability gate missing, muted, or `allow_failure` | Blocker |
+| Deployability gate skips the prod-config dry-run or the rollback rehearsal | Major |
+| Flags-off smoke test replaced by a flags-on run | Major |
 
 ## What good looks like
 
@@ -57,3 +65,4 @@ This checklist is run at the end of `/test` — typically before merge to main a
 - OWASP Testing Guide (owasp.org/www-project-web-security-testing-guide/).
 - WCAG 2.2 (w3.org/TR/WCAG22/).
 - Handbook: [`../../handbook/05-test.md`](../../handbook/05-test.md).
+- Flag-state and deployability items: [`../../platform-team/engineering-policy.md`](../../platform-team/engineering-policy.md) §3.4, §3.5 (both `[SYNTHESIS]` there).

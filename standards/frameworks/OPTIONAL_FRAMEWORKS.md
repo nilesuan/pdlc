@@ -4,6 +4,8 @@ Some kinds of work require deeper review than the default 3-pass loop. This file
 
 **The default policy is 3 passes.** When a trigger matches, escalate to **5 passes** and load the matching framework's spec into the relevant sub-agent's brief. Only the matching framework is loaded — not the entire optional-frameworks set — so each agent's context budget stays small.
 
+**One exception: `FEATURE_FLAGS.md` carries an unconditional baseline.** Its §"Baseline mandate" (every feature behind a flag, default off) applies to every feature regardless of keyword match - it is binding via [`../../CLAUDE.md`](../../CLAUDE.md) §4 and [`../../platform-team/engineering-policy.md`](../../platform-team/engineering-policy.md) §3.4, and it is carried by always-loaded standards ([`../development/TRUNK_BASED.md`](../development/TRUNK_BASED.md) rule 6, [`../release/CONTINUOUS_DELIVERY.md`](../release/CONTINUOUS_DELIVERY.md) rule 9, and the build / test / ship exit checklists). What the keyword trigger buys is the 5-pass escalation and the deeper category / rollout / cleanup review. Do not read a non-match as permission to skip the baseline.
+
 Triggers are evaluated **once at Pass 1 start** by the pass-runner against the brief in `cdocs/.pipeline.json` (task, file paths, keywords from the user's command, diff metadata). Match means: any keyword from the trigger's keyword list appears in the task description, changed-file paths, or diff metadata. Multiple triggers can match; load all matching framework specs.
 
 ## How escalation works
@@ -30,7 +32,7 @@ A pass that meets the trigger's pass-specific check **must produce the artifact 
 | `stride-threat-modeling` | design | `auth`, `PII`, `payment`, `internet-facing`, `trust-boundary`, `STRIDE` | [`STRIDE_THREAT_MODELING.md`](STRIDE_THREAT_MODELING.md) |
 | `characterization-testing` | build | `legacy-code`, `no-tests`, `refactor`, `behavior-preservation` | [`CHARACTERIZATION_TESTING.md`](CHARACTERIZATION_TESTING.md) |
 | `contract-regression` | build, test | `public-API`, `shared-library`, `cross-team`, `consumer`, `provider`, `contract` | [`CONTRACT_REGRESSION.md`](CONTRACT_REGRESSION.md) |
-| `feature-flags` | build, ship | `behavior-change`, `phased-rollout`, `canary`, `percentage`, `flag` | [`FEATURE_FLAGS.md`](FEATURE_FLAGS.md) |
+| `feature-flags` | build, ship | `behavior-change`, `phased-rollout`, `canary`, `percentage`, `flag`, `feature-flag`, `toggle`, `default-off`, `kill-switch` (baseline applies with or without a match) | [`FEATURE_FLAGS.md`](FEATURE_FLAGS.md) |
 | `experimentation` | discover, ship, evolve | `A/B-test`, `experiment`, `hypothesis`, `primary-metric`, `hypothesis-ledger`, `holdout` | [`EXPERIMENTATION.md`](EXPERIMENTATION.md) |
 | `performance-budget` | build, test | `latency`, `p99`, `hot-path`, `bundle-size`, `database-query` | [`PERFORMANCE_BUDGET.md`](PERFORMANCE_BUDGET.md) |
 | `failure-injection` | build, run | `external-service`, `retry`, `circuit-breaker`, `availability`, `chaos` | [`FAILURE_INJECTION.md`](FAILURE_INJECTION.md) |

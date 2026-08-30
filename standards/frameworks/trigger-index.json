@@ -68,7 +68,10 @@
         "canary",
         "percentage",
         "flag",
-        "toggle"
+        "toggle",
+        "feature-flag",
+        "default-off",
+        "kill-switch"
       ],
       "spec": "standards/frameworks/FEATURE_FLAGS.md",
       "escalate_to_passes": 5

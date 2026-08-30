@@ -21,6 +21,9 @@ Implement a single feature on a short-lived feature branch using TDD where possi
 - PR opened with description: what, why, screenshots / curl examples for behavior changes.
 - Sub-agents executing build tasks ran in isolated git worktrees (per [`../agents/pass-runner.md`](../agents/pass-runner.md) §"Briefing sub-agents").
 - MR opened with auto-merge enabled AND source-branch deletion enabled on merge (per [`../standards/platform/AUTO_MERGE.md`](../standards/platform/AUTO_MERGE.md) §"Worktree-based task execution").
+- Feature is gated by a feature flag that **defaults to off** in every environment; enabling it is a flag change, not this merge. Per [`../standards/frameworks/FEATURE_FLAGS.md`](../standards/frameworks/FEATURE_FLAGS.md) §"Baseline mandate".
+- Flag tests exist: default-off, flag-on, and fail-closed (unresolvable flag state falls back to off). Cleanup ticket filed with a deadline.
+- Prod-deployability gate is green on the merge commit; any new config, secret, or IAM permission was added to **prod**, not only dev. Per [`../standards/release/CONTINUOUS_DELIVERY.md`](../standards/release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate".
 - No new top-level dependencies without justification block in PR description.
 - No commits directly to main. No `--no-verify`. No `--auto-approve`.
 - Every authored Markdown artifact passes through `scripts/verify-artifact.sh` (the pre-output gate, layer 6 of the anti-hallucination protocol — see [`../standards/ANTI_HALLUCINATION.md`](../standards/ANTI_HALLUCINATION.md)) before the pass-runner reports completion. Broken relative links auto-block; unverified-tag ratio > 0.3 auto-majors.
@@ -45,6 +48,9 @@ Implement a single feature on a short-lived feature branch using TDD where possi
 | Feature branch off main | `git symbolic-ref HEAD` ≠ `refs/heads/main` | Pass 1 |
 | Working tree clean | `git status --porcelain` empty (or only the in-flight commit) | Pass 1 |
 | Test file alongside implementation | `tests/<…>` or `<src>__tests__/` | Pass 2 (TDD-strict in `**/auth/**`, `**/crypto/**`, `**/billing/**`) |
+| Feature flag registered, default off | `flags/<flag-name>.md` (or the repo's flag registry) + the gating code reference | Pass 1 |
+| Flag cleanup ticket | tracker issue URL recorded in the flag registry entry | Pass 2 |
+| Prod-deployability gate wired and required on `main` | pipeline definition (`.gitlab-ci.yml` / `.github/workflows/*.yml`) | Pass 1 |
 
 If the diff touches a hot-path endpoint, a `perf/<surface>/budget.md` must exist or be created in this build (PERFORMANCE_BUDGET framework activates).
 
@@ -69,7 +75,9 @@ If the diff touches a hot-path endpoint, a `perf/<surface>/budget.md` must exist
         "standards/development/CODE_REVIEW.md",
         "standards/development/SOLID.md",
         "standards/development/CLEAN_ARCHITECTURE.md",
-        "standards/development/TRUNK_BASED.md"
+        "standards/development/TRUNK_BASED.md",
+        "standards/frameworks/FEATURE_FLAGS.md",
+        "standards/release/CONTINUOUS_DELIVERY.md"
       ]
     },
     "qa-engineer": {
@@ -78,7 +86,9 @@ If the diff touches a hot-path endpoint, a `perf/<surface>/budget.md` must exist
         "standards/AGENT_PREAMBLE.md",
         "standards/EVIDENCE.md",
         "standards/testing/TEST_STRATEGY.md",
-        "standards/development/TDD.md"
+        "standards/development/TDD.md",
+        "standards/frameworks/FEATURE_FLAGS.md",
+        "standards/release/CONTINUOUS_DELIVERY.md"
       ]
     },
     "security-reviewer": {
@@ -99,9 +109,9 @@ If the diff touches a hot-path endpoint, a `perf/<surface>/budget.md` must exist
 
 | Pass | Focus | Question |
 |---|---|---|
-| 1 | Correctness | Does the change implement the acceptance criteria, with a test that fails before and passes after, and does it respect the design ADR + Clean Architecture + SOLID? |
-| 2 | Proof & Safety | Are coverage gates met (80/70 project; 95 sensitive paths), is TDD discipline preserved (test predates implementation in TDD-strict paths), and does OWASP / static analysis come back clean on changed lines? |
-| 3 | Ship Readiness | Is CI green end-to-end, are commits Conventional and reviewable on their own, is the PR description complete (what / why / curl-or-screenshot), and does the diff stay under 600 LoC of mixed concerns? |
+| 1 | Correctness | Does the change implement the acceptance criteria, with a test that fails before and passes after, does it respect the design ADR + Clean Architecture + SOLID, and is the new behavior gated by a feature flag that defaults to **off**? |
+| 2 | Proof & Safety | Are coverage gates met (80/70 project; 95 sensitive paths), is TDD discipline preserved (test predates implementation in TDD-strict paths), does OWASP / static analysis come back clean on changed lines, and do the flag tests exist (default-off, flag-on, fail-closed)? |
+| 3 | Ship Readiness | Is CI green end-to-end including the prod-deployability gate, are commits Conventional and reviewable on their own, is the PR description complete (what / why / curl-or-screenshot), does the diff stay under 600 LoC of mixed concerns, and were new config / secrets / IAM added to **prod** rather than only dev? |
 
 ## Standards to load
 
@@ -115,6 +125,8 @@ standards:
   - standards/development/SOLID.md
   - standards/development/CLEAN_ARCHITECTURE.md
   - standards/development/CODE_REVIEW.md
+  - standards/frameworks/FEATURE_FLAGS.md   # baseline mandate is unconditional; escalation still keyword-triggered
+  - standards/release/CONTINUOUS_DELIVERY.md  # prod-deployability gate
   - standards/security/OWASP.md
   - standards/security/AUTH.md         # if touching auth
   # Conditional language standards (loaded by file extension in the diff)
@@ -162,6 +174,9 @@ The pass-runner refuses commits whose message matches:
 - Secret committed: blocker (even in test fixtures — use a clearly-fake placeholder pattern).
 - Coverage drop > 2% with no offsetting gain: major.
 - PR > 600 LoC mixed concerns: major (recommend split).
+- Feature merged on an unflagged code path, or a flag defaulting on: blocker (policy §3.4).
+- Merging while the prod-deployability gate is red, or with the gate muted / `allow_failure`: blocker (policy §3.5).
+- Flag added with no default-off test: major.
 
 ## TDD strict mode
 

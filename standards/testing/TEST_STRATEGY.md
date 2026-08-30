@@ -29,6 +29,8 @@ Backend services: pyramid. Always.
 3. **Tests follow Arrange–Act–Assert (or Given–When–Then) structure.**
 4. **Test code is held to the same quality standard as production code.** Reviewed, refactored, kept maintainable.
 5. **E2E tests are limited to critical user journeys.** Each E2E test justifies itself by the journey it protects.
+6. **Every feature flag has a default-off test.** For each flag, a test asserts the behavior with the flag in its default (off) state, and a second asserts the on-state behavior. The off path is what production runs after the merge; an untested off path is an untested production. Policy §3.4; see [`../frameworks/FEATURE_FLAGS.md`](../frameworks/FEATURE_FLAGS.md) §"Baseline mandate".
+7. **The suite includes a prod-deployability test.** Suite-level, not unit-level: it proves main could go to prod as it stands (artifact identity, prod-config dry-run, flags-off smoke, migration compatibility, rollback rehearsal) and blocks on red. Policy §3.5; the five assertions and the gate rules are in [`../release/CONTINUOUS_DELIVERY.md`](../release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate".
 
 ## Coverage gates (from [`../QUALITY.md`](../QUALITY.md))
 
@@ -40,6 +42,19 @@ Backend services: pyramid. Always.
 | Mutation score (if configured) | 60% |
 
 A change that drops coverage > 2% on any axis without offsetting gain → `QA-COV-*` major finding.
+
+## Flag-state testing
+
+Flag-gated code doubles the state space, and only one of those states is the one production is actually in after a merge. Test both, and be explicit about which is the default.
+
+| Test | Asserts | Required |
+|---|---|---|
+| Default-off | Behavior with the flag unset / default. This is what prod runs post-merge. | Always, per hard rule 6 |
+| Flag-on | The new behavior when the flag is enabled. | Always |
+| Fail-closed | Flag service unreachable / config missing / evaluation error falls back to the **off** path. | Always |
+| Flip-back | Turning the flag off after it has been on returns the old behavior (no one-way state written while on). | When the feature writes persistent state |
+
+The default-off test is not "the test for the old code". It is the test for *this commit's* production behavior. Deleting it when the flag reaches 100% is correct only as part of removing the flag itself and its dead path.
 
 ## Composition verification (wiring stories)
 
@@ -77,6 +92,7 @@ Mocking your own internal seams (between modules in the same service) is almost 
 | A11y | axe-core | every UI PR |
 | Perf | k6 | smoke on PR; full suite before launch |
 | WCAG 2.2 AA | axe-core + manual keyboard test | every UI release |
+| Prod-deployability | pipeline gate (see [`../release/CONTINUOUS_DELIVERY.md`](../release/CONTINUOUS_DELIVERY.md)) | every commit on main; blocking |
 
 ## Anti-patterns to flag
 
@@ -86,6 +102,8 @@ Mocking your own internal seams (between modules in the same service) is almost 
 - Flaky tests everyone ignores. The signal you're not paying attention to.
 - Giant E2E suites > 40 minutes. Engineers stop running them.
 - Testing the framework. (Testing React's `useState` is testing React.)
+- Testing only the flag-on path because "that's the real feature". Production is running the off path; that is the one you shipped.
+- Treating the deployability gate as an E2E test to be trimmed for speed. It is not testing the product, it is testing that the product can ship.
 
 ## Sources
 
@@ -93,3 +111,4 @@ Mocking your own internal seams (between modules in the same service) is almost 
 - Test doubles: Meszaros, *xUnit Test Patterns*; see [`../../research/05-testing/test-levels.md`](../../research/05-testing/test-levels.md).
 - Coverage targets: Fowler "TestCoverage" (also: 100% is a smell).
 - Handbook: [`../../handbook/05-test.md`](../../handbook/05-test.md).
+- Hard rules 6 and 7 come from [`../../platform-team/engineering-policy.md`](../../platform-team/engineering-policy.md) §3.4 and §3.5, both marked `[SYNTHESIS]` there (this organization's codification, not a claim of Fowler / Vocke / Cohn / Dodds).

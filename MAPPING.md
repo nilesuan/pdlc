@@ -45,7 +45,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 
 | Standard | Source |
 |---|---|
-| `standards/development/TRUNK_BASED.md` | `platform-team/engineering-policy.md` §1; Hammant *Trunk-Based Development*; DORA |
+| `standards/development/TRUNK_BASED.md` | `platform-team/engineering-policy.md` §1 (rules 6-7 from §3.4-§3.5, `[SYNTHESIS]`); Hammant *Trunk-Based Development*; DORA |
 | `standards/development/TDD.md` | `platform-team/engineering-policy.md` §4; Beck *TDD By Example*; Fowler "TestDrivenDevelopment" |
 | `standards/development/SOLID.md` | `platform-team/engineering-policy.md` §6; Martin "Solid Relevance" (2020) |
 | `standards/development/CLEAN_ARCHITECTURE.md` | `platform-team/engineering-policy.md` §7; Martin "The Clean Architecture" (2012) |
@@ -57,14 +57,14 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 
 | Standard | Source |
 |---|---|
-| `standards/testing/TEST_STRATEGY.md` | `platform-team/engineering-policy.md` §5; `handbook/05-test.md`; Cohn / Fowler / Vocke / Dodds; Meszaros |
+| `standards/testing/TEST_STRATEGY.md` | `platform-team/engineering-policy.md` §5 (hard rules 6-7 and §"Flag-state testing" from §3.4-§3.5, `[SYNTHESIS]`); `handbook/05-test.md`; Cohn / Fowler / Vocke / Dodds; Meszaros |
 
 ### Release
 
 | Standard | Source |
 |---|---|
-| `standards/release/CONTINUOUS_DELIVERY.md` | `platform-team/engineering-policy.md` §3; `handbook/06-ship.md`; Humble & Farley *Continuous Delivery* |
-| `standards/release/DEPLOYMENT_PIPELINE.md` | `platform-team/developer-guidelines.md` §9; `NOTES.md` |
+| `standards/release/CONTINUOUS_DELIVERY.md` | `platform-team/engineering-policy.md` §3 (incl. §3.4 flag-by-default, §3.5 deployability test, §3.6 - all `[SYNTHESIS]`); `handbook/06-ship.md`; Humble & Farley *Continuous Delivery* |
+| `standards/release/DEPLOYMENT_PIPELINE.md` | `platform-team/developer-guidelines.md` §9; `NOTES.md`; `platform-team/engineering-policy.md` §3.5 (deployability gate, `[SYNTHESIS]`) |
 | `standards/release/CONTAINER_TAGGING.md` | `platform-team/developer-guidelines.md` §8; `NOTES.md` (build-once policy); cosign / SLSA |
 | `standards/release/VERSIONING.md` | `platform-team/engineering-policy.md` §9; Conventional Commits 1.0.0; SemVer 2.0.0 |
 
@@ -123,7 +123,7 @@ These specs are loaded by `pass-runner` only when a brief contains the activatio
 | `standards/frameworks/STRIDE_THREAT_MODELING.md` | `auth`, `PII`, `payment`, `internet-facing`, `STRIDE` | `research/03-design/security-design.md`; Shostack STRIDE-per-element; OWASP Threat Modeling |
 | `standards/frameworks/CHARACTERIZATION_TESTING.md` | `legacy-code`, `no-tests`, `refactor`, `behavior-preservation` | Feathers *Working Effectively with Legacy Code* (seam model, dependency-breaking); `research/08-maintenance/README.md` |
 | `standards/frameworks/CONTRACT_REGRESSION.md` | `public-API`, `shared-library`, `cross-team`, `consumer`, `provider`, `Pact` | `research/05-testing/test-levels.md` (Pact docs verified) |
-| `standards/frameworks/FEATURE_FLAGS.md` | `behavior-change`, `phased-rollout`, `canary`, `percentage`, `flag`, `toggle` | `research/06-release/feature-flags.md`; Hodgson "Feature Toggles" (martinfowler.com, 2017) |
+| `standards/frameworks/FEATURE_FLAGS.md` | `behavior-change`, `phased-rollout`, `canary`, `percentage`, `flag`, `feature-flag`, `toggle`, `default-off`, `kill-switch` - **plus an unconditional baseline mandate** (§"Baseline mandate") that applies with or without a keyword match | `research/06-release/feature-flags.md`; Hodgson "Feature Toggles" (martinfowler.com, 2017); baseline is `platform-team/engineering-policy.md` §3.4 `[SYNTHESIS]` |
 | `standards/frameworks/PERFORMANCE_BUDGET.md` | `latency`, `p99`, `p95`, `hot-path`, `bundle-size`, `database-query`, `load-test` | `research/05-testing/non-functional-testing.md`; Grafana k6 docs (verified) |
 | `standards/frameworks/FAILURE_INJECTION.md` | `external-service`, `retry`, `circuit-breaker`, `availability`, `chaos`, `fault-injection` | `research/05-testing/chaos-and-production-testing.md`; Principles of Chaos (verified) |
 | `standards/frameworks/COMPOSITION_VERIFICATION.md` | `wire`, `entry-point`, `daemon`, `lifecycle`, `register`, `multi-component`, `main()` | This system; pattern from `~/.claude.old/commands/build.md` Composition Verification |
