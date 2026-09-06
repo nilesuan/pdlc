@@ -5,6 +5,12 @@
     "sonnet",
     "haiku"
   ],
+  "attribution": {
+    "$comment": "Suppress Claude attribution in git history. commit/pr empty strings hide the Co-Authored-By trailer and the 'Generated with Claude Code' PR footer; sessionUrl false drops the Claude-Session trailer added by web/Remote Control sessions. Supersedes the deprecated includeCoAuthoredBy boolean. The live settings.json is gitignored, so this template is what carries the setting across a ~/.claude reset.",
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "permissions": {
     "$comment": "Allow common read/edit operations without prompting. Write/Edit are allowed deliberately: a sub-agent spawned to author files must never block on a write-approval prompt - a blocked write produces no output and hangs the whole pass (see lessons/2026 LESSON-0001). Spawn writing sub-agents with mode acceptEdits or rely on this allow-list. Anything writing to a shared system (push, terraform apply, slack) still prompts. The fork-bomb deny rule was removed: `Bash(:(){ :|:& };:)` is rejected by the permission-rule parser (\"Empty parentheses\") and was SKIPPED, so it never blocked anything. Fork bombs and the other CLAUDE.md \u00a74 non-negotiables are enforced by scripts/guard-dangerous-bash.sh (PreToolUse, exit 2).",
     "allow": [
