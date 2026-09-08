@@ -28,14 +28,16 @@ Produce a solution plan whose load-bearing technology and architecture decisions
 ## Pre-flight
 
 - A problem statement exists, either from `/discover` + `/plan` or as a written brief when the problem is purely technical.
+- **Ask the user for the accountable owner if one is not already recorded.** The Dependency Gate requires a named owner and this command must not invent one or infer it from git config. One question, before dispatch.
+- **Greenfield is a supported entry path.** This phase is explicitly enterable for a purely technical problem, which routinely means the repository does not exist yet. When the target has no repository or no commits, step 0 is to create it: `git init`, an initial commit on the default branch, then branch to `solve/<slug>`. The working-tree and branch requirements below apply to the repository *after* that step, never as a precondition for reaching it.
 - A working directory exists for this effort. Default: `solutions/<slug>/`.
 - The user can name at least one hard constraint, or has explicitly confirmed there are none. "None" is a claim and gets recorded as one.
-- Working tree clean. On a feature branch, not main.
+- Working tree clean. On a feature branch, not main. (Satisfied by step 0 on a greenfield target.)
 - No stale `cdocs/.pipeline.json` from a prior incomplete run.
 
 ## Dependency Gate
 
-The pass-runner refuses to start unless every required row is satisfied:
+**Every row is evaluated at dispatch, before Pass 1 runs.** The "Required by" column says which pass *consumes* the row, not when it is *checked*. Checking a Pass-2 row only when Pass 2 begins means the user spends a full framing pass — tens of minutes and six figures of tokens — to be told they needed input they could have supplied in seconds. Evaluate all of it up front.
 
 | Artifact | Path | Required by |
 |---|---|---|
@@ -47,7 +49,14 @@ The pass-runner refuses to start unless every required row is satisfied:
 
 Where `/discover` and `/plan` artifacts exist, they are required. `/solve` is a bridge, not a bypass: it does not license skipping problem validation on a product build. A purely technical problem with no product-discovery phase may enter here with a written brief.
 
-If Pass 2's representative workload is missing, the pass-runner stops and asks for it. A bake-off on unrepresentative input produces a number that decides nothing (per [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md) §"Anti-patterns").
+Two outcomes, decided at dispatch:
+
+- **A Pass-1 row is missing** → refuse to start. Nothing useful can be produced.
+- **Only a later-pass row is missing** → report it immediately, name the highest pass that can complete, and ask the user whether to run the passes that *can* produce value or stop and go get the input. Framing without proof is often worth having; spending it without warning is not.
+
+A run that proceeds under the second outcome is **gate-limited**. It terminates at the last pass it can complete and reports `status: blocked` — never a score (see §"Output").
+
+If the representative workload is missing, no spike runs and no selection ADR is written: a selection ADR requires measured alternatives, and writing one on desk evidence is a blocker per [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md). A bake-off on unrepresentative input produces a number that decides nothing (same source, §"Anti-patterns").
 
 ## Run Config
 
@@ -179,6 +188,10 @@ Artifacts under `solutions/<slug>/` and `docs/adr/`. Pass-runner returns:
 - The table of primary metrics: decision, threshold, measured value, verdict.
 - Decisions that remain open, with what each is blocked on.
 - Score against exit checklist ([`../standards/checklists/02.5-solve-exit.md`](../standards/checklists/02.5-solve-exit.md)); gaps listed.
+
+**A gate-limited run reports `status: blocked` and no score.** Checklist boxes that depend on a missing gate row are marked `n/a (gate-blocked)`, excluded from the denominator, and listed with the input that would unblock them. Report `N of M in-scope boxes met`, never a 0-100 number.
+
+*Why:* a correctly gate-blocked run fails every corpus-dependent box by design, so scoring it produces a low number that reads as a quality verdict on work that behaved exactly as intended. The first real run of this command scored 43/100 for doing the right thing. A score is a judgement about work that was attempted; work the gate forbade was not attempted.
 
 Hand off to `/design <name>` for architecture shape, C4, data model, API contract, and threat model. `/design` consumes the selection ADRs rather than re-opening them.
 
