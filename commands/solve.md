@@ -131,6 +131,7 @@ standards:
   - standards/development/PRINCIPLES.md
   - standards/frameworks/EXPERIMENTATION.md
   - standards/testing/TEST_STRATEGY.md
+  - standards/checklists/02.5-solve-exit.md   # the exit gate this command is scored against
 ```
 
 ## Sub-agents

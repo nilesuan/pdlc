@@ -27,6 +27,8 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 | `commands/review.md` | `platform-team/engineering-policy.md` §8; `standards/development/CODE_REVIEW.md` |
 | `commands/split.md` | `handbook/02-plan.md` (the plan it decomposes); `standards/process/TASK_SIZING.md` |
 | `standards/frameworks/PROBABILISTIC_COMPONENTS.md` | **no research file** (system extension, declared above); assembled from `standards/frameworks/EXPERIMENTATION.md` + `standards/testing/TEST_STRATEGY.md` + `standards/docs/TECH_SELECTION.md` |
+| `standards/development/PRINCIPLES.md` | **no research file.** Cites sibling standards (`SOLID.md`, `CLEAN_ARCHITECTURE.md`, `TDD.md`, `TRUNK_BASED.md`) and `platform-team/engineering-policy.md` §6-§7, §12. KISS, DRY, YAGNI, CQS and PoLE appear nowhere in `research/` or `handbook/` - a third system extension alongside the two declared above. |
+| `standards/process/TEAM_SCALING.md` | `handbook/00-team-lean.md`, `handbook/00-team-full.md`. **Human-reference only** - deliberately not in any command's load list, since team shape is not something a pass scores. |
 | `commands/_shared/pass-loop.md` | This system; orchestration pattern from `SYSTEM.md` analysis of `.claude.old` |
 | `commands/_shared/pipeline-handoff.md` | This system; orchestration pattern |
 | `commands/_shared/evidence-format.md` | `standards/EVIDENCE.md` |

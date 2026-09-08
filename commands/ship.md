@@ -124,7 +124,10 @@ standards:
   - standards/platform/AWS_NAMING.md
   - standards/platform/GITLAB_SECURITY.md
   - standards/security/OWASP.md
+  - standards/checklists/06-ship-exit.md   # the exit gate this command is scored against
 ```
+
+Conditional: if the release fronts two or more product frontends behind one DNS name, also load [`../standards/platform/MULTI_PRODUCT_FRONTEND.md`](../standards/platform/MULTI_PRODUCT_FRONTEND.md) for the platform-managed ALB / CloudFront / WAF and Route53 posture.
 
 ## Sub-agents
 

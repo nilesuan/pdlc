@@ -82,6 +82,7 @@ standards:
   - standards/EVIDENCE.md
   - standards/QUALITY.md
   - standards/process/CUSTOMER_FEEDBACK.md
+  - standards/checklists/01-discover-exit.md   # the exit gate this command is scored against
 ```
 
 ## Sub-agents

@@ -114,6 +114,12 @@ Each trigger entry in `trigger-index.json` has `id`, `phases`, `keywords`, `spec
 
 **Unconditional baseline (no keyword required).** `standards/frameworks/FEATURE_FLAGS.md` is the one spec with a baseline that applies whether or not a keyword matched. On any **build**, **test**, or **ship** phase run, load it into the code-reviewer, qa-engineer, and platform-engineer briefs regardless of trigger match, and apply §"Baseline mandate" plus §"Baseline auto-rejection" (every feature flagged, default off, fail-closed, off-path tested). A keyword match adds the 5-pass escalation and the deeper category / rollout / cleanup checks on top; a non-match never waives the baseline. The paired requirement - the prod-deployability gate - travels with `standards/release/CONTINUOUS_DELIVERY.md`, which the build / test / ship commands carry in their Run Config standards lists. Binding text: [`../platform-team/engineering-policy.md`](../platform-team/engineering-policy.md) §3.4-§3.5, [`../CLAUDE.md`](../CLAUDE.md) §4.
 
+### Exit-checklist loading
+
+Each phase command carries its exit checklist in its Run Config standards list (`standards/checklists/NN-<phase>-exit.md`). Load it like any other standard, but treat it as the **scoring rubric for the phase**, not as advisory reading: its `## Done-when` boxes are the gate the final score is computed against, and its `## Auto-rejection` table is merged into the trigger set for the run, at the severities it names.
+
+A phase command whose standards list carries no checklist is scoring against nothing phase-specific. `/review` and `/split` are the only commands legitimately without one, because they are cross-cutting rather than phases.
+
 ### Lesson loading
 
 Before pass 1 (after trigger evaluation, before any sub-agent is spawned), load `lessons/INDEX.md`. For each row under `## Active`, parse the `Keywords` cell and run the same case-insensitive whole-token substring match against the brief that the framework trigger registry uses (`flag` matches "feature flag" but not "flagrant"). For every matched lesson, read the lesson file at `lessons/<YYYY>/LESSON-NNNN-<slug>.md` and inline its **full body** (frontmatter + four sections) into every sub-agent brief for the run. The sub-agent reads the rule from "How to prevent it" and applies it as if it were any other standard. Record matched lesson IDs in `.pipeline.json` under `lessons_active: [...]` so the final summary lists them. See [`../standards/process/LEARNING.md`](../standards/process/LEARNING.md) §"Loading lessons" for the authoritative rule.

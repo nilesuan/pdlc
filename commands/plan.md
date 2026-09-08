@@ -87,6 +87,7 @@ standards:
   - standards/EVIDENCE.md
   - standards/QUALITY.md
   - standards/process/TASK_SIZING.md
+  - standards/checklists/02-plan-exit.md   # the exit gate this command is scored against
 ```
 
 ## Sub-agents

@@ -132,7 +132,10 @@ standards:
   # Conditional language standards (loaded by file extension in the diff)
   - standards/development/PYTHON.md     # if diff includes *.py / pyproject.toml
   - standards/development/TYPESCRIPT.md # if diff includes *.ts / *.tsx / tsconfig.json / package.json
+  - standards/checklists/04-build-exit.md   # the exit gate this command is scored against
 ```
+
+Conditional: if the diff adds or changes user-facing documentation, also load [`../standards/docs/DIATAXIS.md`](../standards/docs/DIATAXIS.md) - mixing tutorial, how-to, reference and explanation in one document is the failure it exists to catch.
 
 ## Sub-agents
 
