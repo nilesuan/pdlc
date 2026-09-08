@@ -39,6 +39,8 @@ The pass-runner refuses to start unless every required row is satisfied:
 | Now/Next/Later roadmap | `planning/<release-name>/roadmap.md` | Pass 1 (epic and wave sequencing) |
 | MVP scope | `planning/<release-name>/mvp.md` | Pass 1 (in-scope vs out-of-scope boundaries) |
 | Design ADR (when a story touches a load-bearing decision) | `docs/adr/NNNN-*.md` | Pass 1 (optional; the reference is carried into each build unit) |
+| Selection ADR (when a story implements a `/solve` decision) | `docs/adr/NNNN-*.md` | Pass 1 (optional; carried into the build unit with its regression gate) |
+| Solution plan (when `/solve` has run) | `solutions/<slug>/solution-plan.md` | Pass 1 (optional; component boundaries and their gates) |
 
 If a required row is missing: STOP. Suggest "Run `/plan <release-name>` first."
 

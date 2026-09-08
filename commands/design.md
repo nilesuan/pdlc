@@ -40,6 +40,8 @@ Ship a design package that lets the team build in parallel without re-asking bas
 | Plan strategy | `planning/<release>/strategy.md` | Pass 1 |
 | MVP scope (incl. NOT-in-scope) | `planning/<release>/mvp.md` | Pass 1 |
 | OKRs | `planning/<release>/okrs.md` | Pass 1 |
+| Solution plan, **when `/solve` has run** | `solutions/<slug>/solution-plan.md` | Pass 1 |
+| Selection ADRs, **when `/solve` has run** | `docs/adr/NNNN-*.md` | Pass 1 (consumed, not re-opened) |
 | (Brownfield) Current C4 container diagram | `docs/architecture/c4-container.md` (or equivalent) | Pass 1 |
 | Riskiest assumption | named in `mvp.md` | Pass 2 (informs threat model) |
 
@@ -88,6 +90,8 @@ Ship a design package that lets the team build in parallel without re-asking bas
 ```
 
 `force_model: opus` applies to all three sub-agents on every pass — design errors compound into expensive rework. STRIDE_THREAT_MODELING is loaded by default in this phase (always activated regardless of brief keywords).
+
+Where `/solve` has produced selection ADRs, this phase treats them as decided input. Re-opening a decision that carries a measured result against a pre-registered threshold is a finding, not diligence: raise it as a new ADR that supersedes the old one per [`../standards/docs/ADR.md`](../standards/docs/ADR.md) hard rule 2, with evidence at the tier that displaced it. Decisions `/solve` left open are in scope for this phase and are listed in `solutions/<slug>/decision-register.md`.
 
 ## Pass focus
 
@@ -139,6 +143,7 @@ Pass-runner enforces:
 - Big Design Up Front with no Phase-01 contact: refuse, route back.
 - Microservices on day one: blocker unless ADR explains the team-size and traffic-scale justification.
 - Custom auth: blocker unless ADR explains why a real provider doesn't fit.
+- Re-deciding a `/solve` selection without superseding its ADR and without displacing evidence: major.
 - Premature scaling optimizations (sharding before one tenant): major.
 - Skipping threat model "because we're small": blocker.
 - Design review as theatre (sign-off without comments): major — record at least one specific question per reviewer.

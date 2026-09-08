@@ -47,8 +47,11 @@ The handbook tells a human *what* to do. The research tells a human *why*. The p
     platform-engineer.md    AWS / ECS / Terraform / GitLab CI specialist
     code-reviewer.md        readability, idioms, conventions
 
-  commands/                 one slash command per handbook phase + /review
-    discover plan design build test ship run evolve · review
+  commands/                 one slash command per handbook phase + cross-cutting
+    discover plan design build test ship run evolve
+    solve                   02.5 bridge — proven tech/architecture decisions
+    split                   plan → build-ready stories
+    review                  cross-cutting code/PR review
     _shared/                shared command snippets
     _COMMAND_TEMPLATE.md
 
@@ -79,7 +82,7 @@ After deployment, verify:
 
 ```bash
 ls ~/.claude/agents/        # 7 agents
-ls ~/.claude/commands/      # 9 commands
+ls ~/.claude/commands/      # 11 commands
 ls ~/.claude/standards/     # standard categories
 ```
 
