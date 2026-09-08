@@ -152,4 +152,4 @@ All citations trace back through:
 - Research: [`../../research/01-ideation/user-research.md`](../../research/01-ideation/user-research.md) §3 (NN/g user interviews), §7 (NN/g surveys), §4 (Nielsen 5-users — usability only, not surveys).
 - Handbook: [`../../handbook/01-discover.md`](../../handbook/01-discover.md) (Step 2 interview practice; anti-patterns 2, 3, 5, 6).
 - Handbook: [`../../handbook/08-evolve.md`](../../handbook/08-evolve.md) (quantitative + qualitative signals, "NPS as vanity metric" warning, weekly cadence).
-- Handbook: [`../../handbook/08-evolve-processes.md`](../../handbook/08-evolve-processes.md) §§97–132 (configured surveys, anti-patterns).
+- Handbook: [`../../handbook/08-evolve-processes.md`](../../handbook/08-evolve-processes.md) §1 (Quantitative Feedback Capture - configured surveys, anti-patterns).
