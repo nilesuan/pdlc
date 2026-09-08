@@ -68,7 +68,7 @@ for each prefix found in history.jsonl:
 write calibration.json with _default, _meta.computed_at, _meta.history_rows_at_compute
 ```
 
-*Why every 5:* fewer recomputations than per-row, but frequent enough that a new prefix graduates out of `_default` quickly. Matches the predecessor cadence in `~/.claude.old/commands/amrr.md` §"Step 4c. Feedback Capture".
+*Why every 5:* fewer recomputations than per-row, but frequent enough that a new prefix graduates out of `_default` quickly. The cadence is inherited from the predecessor system, whose feedback-capture step read: "Count reviews with resolved outcomes. If count is a multiple of 5, trigger recalibration." (see §"Provenance" below for the full excerpt).
 
 ---
 
@@ -136,8 +136,32 @@ The routine is the pass-runner invoked headlessly - the same single recompute au
 
 ## Sources
 
-- `~/.claude.old/commands/_shared/review-pipeline.md` Stage 4b–4d — calibration formula (`calibrated_confidence = adjusted_confidence × historical_accuracy`), the 0.75 default, and the "look up by check_id prefix" rule.
-- `~/.claude.old/commands/amrr.md` §"Step 4c. Feedback Capture" — the every-5-resolved-reviews recomputation cadence and `history.jsonl` row shape.
+- Predecessor system (`~/.claude.old`) — see §"Provenance" below. That directory is a local snapshot on one machine and is **not** part of this repository, so the load-bearing excerpt is quoted here rather than cited by path.
 - This file extends the anti-hallucination discipline in [`../ANTI_HALLUCINATION.md`](../ANTI_HALLUCINATION.md) by adding a complementary defense that operates across passes: historical-accuracy weighting that catches systematic agent drift over time. It is not a "layer" in the same defense-in-depth sense (it does not check the current pass), but it shares the same goal.
 - Consumed by [`../QUALITY.md`](../QUALITY.md) (the deduction formula) and [`../../agents/pass-runner.md`](../../agents/pass-runner.md) (the orchestrator that recomputes the snapshot).
 - The 0.75 default and the 30-day pending-outcome cutoff are codifications adopted by this system, flagged `[UNVERIFIED]` against any single named source.
+
+---
+
+## Provenance
+
+The cadence and row shape above were ported from a predecessor configuration kept at `~/.claude.old`. That directory is a snapshot on one machine, is not part of this repository, and will not resolve for anyone else - so the load-bearing text is reproduced here verbatim rather than cited by a path only one reader can open. Analysis of that predecessor system is recorded in [`../../research/sources/SYSTEM.md`](../../research/sources/SYSTEM.md).
+
+From its `commands/amrr.md`, section `### 4c. Feedback Capture (Orchestrator Does Directly)`:
+
+> 3. Append to `~/.cdocs/review-calibration/history.jsonl`:
+>    ```json
+>    {"timestamp": "<ISO-8601>", "mr_url": "$URL", "work_item_id": "$WORK_ITEM_ID", "score": $SCORE, "verdict": "$VERDICT", "findings": [{"check_id": "...", "severity": "...", "calibrated_confidence": N, "verification_verdict": "...", "outcome": "pending"}], "static_blockers": N, "merge_threshold": N}
+>    ```
+> 4. Count reviews with resolved outcomes. If count is a multiple of 5, trigger recalibration:
+>    - Read all history.jsonl entries
+>    - For each check_id prefix: compute total, accurate, accuracy
+>    - Write `~/.cdocs/review-calibration/calibration.json`
+
+Two deliberate departures from that text, so the excerpt is not mistaken for current spec:
+
+- **Storage location.** The predecessor wrote to `~/.cdocs/` (home-relative, shared across every project). This system writes to `cdocs/` relative to the working repository, so calibration history is per-project. Cross-project accuracy is not pooled.
+- **Outcome expiry.** The predecessor counted every resolved row forever. This system flips rows `pending` for more than 30 days to `expired` and excludes them, per §"Outcome resolution UX". That cutoff is this system's own addition and carries no predecessor authority.
+
+The calibration formula itself (`calibrated_confidence = adjusted_confidence × historical_accuracy`), the `0.75` default, and the look-up-by-`check_id`-prefix rule came from the same predecessor's `commands/_shared/review-pipeline.md`, Stages 4b-4d.
+
