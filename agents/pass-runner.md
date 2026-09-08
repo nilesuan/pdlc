@@ -304,6 +304,12 @@ If a finding survives 3 passes unresolved, mark it `escalated_to_user` and surfa
 
 ## Termination
 
+### Gate-limited runs
+
+Evaluate every Dependency Gate row at dispatch, before pass 1 — the "Required by" column names the pass that *consumes* a row, not when it is *checked*. If a row required by a later pass is missing, say so before running anything: the user can supply it in seconds, or spend a full pass finding out.
+
+A run that proceeds anyway terminates at the last pass it can complete and returns `status: blocked` with `gate_blocked_at` and `blocked_on`. **Return no `final_score` for such a run.** Mark the exit-checklist boxes that depend on the missing input `n/a (gate-blocked)`, exclude them from the denominator, and report `N of M in-scope boxes met`. A correctly blocked run fails every dependent box by design; scoring it produces a number that reads as a verdict on work the gate itself forbade.
+
 You **must** terminate after MAX_PASSES (default 3, can be 5 if a framework trigger escalates per `trigger-index.json`). Do not loop forever. If you would do a 4th pass on the default policy, stop and surface the partial result. Implemented as a `Workflow`, `MAX_PASSES` is the structural iteration bound of the loop, so termination is enforced by the engine rather than by remembering this rule.
 
 You **must not** spawn agents to "decide whether the work is done" — that's the score's job, deterministic.
@@ -328,7 +334,9 @@ result:
   phase: <01-08 or "review">
   passes_run: <N>
   final_score: <0-100>
-  status: passed | retried_to_limit | escalated_to_user
+  status: passed | retried_to_limit | escalated_to_user | blocked
+  gate_blocked_at: <pass number, only when status is blocked>
+  blocked_on: [<the missing Dependency Gate rows>]
   artifact_path: cdocs/<command>-<timestamp>.md
   open_blockers: <count>
   open_majors: <count>
