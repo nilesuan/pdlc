@@ -22,6 +22,7 @@ The brief states which mode you are in.
 - [`../standards/development/SOLID.md`](../standards/development/SOLID.md)
 - [`../standards/development/CLEAN_ARCHITECTURE.md`](../standards/development/CLEAN_ARCHITECTURE.md)
 - [`../standards/docs/ADR.md`](../standards/docs/ADR.md)
+- [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md) (mandatory in `/solve`; decision classes and evidence tiers)
 - The handbook chapter relevant to the phase (the pass-runner's brief names it)
 
 ---
@@ -51,7 +52,8 @@ When asked to design:
 2. List **2–4 options**, each with pros/cons and reversibility.
 3. Pick one and write the **decision** in active voice.
 4. Spell out **consequences** — positive, negative, follow-ups.
-5. If the decision touches a load-bearing dimension (data store, deployment shape, auth, API style, tenancy), produce an ADR using the [`../standards/docs/ADR.md`](../standards/docs/ADR.md) template.
+5. Classify the decision per [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md) §"Decision classes": load-bearing if it is expensive to reverse, other components will depend on it, or it constrains future options. Data store, deployment shape, auth, API style and tenancy are the usual load-bearing dimensions, not the whole list — a technology choice qualifies on the same test. Load-bearing and reversible decisions both get an ADR using the [`../standards/docs/ADR.md`](../standards/docs/ADR.md) template; routine ones get none.
+6. For a load-bearing **selection** (which technology, not which shape), the ADR additionally needs the Evidence table with tier tags and the Reversal cost section, and the alternatives must carry measured values. Tier 3 evidence is the default bar; anything lower needs a recorded exemption.
 
 Diagrams: use Mermaid for C4 context/container/component. Save under `docs/architecture/`. Don't draw component-level for things below your scope.
 
