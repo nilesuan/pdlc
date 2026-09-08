@@ -63,7 +63,8 @@ If the diff is > 2000 LoC, ask the user to scope tighter or accept that review w
         "standards/development/CODE_REVIEW.md",
         "standards/development/SOLID.md",
         "standards/development/CLEAN_ARCHITECTURE.md",
-        "standards/development/TRUNK_BASED.md"
+        "standards/development/TRUNK_BASED.md",
+        "standards/docs/ADR.md"
       ]
     },
     "qa-engineer": {
@@ -82,6 +83,17 @@ If the diff is > 2000 LoC, ask the user to scope tighter or accept that review w
         "standards/EVIDENCE.md",
         "standards/security/OWASP.md",
         "standards/security/AUTH.md"
+      ]
+    },
+    "systems-architect": {
+      "model": "opus",
+      "auto_add_when": "diff_touches:docs/adr/**,docs/architecture/**,solutions/**,**/migrations/**",
+      "standards": [
+        "standards/AGENT_PREAMBLE.md",
+        "standards/EVIDENCE.md",
+        "standards/docs/ADR.md",
+        "standards/docs/TECH_SELECTION.md",
+        "standards/development/CLEAN_ARCHITECTURE.md"
       ]
     },
     "platform-engineer": {
@@ -133,6 +145,8 @@ If diff touches `**/test/**` or `**/spec/**`: also load `standards/testing/TEST_
 
 If diff touches `**/*.tf`, `**/.gitlab-ci.yml`, `**/.github/workflows/**`: also load `standards/platform/AWS_ECS_TERRAFORM.md`, `standards/platform/TERRAFORM_DISCIPLINE.md`, `standards/platform/GITLAB_SECURITY.md`, `standards/release/CONTAINER_TAGGING.md`.
 
+If diff touches `docs/adr/**`, `docs/architecture/**`, `solutions/**`, or `**/migrations/**`: also load `standards/docs/ADR.md` and `standards/docs/TECH_SELECTION.md`.
+
 If diff touches `**/*.py`, `pyproject.toml`, `requirements*.txt`: also load `standards/development/PYTHON.md`.
 
 If diff touches `**/*.ts`, `**/*.tsx`, `tsconfig.json`, `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`: also load `standards/development/TYPESCRIPT.md`.
@@ -144,8 +158,11 @@ sub_agents:
   - code-reviewer        # always (sonnet)
   - qa-engineer          # always; primary if test/spec files in diff (sonnet)
   - security-reviewer    # always (opus); pass-runner upgrades to "primary" if auth/crypto/billing/input touched
+  - systems-architect    # if the diff touches ADRs, architecture docs, solution plans, or migrations (opus)
   - platform-engineer    # if IaC, pipeline, or AWS resource files in diff (opus for design; sonnet for review)
 ```
+
+ADR enforcement splits between two of these, per [`../standards/docs/ADR.md`](../standards/docs/ADR.md) §"Auto-rejection". `code-reviewer` raises the mechanical document defects (`CR-ADR-*`): missing Alternatives or Consequences, an Accepted ADR edited rather than superseded, a reused number. `systems-architect` raises the judgment calls (`ARCH-ADR-*`): whether the change was architecturally significant enough to need an ADR at all, and whether a `/solve` selection was re-decided without a superseding record. Before this split existed, the auto-rejection triggers in `ADR.md` named enforcers that `/review` never spawned, so none of them fired.
 
 All reviewer agents emit `confidence: 0-100` numeric (not `high`/`medium`/`low`). The cross-verifier emits `adjusted_confidence: 0-100` and `adjusted_severity: blocker|major|minor|nit|info|n/a` per finding. The pass-runner replaces the original `confidence`/`severity` with the cross-verifier's adjusted values and then applies per-prefix calibration before scoring. See [`../standards/EVIDENCE.md`](../standards/EVIDENCE.md) §"Confidence calibration" and [`../agents/cross-verifier.md`](../agents/cross-verifier.md) §"Output".
 

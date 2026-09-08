@@ -37,6 +37,7 @@ A pass that meets the trigger's pass-specific check **must produce the artifact 
 | `performance-budget` | build, test | `latency`, `p99`, `hot-path`, `bundle-size`, `database-query` | [`PERFORMANCE_BUDGET.md`](PERFORMANCE_BUDGET.md) |
 | `failure-injection` | build, run | `external-service`, `retry`, `circuit-breaker`, `availability`, `chaos` | [`FAILURE_INJECTION.md`](FAILURE_INJECTION.md) |
 | `composition-verification` | build, test | `wire`, `entry-point`, `daemon`, `lifecycle`, `register`, `multi-component` | [`COMPOSITION_VERIFICATION.md`](COMPOSITION_VERIFICATION.md) |
+| `probabilistic-components` | solve, build, test, run | `LLM`, `model`, `OCR`, `embedding`, `classifier`, `extraction`, `transcription`, `nondeterministic`, `probabilistic`, `prompt`, `inference`, `RAG` | [`PROBABILISTIC_COMPONENTS.md`](PROBABILISTIC_COMPONENTS.md) |
 
 The machine-readable form is [`trigger-index.json`](trigger-index.json). Keep both files in sync when adding a trigger.
 

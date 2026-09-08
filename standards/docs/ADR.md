@@ -67,16 +67,21 @@ When in doubt, write one. ADRs are cheap; "why did we do this?" investigations m
 6. **Deciders explicitly listed.** "We" without names is unaccountable.
 7. **Alternatives section non-empty.** If the decision has no alternatives, it's not a decision.
 
-## Auto-rejection (used by systems-architect / code-reviewer)
+## Auto-rejection
 
-| Trigger | Severity |
-|---|---|
-| Architecturally-significant change merged without ADR | Major |
-| ADR missing Alternatives section | Major |
-| ADR missing Consequences section | Major |
-| ADR with status "Accepted" being edited (vs. superseded) | Major |
-| Deviation from Clean Architecture / SOLID / standards in this system without an ADR | Major |
-| ADR number reused after a deletion | Major (numbers are permanent) |
+Enforcement splits by the judgment each trigger needs, because `code-reviewer` explicitly is not the architecture reviewer:
+
+- **`code-reviewer`** raises the mechanical document defects (`CR-ADR-*`): a missing Alternatives or Consequences section, an Accepted ADR edited in place rather than superseded, a reused number, a status moving backwards. These are checks on the file, not on the architecture, and need no design judgment.
+- **`systems-architect`** raises the judgment calls (`ARCH-ADR-*`): whether a change is architecturally significant enough to require an ADR at all, and whether a deviation from a standard was recorded. It is added to `/review` when the diff touches `docs/adr/**` or an architecture-significant surface.
+
+| Trigger | Severity | Raised by |
+|---|---|---|
+| Architecturally-significant change merged without ADR | Major | systems-architect |
+| ADR missing Alternatives section | Major | code-reviewer |
+| ADR missing Consequences section | Major | code-reviewer |
+| ADR with status "Accepted" being edited (vs. superseded) | Major | code-reviewer |
+| Deviation from Clean Architecture / SOLID / standards in this system without an ADR | Major | systems-architect |
+| ADR number reused after a deletion | Major (numbers are permanent) | code-reviewer |
 
 ## How to file an ADR in this system
 

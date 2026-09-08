@@ -577,6 +577,7 @@ Every role and structural choice in this chapter maps back to the handbook and t
 - **PMs owning continuous discovery per squad.** Handbook [`01-discover.md`](01-discover.md). Discovery is a team practice at lean scale; at full-team scale it becomes a per-squad PM practice supported by dedicated UX researchers.
 
 - **Architecture review forums and distributed ADR ownership.** Handbook [`03-design.md`](03-design.md). At lean scale, Seat 3 writes ADRs personally; at full scale, Tech Leads write them and a Principal Engineer community reviews. Forums replace the "just ask Seat 3" pattern.
+- **Phase 02.5 ownership at scale.** Handbook [`02.5-solve.md`](02.5-solve.md). A choice contained within one service is owned by that stream-aligned team's Tech Lead. A choice that crosses stream boundaries, or that commits the organization to a vendor or platform, is owned by platform engineering (§6.2) and reviewed in the architecture forum. Security engineering (§6.4) supplies the residency, licence, and regulated-data constraints at the start of the phase rather than at review time.
 
 - **Platform teams treated as internal products.** Handbook [`04-build.md`](04-build.md) and [`06-ship.md`](06-ship.md). CI/CD, paved paths, internal developer portals — these are platform-team products, not overhead.
 

@@ -108,6 +108,8 @@ standards:
   - standards/development/TYPESCRIPT.md # if scope includes *.ts / *.tsx
 ```
 
+If the scope contains a probabilistic component (model, LLM, OCR, classifier, embedding), the `probabilistic-components` trigger fires and [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) is loaded at 5 passes. Coverage percentage and flake rate say nothing about whether such a component is still accurate; its gate is corpus evaluation against pre-registered thresholds, and this command audits that gate rather than substituting for it.
+
 ## Sub-agents
 
 ```yaml
