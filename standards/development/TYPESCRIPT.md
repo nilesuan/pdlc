@@ -101,7 +101,7 @@ service/
 
 - [Google Style Guides](https://google.github.io/styleguide/) (TypeScript and JavaScript guides; accessed 2026-04-24) [VERIFIED via [`../../research/04-development/coding-practices.md`](../../research/04-development/coding-practices.md) §6].
 - [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) (148k+ stars at fetch time; accessed 2026-04-24) [VERIFIED].
-- [`../../handbook/04-build.md`](../../handbook/04-build.md) §"Automate with a formatter / linter / type checker / security-focused linter / secrets scanning" — tool prescriptions.
+- [`../../handbook/04-build.md`](../../handbook/04-build.md) §"Style" and §"Static analysis" — tool prescriptions.
 - [`../../handbook/04-build-processes.md`](../../handbook/04-build-processes.md) §"Commit config in-repo" — `tsconfig.json` placement.
 - [`../../research/04-development/coding-practices.md`](../../research/04-development/coding-practices.md) §6 (Style guides), §5 (Static analysis — SonarQube, DORA Code Maintainability).
 - Predecessor: `~/.claude.old/standards/TYPESCRIPT.md` (referenced for layout shape; specific tool versions and pin policies were re-grounded against this workspace's handbook + research, not lifted as-is).

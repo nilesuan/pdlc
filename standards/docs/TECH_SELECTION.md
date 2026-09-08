@@ -125,7 +125,7 @@ Used by systems-architect and by the pass-runner during [`../../commands/solve.m
 ## Sources
 
 - Record format and hard rules: [`ADR.md`](ADR.md), grounding in Michael Nygard, "Documenting Architecture Decisions" (2011) and [`../../research/03-design/adrs.md`](../../research/03-design/adrs.md).
-- Pre-registration, one-primary-metric, no-peeking, HARKing: ported from [`../frameworks/EXPERIMENTATION.md`](../frameworks/EXPERIMENTATION.md) §"Rules" and §"Pre-registration / hypothesis ledger", which grounds them in [`../../handbook/08-evolve-processes.md`](../../handbook/08-evolve-processes.md) §4.
+- Pre-registration, one-primary-metric, no-peeking, HARKing: ported from [`../frameworks/EXPERIMENTATION.md`](../frameworks/EXPERIMENTATION.md) §"Hard rules" and §"Pre-registration / hypothesis ledger", which grounds them in [`../../handbook/08-evolve-processes.md`](../../handbook/08-evolve-processes.md) §4.
 - Claim tagging and source hierarchy: [`../../techstacks/00-methodology.md`](../../techstacks/00-methodology.md).
 - Evidence schemas and the weasel-grounding auto-reject: [`../EVIDENCE.md`](../EVIDENCE.md).
 - "Cheapest evidence that actually proves it": [`../../research/01-ideation/discovery.md`](../../research/01-ideation/discovery.md) (riskiest-assumption testing).
