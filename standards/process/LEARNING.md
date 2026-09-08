@@ -43,7 +43,7 @@ YAML frontmatter plus four sections. Blameless framing throughout — describe t
 ---
 id: LESSON-NNNN
 date: YYYY-MM-DD
-trigger: xv-rejected | broken-link | auto-rejected | user-correction | failed-pass
+trigger: xv-rejected | broken-link | auto-rejected | user-correction | failed-pass | audit-finding
 phases: [01, 03, 06]            # PDLC phase numbers the failure mode applies to
 keywords: [feature-flag, ADR, terraform-plan]
 related-rules: [standards/ANTI_HALLUCINATION.md, agents/cross-verifier.md]
@@ -122,6 +122,7 @@ The sweep is additive to, not a replacement for, the quarterly retirement pass a
 4. **Keywords are matchable, not aspirational.** A lesson with the keyword `everything` matches every brief and is therefore worthless. Keywords should be the specific tokens the failure mode actually involved.
 5. **Retirement requires structural change.** A lesson does not retire because a year passed; it retires because the failure mode is now mechanically prevented. Otherwise the lesson is still earning its place.
 6. **The index is the loader's input.** Lessons not in `INDEX.md` do not get loaded into briefs. A lesson file that exists on disk but is missing from the index is not in the loop.
+7. **`audit-finding` is a first-class trigger.** A failure mode found by deliberately auditing the system - rather than by a pass failing, a link breaking, or a user correcting - records `trigger: audit-finding`. Self-audits are a standing detection path here and the lessons they produce are not second-class. *Why: the alternative was mislabelling audit-detected lessons as `user-correction`, which corrupts the trigger field the calibration and retirement passes read.*
 
 ## Anti-patterns to flag
 
