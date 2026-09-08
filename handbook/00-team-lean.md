@@ -165,6 +165,7 @@ Each seat is described in the same shape: **role**, **phase ownership** (primary
 **Role.** The senior engineer accountable for "does it work in production at 3 a.m.?" — and for the architectural decisions today that let the team ship without stalling six months from now.
 
 **Primary phase ownership.**
+- [**Phase 02.5 Solve**](02.5-solve.md). Owns the phase. Writes the constraints before any candidate list, classifies decisions by reversal cost, runs or delegates the bake-offs, authors the selection ADRs. This is where the tech-stack picks below are actually decided and proven; Phase 03 consumes the result.
 - [**Phase 03 Design (architecture)**](03-design.md). Architecture Decision Records. System boundaries. Data model. API design. Tech-stack picks.
 - [**Phase 06 Ship**](06-ship.md). CI/CD pipeline. Deployment strategy (rolling / blue-green / canary — handbook picks the default). Release tooling. DORA metric instrumentation.
 - [**Phase 07 Run**](07-run.md). SLOs. Observability (OpenTelemetry-based per handbook Phase 07). On-call rotation tooling. Incident commander on SEV1/SEV2.
@@ -287,12 +288,13 @@ Each seat is described in the same shape: **role**, **phase ownership** (primary
 
 ## 3. Phase ownership matrix
 
-The four seats map to all eight handbook phases as follows. "**R**" = Responsible (owns it), "**C**" = Contributes substantively, "**I**" = Informed / reviews.
+The four seats map to all eight handbook phases, plus the 02.5 bridge, as follows. "**R**" = Responsible (owns it), "**C**" = Contributes substantively, "**I**" = Informed / reviews.
 
 | Phase | Founder / PM (1) | Design Eng (2) | Staff Eng (3) | Senior FS Eng (4) |
 |---|---|---|---|---|
 | [01 Discover](01-discover.md) | **R** | C (usability & research) | C (feasibility spikes) | C (feasibility spikes) |
 | [02 Plan](02-plan.md) | **R** | C (design effort sizing) | C (tech effort sizing) | C (tech effort sizing) |
+| [02.5 Solve](02.5-solve.md) | C (scope call when constraints eliminate everything) | I | **R** | C (builds the bake-off harnesses) |
 | [03 Design — UX](03-design.md) | C (flows, problem framing) | **R** | I | I |
 | [03 Design — architecture](03-design.md) | I | I | **R** | C (module design) |
 | [04 Build — frontend](04-build.md) | I | **R** | I | C |
