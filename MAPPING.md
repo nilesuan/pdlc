@@ -118,7 +118,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 | `standards/process/CUSTOMER_FEEDBACK.md` | `handbook/01-discover.md`; `handbook/08-evolve.md`; `research/01-ideation/discovery.md`; `research/01-ideation/user-research.md`; `research/08-maintenance/feedback-loops.md`; Reichheld HBR 2003 (NPS); Dixon et al. HBR 2010 (CES) |
 | `standards/process/TASK_SIZING.md` | `handbook/02-plan.md` §"Step 6 — Size items" + §"Step 8 — Establish backlog refinement"; `research/02-planning/estimation.md` §§1–2; Cohn *Agile Estimating and Planning* (2005). The 1–2 hour leaf-task band and the mandatory verification pass are codifications adopted by this system, flagged `[UNVERIFIED]` against any single named source. |
 | `standards/process/LEARNING.md` | `handbook/08-evolve.md`; `research/08-maintenance/feedback-loops.md` §§6–9 (Kerth Prime Directive; PDCA Shewhart/Deming; Rother Toyota Kata 2009); `research/07-operations/incident-response.md` (Allspaw blameless postmortems). The automatic candidate-stub capture, keyword-matching loader, and 1-year-plus-structural-change retirement rule are codifications adopted by this system, flagged `[UNVERIFIED]` against any single named source. |
-| `standards/process/CALIBRATION.md` | Per-prefix historical-accuracy calibration; consumed by pass-runner scoring. Ported from `~/.claude.old/commands/_shared/review-pipeline.md` Stage 4b–4d and `~/.claude.old/commands/amrr.md` §"Step 4c. Feedback Capture". Cross-references: `agents/pass-runner.md`, `standards/QUALITY.md`. |
+| `standards/process/CALIBRATION.md` | Per-prefix historical-accuracy calibration; consumed by pass-runner scoring. Ported from `~/.claude.old/commands/_shared/review-pipeline.md` Stage 4b–4d and the predecessor `commands/amrr.md` §"4c. Feedback Capture" (excerpt quoted in [`standards/process/CALIBRATION.md`](standards/process/CALIBRATION.md) §"Provenance", since that path is machine-local). Cross-references: `agents/pass-runner.md`, `standards/QUALITY.md`. |
 
 ### Frameworks (conditional escalation)
 
@@ -147,7 +147,7 @@ These specs are loaded by `pass-runner` only when a brief contains the activatio
 | `MAPPING.md` | This file | This system |
 | `standards/AGENT_PREAMBLE.md` | Non-negotiables every agent loads | This system |
 | `standards/ANTI_HALLUCINATION.md` | Unified six-layer anti-hallucination protocol; defines the pre-output gate (layer 6), hallucination KPIs, and escalation thresholds | This system; research/CLAUDE.md (research rules) §§1–4; CLAUDE.md (global rules) §§1–2; cross-verifier; EVIDENCE.md; QUALITY.md |
-| `standards/process/CALIBRATION.md` | Per-prefix historical-accuracy calibration applied during scoring; complementary to ANTI_HALLUCINATION.md (catches systematic agent drift across passes) | This system; ported from `~/.claude.old/commands/_shared/review-pipeline.md` Stage 4 and `~/.claude.old/commands/amrr.md` §"Step 4c. Feedback Capture" |
+| `standards/process/CALIBRATION.md` | Per-prefix historical-accuracy calibration applied during scoring; complementary to ANTI_HALLUCINATION.md (catches systematic agent drift across passes) | This system; ported from `~/.claude.old/commands/_shared/review-pipeline.md` Stage 4 and the predecessor `commands/amrr.md` §"4c. Feedback Capture" (excerpt quoted in [`standards/process/CALIBRATION.md`](standards/process/CALIBRATION.md) §"Provenance", since that path is machine-local) |
 | `standards/EVIDENCE.md` | The three claim schemas | This system; CLAUDE.md research-rules grounding |
 | `standards/QUALITY.md` | Scoring formula | This system; from `SYSTEM.md` analysis of `.claude.old` |
 | `lessons/INDEX.md` | Durable lesson storage; loader input for the pass-runner before pass 1 | This system, defined by `standards/process/LEARNING.md` |
@@ -185,6 +185,7 @@ These specs are loaded by `pass-runner` only when a brief contains the activatio
 ## Sources
 
 - This system was bootstrapped from analysis of `~/.claude.old/` recorded in [`research/sources/SYSTEM.md`](research/sources/SYSTEM.md).
+- **`~/.claude.old` is not part of this repository.** It is a snapshot of the predecessor configuration on one machine and will not resolve for any other reader. Remaining mentions of it in this file are *attributions* - they credit where a pattern came from - and are not citations a reader is expected to open. Where a predecessor text is load-bearing for a rule in this system, it is quoted verbatim in the standard that depends on it rather than cited by path; see [`standards/process/CALIBRATION.md`](standards/process/CALIBRATION.md) §"Provenance" for the one case where that applies.
 - Authoritative policy documents that ground most standards:
   - [`platform-team/engineering-policy.md`](platform-team/engineering-policy.md)
   - [`platform-team/developer-guidelines.md`](platform-team/developer-guidelines.md)

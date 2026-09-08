@@ -121,6 +121,13 @@ PYSPEC
 eq "every trigger-index.json spec file exists" "0" "$bad_specs"
 
 # ---------------------------------------------------------------------------
+section "citations point at things a reader can actually open"
+# A section citation against a path outside this repository resolves only on the
+# machine that has it. Attribution prose is fine; a verifiable-looking § is not.
+offrepo=$(grep -rn 'claude\.old[^ ]*\.md[`)]* *§' --include="*.md" . 2>/dev/null | wc -l | tr -d ' ')
+eq "no section citation targets a path outside the repo" "0" "$offrepo"
+
+# ---------------------------------------------------------------------------
 section "the lesson loader can resolve every indexed lesson"
 unresolved=$(python3 <<'PYL1'
 import re, io, glob, os
