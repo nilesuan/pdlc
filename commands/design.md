@@ -113,7 +113,10 @@ standards:
   - standards/security/OWASP.md
   - standards/security/AUTH.md
   - standards/docs/ADR.md
+  - standards/checklists/03-design-exit.md   # the exit gate this command is scored against
 ```
+
+Conditional: if the system exposes two or more customer-facing product frontends under one hostname, also load [`../standards/platform/MULTI_PRODUCT_FRONTEND.md`](../standards/platform/MULTI_PRODUCT_FRONTEND.md). Its own §Scope states the condition; it does not apply to internal tools or to a single product with multiple routes.
 
 ## Sub-agents
 

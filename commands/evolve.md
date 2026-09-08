@@ -127,6 +127,7 @@ standards:
   - standards/security/OWASP.md
   - standards/process/TECHNICAL_DEBT.md
   - standards/process/CUSTOMER_FEEDBACK.md
+  - standards/checklists/08-evolve-exit.md   # the exit gate this command is scored against
 ```
 
 ## Sub-agents

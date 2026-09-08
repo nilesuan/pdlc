@@ -108,7 +108,10 @@ standards:
   - standards/operations/OBSERVABILITY.md
   - standards/operations/ON_CALL.md
   - standards/security/OWASP.md          # for A09 logging hygiene
+  - standards/checklists/07-run-exit.md   # the exit gate this command is scored against
 ```
+
+Conditional: when auditing or authoring runbooks, also load [`../standards/docs/DIATAXIS.md`](../standards/docs/DIATAXIS.md). A runbook is a how-to; a runbook that has drifted into explanation is the documented failure mode.
 
 ## Sub-agents
 
