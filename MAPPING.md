@@ -4,7 +4,7 @@ This is the index that traces every system artifact back to its source: the pres
 
 If you cannot find an entry here for a claim, the claim is not grounded — open an issue or add the source.
 
-**Known gap.** `commands/solve.md` and `standards/checklists/02.5-solve-exit.md` have no `handbook/` chapter. Phase 02.5 is a system extension, not a distillation of an existing chapter. Its discipline is grounded in `standards/docs/TECH_SELECTION.md`, which in turn cites Nygard, the pre-registration rules ported from `standards/frameworks/EXPERIMENTATION.md`, and `techstacks/00-methodology.md`. Writing `handbook/02.5-solve.md` would close the gap.
+**Weaker grounding, declared.** Phase 02.5 (`handbook/02.5-solve.md`, `commands/solve.md`, `standards/docs/TECH_SELECTION.md`) and `standards/frameworks/PROBABILISTIC_COMPONENTS.md` are system extensions, not distillations of an existing research document. No `research/` file covers technology-selection method or ML evaluation practice. Both are assembled from adjacent verified sources - Nygard on architecturally significant decisions, the pre-registration discipline in `standards/frameworks/EXPERIMENTATION.md`, riskiest-assumption testing in `research/01-ideation/discovery.md`, Cost of Delay in `research/02-planning/prioritization.md`, and the source hierarchy in `techstacks/00-methodology.md`. Each carries an `[UNVERIFIED]` note at the point where the assembly exceeds its sources. Closing this properly means adding `research/` documents on those two topics.
 
 ## Phase commands
 
@@ -13,7 +13,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 | `commands/discover.md` | `handbook/01-discover.md` | `research/01-ideation/` (Discovery, JTBD, ODI, OST, four-risks) |
 | `commands/plan.md` | `handbook/02-plan.md` | `research/02-planning/` (OKRs, RICE, Now/Next/Later, strategy kernel) |
 | `commands/design.md` | `handbook/03-design.md` | `research/03-design/` (C4, Clean Arch, STRIDE, ADR, NFRs) |
-| `commands/solve.md` | **no chapter yet** (system extension) | `standards/docs/TECH_SELECTION.md`; `research/03-design/adrs.md` (Nygard ADRs); `research/01-ideation/discovery.md` (riskiest-assumption test); `research/02-planning/prioritization.md` (Cost of Delay → reversal cost); `techstacks/` (Tier 1 desk corpus) |
+| `commands/solve.md` | `handbook/02.5-solve.md` | `standards/docs/TECH_SELECTION.md`; `research/03-design/adrs.md` (Nygard ADRs); `research/01-ideation/discovery.md` (riskiest-assumption test); `research/02-planning/prioritization.md` (Cost of Delay → reversal cost); `techstacks/` (Tier 1 desk corpus) |
 | `commands/build.md` | `handbook/04-build.md` | `research/04-development/` + `platform-team/engineering-policy.md` §1, §4, §6, §7, §8, §9 |
 | `commands/test.md` | `handbook/05-test.md` | `research/05-testing/` + `platform-team/engineering-policy.md` §5 |
 | `commands/ship.md` | `handbook/06-ship.md` | `research/06-release/` + `platform-team/engineering-policy.md` §3 + `platform-team/developer-guidelines.md` §8, §9 + `NOTES.md` |
@@ -26,6 +26,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 |---|---|
 | `commands/review.md` | `platform-team/engineering-policy.md` §8; `standards/development/CODE_REVIEW.md` |
 | `commands/split.md` | `handbook/02-plan.md` (the plan it decomposes); `standards/process/TASK_SIZING.md` |
+| `standards/frameworks/PROBABILISTIC_COMPONENTS.md` | **no research file** (system extension, declared above); assembled from `standards/frameworks/EXPERIMENTATION.md` + `standards/testing/TEST_STRATEGY.md` + `standards/docs/TECH_SELECTION.md` |
 | `commands/_shared/pass-loop.md` | This system; orchestration pattern from `SYSTEM.md` analysis of `.claude.old` |
 | `commands/_shared/pipeline-handoff.md` | This system; orchestration pattern |
 | `commands/_shared/evidence-format.md` | `standards/EVIDENCE.md` |
@@ -36,7 +37,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 |---|---|
 | `standards/checklists/01-discover-exit.md` | `handbook/01-discover.md` "Done when" + four-risks (Cagan), CDH (Torres) |
 | `standards/checklists/02-plan-exit.md` | `handbook/02-plan.md` + Rumelt strategy kernel, Doerr OKRs, Wodtke Radical Focus |
-| `standards/checklists/02.5-solve-exit.md` | `standards/docs/TECH_SELECTION.md` + `standards/frameworks/EXPERIMENTATION.md` (pre-registration) + Nygard ADRs |
+| `standards/checklists/02.5-solve-exit.md` | `handbook/02.5-solve.md` + `standards/docs/TECH_SELECTION.md` + `standards/frameworks/EXPERIMENTATION.md` (pre-registration) + Nygard ADRs |
 | `standards/checklists/03-design-exit.md` | `handbook/03-design.md` + C4 (Brown), Clean Arch (Martin), STRIDE (Shostack) |
 | `standards/checklists/04-build-exit.md` | `handbook/04-build.md` + `platform-team/engineering-policy.md` §1, §4, §6, §7, §8, §9 |
 | `standards/checklists/05-test-exit.md` | `handbook/05-test.md` + `platform-team/engineering-policy.md` §5 + Cohn / Fowler / Vocke / Dodds |

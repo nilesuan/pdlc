@@ -155,7 +155,7 @@ Pass-runner produces, in order:
 4. **Spike pre-registrations** at `solutions/<slug>/spikes/<decision-slug>.md`, written before spike code.
 5. **Spike results** appended to the same file: measured primary metric against the pre-registered threshold, guardrails, and the decision.
 6. **Selection ADRs** under `docs/adr/`, sharing the design-ADR number sequence, per [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md) §"The selection ADR".
-7. **Regression harnesses** promoted from spike code into the repo's test tree, wired to run in CI.
+7. **Regression harnesses** promoted from spike code into the repo's test tree, wired to run in CI. Where the chosen component is probabilistic (model, LLM, OCR, classifier, embedding), the `probabilistic-components` trigger fires and the spike's corpus and thresholds become the artifacts required by [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md).
 8. **Solution plan** at `solutions/<slug>/solution-plan.md`: the chosen approach end to end, with each component pointing at the ADR that chose it and the gate that holds it.
 
 Pass-runner enforces:
@@ -183,7 +183,7 @@ Hand off to `/design <name>` for architecture shape, C4, data model, API contrac
 
 ## Sources
 
-- Handbook: no chapter yet. This phase is a system extension; its discipline is grounded in the standards below rather than in a handbook chapter, and that gap is recorded in [`../MAPPING.md`](../MAPPING.md).
+- Handbook: [`../handbook/02.5-solve.md`](../handbook/02.5-solve.md). The chapter declares its own weaker grounding: no `research/` document covers technology-selection method, so the discipline is assembled from adjacent verified sources. Recorded in [`../MAPPING.md`](../MAPPING.md).
 - Standards:
   - [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md) — decision classes, evidence tiers, bake-off protocol, selection-ADR format
   - [`../standards/docs/ADR.md`](../standards/docs/ADR.md) — Nygard record format and hard rules

@@ -30,12 +30,13 @@ If you're building something very different (console games, safety-critical syst
 
 ---
 
-## The 8 phases
+## The 8 phases (plus one bridge)
 
 | # | Phase | What you do | Primary output |
 |---|---|---|---|
 | 01 | [**Discover**](01-discover.md) | Find a problem worth solving and validate it | A sharp problem statement and evidence of demand |
 | 02 | [**Plan**](02-plan.md) | Decide what to build first and how you'll measure success | Product strategy, MVP scope, OKRs |
+| 02.5 | [**Solve**](02.5-solve.md) | Prove the load-bearing technology and approach choices before an architecture is drawn around them | Constraints, decision register, selection ADRs with measured evidence, solution plan |
 | 03 | [**Design**](03-design.md) | Make the major technical and UX decisions | System architecture, key flows, ADRs |
 | 04 | [**Build**](04-build.md) | Write the code, well | Working software in version control, reviewed and refactored |
 | 05 | [**Test**](05-test.md) | Make sure it works and keeps working | Automated test suite and quality gates |
