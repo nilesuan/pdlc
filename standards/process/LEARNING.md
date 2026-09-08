@@ -116,7 +116,7 @@ The sweep is additive to, not a replacement for, the quarterly retirement pass a
 
 ## Hard rules
 
-1. **Record on detection, not later.** The pass-runner and cross-verifier write candidate stubs as part of their normal flow. A stub written "after the next pass" is a stub that does not exist.
+1. **Record on detection, not later, and commit it.** The pass-runner and cross-verifier write candidate stubs as part of their normal flow. A stub written "after the next pass" is a stub that does not exist - and neither is one left untracked. `lessons/` is version-controlled, so an uncommitted stub is one `git clean` or one fresh clone from gone, which makes the durability this file claims in its opening paragraph untrue. Writing the file is half the record; committing it is the other half.
 2. **Candidates are reviewed, not auto-promoted.** A stub is `LESSON-<id>-candidate.md`; the user reviews and promotes it to `LESSON-<id>-<slug>.md`. Auto-promotion would let one bad correction become a permanent rule.
 3. **Lessons are blameless.** No agent attribution. The rule is the artifact; the actor is irrelevant. [Kerth Prime Directive](https://retrospectivewiki.org/index.php?title=The_Prime_Directive) (accessed 2026-04-24, via [`../../research/08-maintenance/feedback-loops.md`](../../research/08-maintenance/feedback-loops.md) §6).
 4. **Keywords are matchable, not aspirational.** A lesson with the keyword `everything` matches every brief and is therefore worthless. Keywords should be the specific tokens the failure mode actually involved.
