@@ -68,7 +68,7 @@ Per input class, declare in advance:
 | Sample size | How many corpus items. Enough that the band is narrower than the effect you care about |
 | Guardrails | Cost per item, p95 latency, refusal rate. Tracked, not decision-bearing |
 
-Thresholds are declared before results, and a threshold lowered after a failing run is a blocker, not a fix. This is [`EXPERIMENTATION.md`](EXPERIMENTATION.md) §"Rules" applied to a corpus run, and the same reasoning holds: a threshold set after seeing the number measures nothing.
+Thresholds are declared before results, and a threshold lowered after a failing run is a blocker, not a fix. This is [`EXPERIMENTATION.md`](EXPERIMENTATION.md) §"Hard rules" applied to a corpus run, and the same reasoning holds: a threshold set after seeing the number measures nothing.
 
 **Segment, or the aggregate lies.** Report and gate per class. A 94% aggregate that hides one class failing at 40% is the normal way this goes undetected, because the failing class is usually the rare, important one.
 
@@ -165,7 +165,7 @@ A pass that touches a probabilistic component must produce, before scoring proce
 
 ## Sources
 
-- Pre-registration, one primary metric, no peeking, HARKing: [`EXPERIMENTATION.md`](EXPERIMENTATION.md) §"Rules", which grounds them in [`../../handbook/08-evolve-processes.md`](../../handbook/08-evolve-processes.md) §4.
+- Pre-registration, one primary metric, no peeking, HARKing: [`EXPERIMENTATION.md`](EXPERIMENTATION.md) §"Hard rules", which grounds them in [`../../handbook/08-evolve-processes.md`](../../handbook/08-evolve-processes.md) §4.
 - Fakes over mocks, flake quarantine, suite shape: [`../testing/TEST_STRATEGY.md`](../testing/TEST_STRATEGY.md).
 - Bake-off protocol, evidence tiers, harness promotion: [`../docs/TECH_SELECTION.md`](../docs/TECH_SELECTION.md).
 - Segmentation-over-aggregate and the representative-workload requirement: [`../docs/TECH_SELECTION.md`](../docs/TECH_SELECTION.md) §"Anti-patterns".

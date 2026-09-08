@@ -73,7 +73,7 @@ Deviations require an ADR (`docs/adr/`).
 
 - [PEP 8 — Style Guide for Python Code](https://peps.python.org/pep-0008/) (van Rossum / Warsaw / Coghlan; accessed 2026-04-24) — primary style guide [VERIFIED].
 - [Google Python Style Guide](https://google.github.io/styleguide/) (listed on the Google Style Guides index; accessed 2026-04-24) [VERIFIED].
-- [`../../handbook/04-build.md`](../../handbook/04-build.md) §"Automate with a formatter / linter / type checker / security-focused linter / secrets scanning" — tool prescriptions.
+- [`../../handbook/04-build.md`](../../handbook/04-build.md) §"Style" and §"Static analysis" — tool prescriptions.
 - [`../../handbook/04-build-processes.md`](../../handbook/04-build-processes.md) §"Commit config in-repo" — `pyproject.toml` placement.
 - [`../../research/04-development/coding-practices.md`](../../research/04-development/coding-practices.md) §6 (Style guides — PEP 8 verified primary), §5 (Static analysis — DORA Code Maintainability).
 - [`../../research/05-testing/non-functional-testing.md`](../../research/05-testing/non-functional-testing.md) §SAST — Bandit listed in OWASP directory [VERIFIED].

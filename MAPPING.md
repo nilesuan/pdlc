@@ -58,8 +58,8 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 | `standards/development/SOLID.md` | `platform-team/engineering-policy.md` §6; Martin "Solid Relevance" (2020) |
 | `standards/development/CLEAN_ARCHITECTURE.md` | `platform-team/engineering-policy.md` §7; Martin "The Clean Architecture" (2012) |
 | `standards/development/CODE_REVIEW.md` | `platform-team/engineering-policy.md` §8; Google Engineering Practices; Bacchelli & Bird ICSE 2013 |
-| `standards/development/PYTHON.md` | PEP 8 (verified); `handbook/04-build.md` §"Automate with a formatter / linter / type checker"; `research/04-development/coding-practices.md` §5–6; `research/05-testing/non-functional-testing.md` (Bandit via OWASP) |
-| `standards/development/TYPESCRIPT.md` | Google Style Guides (TypeScript guide listed, verified); Airbnb JS Style Guide (verified); `handbook/04-build.md` §"Automate with a formatter / linter / type checker"; `research/04-development/coding-practices.md` §5–6 |
+| `standards/development/PYTHON.md` | PEP 8 (verified); `handbook/04-build.md` §"Style" and §"Static analysis"; `research/04-development/coding-practices.md` §5–6; `research/05-testing/non-functional-testing.md` (Bandit via OWASP) |
+| `standards/development/TYPESCRIPT.md` | Google Style Guides (TypeScript guide listed, verified); Airbnb JS Style Guide (verified); `handbook/04-build.md` §"Style" and §"Static analysis"; `research/04-development/coding-practices.md` §5–6 |
 
 ### Testing
 
