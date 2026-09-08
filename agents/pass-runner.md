@@ -139,12 +139,14 @@ Sum `broken_links` across all artifacts in the pass and report the per-artifact 
 
 ### Lesson capture
 
-After scoring (step 2f), inspect the pass's `hallucination_kpis`. When the pass produces `xv_rejected ≥ 1`, `broken_links ≥ 1`, or `auto_rejected ≥ 1`, write a candidate lesson stub to `lessons/<YYYY>/LESSON-NNNN-candidate.md` for the user to review before the next pass. `<YYYY>` is the current calendar year; `NNNN` is the next zero-padded sequence number for that year (read existing files in the directory to determine it). The stub uses the frontmatter and four-section structure defined in [`../standards/process/LEARNING.md`](../standards/process/LEARNING.md) §"Lesson file structure" and captures:
+After scoring (step 2f), inspect the pass's `hallucination_kpis`. When the pass produces `xv_rejected ≥ 1`, `broken_links ≥ 1`, `auto_rejected ≥ 1`, or **`xv_downgraded ≥ 2` sharing a common root cause**, write a candidate lesson stub to `lessons/<YYYY>/LESSON-NNNN-candidate.md` for the user to review before the next pass. `<YYYY>` is the current calendar year; `NNNN` is the next zero-padded sequence number for that year (read existing files in the directory to determine it). The stub uses the frontmatter and four-section structure defined in [`../standards/process/LEARNING.md`](../standards/process/LEARNING.md) §"Lesson file structure" and captures:
 
 - The `trigger` matching the failure (`xv-rejected`, `broken-link`, `auto-rejected`).
 - A blameless one-paragraph "What went wrong" naming the failure mode (the cited source vs. what was actually there; the broken link's resolved path; the auto-rejection rule that fired) — never the agent that erred.
 - A draft "How to prevent it" rule. The user refines this on review.
 - Suggested `keywords` drawn from the brief tokens that were load-bearing in the failure.
+
+The downgrade trigger exists because the other three catch findings that were *wrong*, and miss a set of findings that were each defensible but shared a systematic weakness. A cross-verifier that downgrades three findings for the same reason has identified exactly that, and it is the most valuable thing a pass can tell you about its own method. LESSON-0008 was captured this way, off-spec, because the rule did not yet cover it.
 
 Multiple triggers in one pass produce multiple stubs — one per failure mode, not one combined. The user promotes a stub by renaming it to `LESSON-NNNN-<slug>.md` and adding a row to `lessons/INDEX.md`; the orchestrator does not auto-promote. See [`../standards/process/LEARNING.md`](../standards/process/LEARNING.md) §"Hard rules" #2.
 
