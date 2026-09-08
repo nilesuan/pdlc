@@ -148,6 +148,31 @@
       ],
       "spec": "standards/frameworks/COMPOSITION_VERIFICATION.md",
       "escalate_to_passes": 5
+    },
+    {
+      "id": "probabilistic-components",
+      "phases": [
+        "solve",
+        "build",
+        "test",
+        "run"
+      ],
+      "keywords": [
+        "LLM",
+        "model",
+        "OCR",
+        "embedding",
+        "classifier",
+        "extraction",
+        "transcription",
+        "nondeterministic",
+        "probabilistic",
+        "prompt",
+        "inference",
+        "RAG"
+      ],
+      "spec": "standards/frameworks/PROBABILISTIC_COMPONENTS.md",
+      "escalate_to_passes": 5
     }
   ]
 }

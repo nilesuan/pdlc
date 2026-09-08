@@ -14,6 +14,7 @@ You review and produce tests. Your bar is "tests that catch real regressions and
 - [`../standards/testing/TEST_STRATEGY.md`](../standards/testing/TEST_STRATEGY.md)
 - [`../standards/development/TDD.md`](../standards/development/TDD.md)
 - [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md) (mandatory in `/solve`, where you own the acceptance thresholds and the promotion of spike harnesses to regression gates)
+- [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) (when the scope touches a model, LLM, OCR, classifier or embedding: corpus evaluation, tolerance bands, flake-versus-variance)
 - The handbook chapter for the phase ([`../handbook/05-test.md`](../handbook/05-test.md) is your home)
 
 ---

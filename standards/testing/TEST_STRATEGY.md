@@ -112,3 +112,9 @@ Mocking your own internal seams (between modules in the same service) is almost 
 - Coverage targets: Fowler "TestCoverage" (also: 100% is a smell).
 - Handbook: [`../../handbook/05-test.md`](../../handbook/05-test.md).
 - Hard rules 6 and 7 come from [`../../platform-team/engineering-policy.md`](../../platform-team/engineering-policy.md) §3.4 and §3.5, both marked `[SYNTHESIS]` there (this organization's codification, not a claim of Fowler / Vocke / Cohn / Dodds).
+
+## Probabilistic components
+
+Nothing in this file applies cleanly to a component whose output varies for a fixed input: a model, an LLM, an OCR engine, a classifier, an embedding. Coverage percentage and exact-match assertions do not measure their correctness, and their intermittent failures are not necessarily flake.
+
+Those components are governed by [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md), which separates the deterministic shell (tested here, with fakes) from model behaviour (gated on corpus evaluation against pre-registered thresholds). The flake-quarantine rules in this file apply to the shell; they do not license muting a corpus gate.

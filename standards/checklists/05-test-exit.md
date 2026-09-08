@@ -27,6 +27,7 @@ This checklist is run at the end of `/test` — typically before merge to main a
 - [ ] **Flag-state tests** for every flag touched: default-off, flag-on, and fail-closed (unresolvable state falls back to off). Flip-back test where the feature writes persistent state. See [`../testing/TEST_STRATEGY.md`](../testing/TEST_STRATEGY.md) §"Flag-state testing".
 - [ ] **Prod-deployability gate green** on this commit, with all five assertions run (artifact identity, prod-config dry-run, flags-off smoke, migration compatibility, rollback rehearsal). See [`../release/CONTINUOUS_DELIVERY.md`](../release/CONTINUOUS_DELIVERY.md) §"The prod-deployability gate".
 - [ ] **Gate is required, not advisory** - not `allow_failure`, not skipped, not muted for flakiness.
+- [ ] **Probabilistic components gated on a corpus**, not on exact-match assertions: deterministic shell tested with fakes (including malformed, empty, truncated and error responses), model version pinned and recorded as a dependency, thresholds dated before the first run, results segmented per input class, held-out slice reserved. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md).
 
 ## Auto-rejection
 
