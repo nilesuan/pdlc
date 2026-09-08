@@ -173,6 +173,7 @@ These specs are loaded by `pass-runner` only when a brief contains the activatio
 | `scripts/verify-artifact.sh` | Pre-output gate (layer 6) - checks relative-link resolution, lists external URLs, tallies uncertainty tags on authored Markdown artifacts | Invoked by `pass-runner` per artifact before final summary, and by `scripts/verify-artifact-hook.sh` at the tool boundary; defined by `standards/ANTI_HALLUCINATION.md` |
 | `scripts/guard-dangerous-bash.sh` | Hard-blocks the CLAUDE.md §4 non-negotiables (terraform/tofu auto-approve, `--no-verify`, force-push to a protected branch) by exiting 2 | `PreToolUse` hook, matcher `Bash`, in `settings.example.json` |
 | `scripts/verify-artifact-hook.sh` | Runs the layer-6 gate on authored Markdown at write time and returns `{"decision":"block"}` so the finding reaches Claude; fails open | `PostToolUse` hook, matcher `Write\|Edit`, in `settings.example.json` |
+| `scripts/test-controls.sh` | Negative tests for every control: feeds each guard, gate and hook input it must reject and asserts the rejection; validates shipped JSON templates by parsing them; asserts identifiers shared between a script and a document are equal | Required by `lessons/2026/LESSON-0005-silent-control-needs-a-negative-test.md` |
 
 ## How to extend the mapping
 

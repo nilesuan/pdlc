@@ -62,6 +62,7 @@ The handbook tells a human *what* to do. The research tells a human *why*. The p
 
   lessons/                  durable learned-mistake store (loader input for pass 1)
   scripts/                  context-monitor, audit-log, verify-artifact (pre-output gate)
+    test-controls.sh        negative tests - every guard/gate/hook must reject what it claims to
   settings.example.json     annotated settings template
 
   handbook/                 prescriptive single-path guide (phases 01–08)
