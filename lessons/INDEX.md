@@ -12,6 +12,7 @@ This file is the index the pass-runner reads before pass 1 to load matched lesso
 | LESSON-0004 | 2026-08-16 | xv-rejected | 02, 03 | design-claim, cited_excerpt, cross-reference, tracked-not-resolved, split, evidence-source | active | A finding asserting a change must cite the artifact that changed, not the source that motivated it |
 | LESSON-0005 | 2026-08-21 | audit-finding | 04, 05, 07 | inert-control, silent-failure, unfired-hook, config-validation, dead-guard, self-verification, drift, permission-rule, path-mismatch, tag-pattern, gate | active | A control that can fail silently must have a test that makes it speak |
 | LESSON-0007 | 2026-08-21 | audit-finding | 04, 05 | css, selector, stylesheet, scope, styling, jsdom, visual-regression, screenshot, appearance, narrowing, mutation-testing, deploy-watcher, gh-run-list | active | Verify a selector on every screen it reaches, not only the one it was written for |
+| LESSON-0008 | 2026-09-08 | audit-finding | 02.5, 03, 04, 05 | omission, unowned, no-decision-owns, grep, vocabulary, absence, zero-matches, sole-instance, register, coverage, universal-quantifier | active | An absence claim must state the search that grounds it, and must search the authoring artifact's own vocabulary, not only the reviewer's |
 
 ## Retired
 
