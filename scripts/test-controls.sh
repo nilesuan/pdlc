@@ -121,6 +121,14 @@ PYSPEC
 eq "every trigger-index.json spec file exists" "0" "$bad_specs"
 
 # ---------------------------------------------------------------------------
+section "recorded lessons are actually durable"
+# LEARNING.md hard rule 1: a stub is not recorded until it is committed.
+# lessons/ is version-controlled, so an untracked stub is one `git clean` from
+# gone - and the rest of this suite stays green while that is true.
+untracked_lessons=$(git ls-files --others --exclude-standard -- lessons/ | wc -l | tr -d ' ')
+eq "no lesson file is left untracked" "0" "$untracked_lessons"
+
+# ---------------------------------------------------------------------------
 section "citations point at things a reader can actually open"
 # A section citation against a path outside this repository resolves only on the
 # machine that has it. Attribution prose is fine; a verifiable-looking § is not.
