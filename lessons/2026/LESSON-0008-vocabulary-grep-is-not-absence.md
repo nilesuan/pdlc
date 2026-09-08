@@ -5,12 +5,10 @@ trigger: audit-finding
 phases: [02.5, 03, 04, 05]
 keywords: [omission, unowned, no-decision-owns, grep, vocabulary, absence, zero-matches, sole-instance, register, coverage, universal-quantifier]
 related-rules: [standards/EVIDENCE.md, standards/ANTI_HALLUCINATION.md, agents/cross-verifier.md]
-status: candidate
+status: active
 ---
 
-# Candidate stub - awaiting user review before promotion
-
-Raised from a `/solve` Phase 02.5 Pass 1 run on `pdf-extraction-financial-docs`, 2026-09-08. The mandated capture triggers did not fire (0 `REJECTED`, 0 broken links, 0 auto-rejected). This is filed under `audit-finding` because the cross-verifier explicitly named it as "the one systematic weakness in this set" and it accounted for all three `DOWNGRADED` votes in the pass.
+**Provenance.** Raised from a `/solve` Phase 02.5 Pass 1 run on `pdf-extraction-financial-docs`, 2026-09-08. At capture time none of the three mandated triggers fired - 0 `REJECTED`, 0 broken links, 0 auto-rejected - and the stub was written off-spec because the cross-verifier named this "the one systematic weakness in this set" and it accounted for all three `DOWNGRADED` votes in the pass. That capture is now within spec: `xv_downgraded >= 2` sharing a common root cause was added as a fourth trigger in [`../../agents/pass-runner.md`](../../agents/pass-runner.md) §"Lesson capture" precisely because this lesson had to be captured without one.
 
 ## What went wrong
 
