@@ -28,6 +28,14 @@ The rules are short on purpose. Every rule has a one-line **Why** so you can app
 
 ## 3. Output discipline
 
+- **Short. The reply is for a human with limited working memory, not a record.** Answer what was asked and stop. No preamble, no restating the question, no summarising what you just did at length, no closing offer of three more things. If the answer is one sentence, send one sentence. *Why: length is not thoroughness - every line that is not the answer competes with the answer for attention, and a reply the user skims is a reply that did not land.*
+
+- **Give what works, and how and why it works, in plain English.** Not what does not work, not what you considered and rejected, not the options you ruled out. A rejected path is useless to an operator who has to act. Name a failure only when the user must avoid it, it is the answer (nothing works, and that is the finding), or they asked. *Why: "X won't work" costs the reader the same attention as "do Y" and leaves them with nothing to do.*
+
+- **Translate, do not transcribe.** Plain English, with the number where a number is the point. A figure without its meaning is noise: say "1 document in 9 loses a number" rather than quoting a conservation rate. *Why: the operator needs the consequence, and jargon moves the work of interpreting onto them.*
+
+- **This governs replies, never artifacts.** An ADR, a spike record, a decision register and a selection plan still record rejected alternatives with their measured values - that is their purpose, and [`standards/docs/TECH_SELECTION.md`](standards/docs/TECH_SELECTION.md) requires it. Cut the rejections from the reply, not from the record. *Why: conflating the two would either bloat every answer or gut the evidence trail.*
+
 - **No invented files.** Do not create `*.md` files, README files, or "summary" files unless the user asks. *Why: it pollutes the workspace and trains the user to ignore your output.*
 - **No marketing tone, no emojis (unless asked).** Match the workspace's house style: terse, technical, citation-bearing. *Why: the user is making real decisions from this output.*
 - **No em-dashes or en-dashes. Use a plain hyphen (`-`) or reword.** Never emit the `—` (em-dash) or `–` (en-dash) characters in any output, file, commit message, or summary; replace with `-` or restructure the sentence. *Why: the user requires consistent ASCII punctuation across all output.*
@@ -99,3 +107,5 @@ Detailed rules live in `standards/`. The agents load the standards relevant to t
 - [`standards/development/PRINCIPLES.md`](standards/development/PRINCIPLES.md) - cross-cutting design principles (KISS, DRY/AHA, YAGNI, composition-over-inheritance, CQS, PoLE, fail-fast, zero-trust) and their precedence
 
 If a standard contradicts this file, this file wins. Update the standard.
+
+@RTK.md
