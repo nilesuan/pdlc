@@ -32,6 +32,7 @@ This file is the index the pass-runner reads before pass 1 to load matched lesso
 | LESSON-0036 | 2026-09-19 | xv-rejected | 02.5, 03, 04 | cross-verifier, vote, docs author, brief, sequencing, unverified finding, propagation, records, pass-runner | active | A finding reaches an author who will write it into a tracked file only after the cross-verifier has voted on it |
 | LESSON-0037 | 2026-09-19 | self-detected | 02.5 | label rule, ruling, filter, metadata, harvest, yield, floor, stored manifest, pre-registration, amendment | active | A label or filter rule is run over stored metadata to see what else it removes before it is sealed |
 | LESSON-0038 | 2026-09-19 | xv-downgraded | 02.5, 05 | symmetrised, directional, similarity, fingerprint, both directions, audit, derived value, raw record | active | A finding that explains a result reads the rawest stored record behind the value, not the derived one |
+| LESSON-0039 | 2026-09-19 | xv-rejected | 02.5, 03 | adr, status change, accepted, frozen record, stale clause, deciders, self-contradiction, sweep, docs author, freeze | active | When a record's status changes, the whole record is swept for the old status's words before the commit |
 
 ## Retired
 
