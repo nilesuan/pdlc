@@ -34,10 +34,13 @@
 /telemetry/
 /mcp-needs-auth-cache.json
 /uploads/
+/state/
+/skills/synced/
 
 # Live, machine-specific settings - user-owned, never committed.
 # Start from settings.example.json; keep your own permission posture here.
 /settings.json
+/settings.json.bak
 /settings.local.json
 /.claude.json
 
