@@ -68,6 +68,34 @@ with open(artifact, "r", encoding="utf-8", errors="replace") as fh:
 # inside the target (Markdown does not allow it without angle brackets).
 LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 
+
+def mask_code(src):
+    """Blank fenced code blocks and inline code spans, preserving length and line
+    count, so link syntax inside them is not treated as one of this document's
+    links. Per CommonMark, link syntax inside a code span or fence is literal
+    text, not a link. This matters because EVIDENCE.md requires verbatim source
+    excerpts, and a quoted README line such as
+    "* Released under the [MIT license](LICENSE.txt)." is text we are obliged to
+    reproduce byte-identically and must not rewrite to appease this gate."""
+    out = []
+    fence_char = None
+    for line in src.split("\n"):
+        stripped = line.lstrip()
+        marker = re.match(r"(`{3,}|~{3,})", stripped)
+        if fence_char is None:
+            out.append(line)
+            if marker:
+                fence_char = marker.group(1)[0]
+        else:
+            if marker and marker.group(1)[0] == fence_char:
+                fence_char = None
+                out.append(line)
+            else:
+                out.append(" " * len(line))
+    masked = "\n".join(out)
+    return re.sub(r"`[^`\n]*`", lambda m: " " * len(m.group(0)), masked)
+
+
 # External URL pattern (used for listing only).
 URL_RE = re.compile(r"https?://[^\s)>\]]+")
 
@@ -86,7 +114,9 @@ broken = []
 resolved = []
 external = []
 
-for match in LINK_RE.finditer(text):
+LINK_TEXT = mask_code(text)
+
+for match in LINK_RE.finditer(LINK_TEXT):
     label = match.group(1)
     target = match.group(2)
 

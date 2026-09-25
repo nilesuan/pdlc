@@ -49,6 +49,8 @@ eq "exits zero on a clean artifact"          0 "$?"
 # LESSON-0005 defect 2: the tally must count qualified forms, not the bare token only.
 tag_count=$(bash scripts/verify-artifact.sh "$TMP/tags.md" 2>/dev/null | grep -o 'unverified=[0-9]*')
 eq "counts qualified [UNVERIFIED - reason] forms" "unverified=3" "$tag_count"
+bash scripts/test-verify-artifact.sh >/dev/null 2>&1
+eq "ignores link syntax inside code, not after it" 0 "$?"
 
 # ---------------------------------------------------------------------------
 section "verify-artifact-hook.sh speaks on bad input and fails open otherwise"
