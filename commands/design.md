@@ -118,6 +118,8 @@ standards:
 
 Conditional: if the system exposes two or more customer-facing product frontends under one hostname, also load [`../standards/platform/MULTI_PRODUCT_FRONTEND.md`](../standards/platform/MULTI_PRODUCT_FRONTEND.md). Its own §Scope states the condition; it does not apply to internal tools or to a single product with multiple routes.
 
+Conditional: if the design includes a model, LLM or agent, the `probabilistic-components-lifecycle` trigger loads [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) at 5 passes, and its §"By phase" applies. The design then climbs the architecture ladder only as far as the evals require, keeps the deterministic shell separate, and names the review route, guardrails, trace fields and provider-outage plan. The threat model walks LLM01-LLM10 from [`../standards/security/OWASP.md`](../standards/security/OWASP.md) §"OWASP Top 10 for LLM Applications 2025".
+
 ## Sub-agents
 
 ```yaml

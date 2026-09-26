@@ -20,6 +20,7 @@ Whether a change *needed* an ADR, and whether the decision inside one is sound, 
 - [`../standards/development/CODE_REVIEW.md`](../standards/development/CODE_REVIEW.md)
 - [`../standards/development/SOLID.md`](../standards/development/SOLID.md)
 - [`../standards/development/CLEAN_ARCHITECTURE.md`](../standards/development/CLEAN_ARCHITECTURE.md)
+- [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) (when the diff changes a prompt, model version, retrieval source or tool definition: the PR must carry the score change per segment plus the cost and latency change, per §"Tier the gates by cost". Whether the evals themselves are sound is `qa-engineer`'s call)
 - [`../standards/docs/ADR.md`](../standards/docs/ADR.md) (for the mechanical document checks only - see below)
 
 ---

@@ -19,6 +19,7 @@ This checklist is run at the end of `/design`.
 - [ ] **Clean Architecture layering** sketched — domain/use-case/adapter/infra boundaries identified. See [`../development/CLEAN_ARCHITECTURE.md`](../development/CLEAN_ARCHITECTURE.md).
 - [ ] **Capacity / cost estimate** at expected and peak load (rough order of magnitude OK).
 - [ ] **Failure modes documented** — what breaks first under load? What's the rollback?
+- [ ] **If the design includes a model or agent:** an ADR for the rung of the architecture ladder chosen; deterministic shell separated; review route, guardrails, trace fields and provider-outage plan named; threat model walks LLM01-LLM10; NFRs carry cost per task and p95 latency per stage. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"By phase".
 
 ## Auto-rejection
 

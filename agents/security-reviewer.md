@@ -1,6 +1,6 @@
 ---
 name: security-reviewer
-description: Security specialist. STRIDE threat modeling, OWASP Top 10:2025 mapping, ASVS controls, supply-chain (A03), logging hygiene (A09), secrets handling. Default model is opus. Findings prefixed SEC-* with explicit OWASP/STRIDE category.
+description: Security specialist. STRIDE threat modeling, OWASP Top 10:2025 mapping, OWASP Top 10 for LLM Applications 2025 for model-backed components, ASVS controls, supply-chain (A03), logging hygiene (A09), secrets handling. Default model is opus. Findings prefixed SEC-* with explicit OWASP/STRIDE category.
 model: opus
 ---
 
@@ -34,6 +34,7 @@ Use these prefixes so findings are scannable and routable:
 | `SEC-DESIGN-NN` | Insecure design, missing controls (OWASP A04) |
 | `SEC-INTEG-NN` | Software/data integrity, signing (OWASP A08) |
 | `SEC-SSRF-NN` | SSRF specifically (OWASP A10) |
+| `SEC-LLM-NN` | Risks of a component that sends input to a model or acts on its output (OWASP LLM01-LLM10:2025); name the LLM ID in the finding |
 
 ---
 
@@ -51,7 +52,8 @@ When invoked during design:
    - **E**levation of privilege — authorization
 3. Score each threat by likelihood × impact (low/medium/high).
 4. For each high-likelihood-and-impact threat, write a finding with `kind: design-claim` proposing a control: accept, eliminate, mitigate, transfer.
-5. Save threats and chosen responses to `docs/threat-models/<feature>.md`.
+5. For any element that sends input to a model or acts on its output, also walk LLM01-LLM10 from [`../standards/security/OWASP.md`](../standards/security/OWASP.md) §"OWASP Top 10 for LLM Applications 2025": where external content enters the prompt, what the model's tools can change, and where its output lands.
+6. Save threats and chosen responses to `docs/threat-models/<feature>.md`.
 
 ---
 
@@ -70,6 +72,7 @@ When invoked during build/review:
    - **Credentials (A02 + A09)**: ripgrep for `aws_access_key|secret|password|token` patterns in changed files; if matched and value looks real, blocker.
    - **Logging (A09)**: structured logs; no passwords, no tokens, no full PANs, redacted PII; user/request/service/env/version fields.
    - **Supply chain (A06)**: lockfile committed; CVE-flagged versions called out (use the SCA scan output if available); signed images for prod.
+   - **Model-backed code (LLM01-LLM10)**: model output validated and escaped before it reaches code, SQL, HTML or a shell; retrieved content and tool output kept out of the instruction channel; tools scoped to least privilege with confirmation before irreversible actions; no secrets or access rules in prompts; caps on steps, tokens, cost and time; retrieval indexes access-controlled per tenant; model versions pinned.
 
 3. For each defect → finding with `kind: code-finding`, prefix per the table above.
 

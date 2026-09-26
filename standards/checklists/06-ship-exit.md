@@ -25,6 +25,7 @@ This checklist is run before each promotion (dev → preprod → prod) and as a 
 - [ ] **Branch protection respected** — merge through MR, required approvals, no force-push.
 - [ ] **Smoke test in dev passed** before promotion to preprod.
 - [ ] **Synthetic transaction in preprod passed** before prod.
+- [ ] **If the release contains a model-backed feature:** rollout plan runs dogfood, shadow, canary, then A/B against control; rollback to the previous pinned prompt and model tested; model and prompt versions on every trace and in the release notes. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"By phase".
 
 ## Auto-rejection
 

@@ -130,6 +130,8 @@ standards:
   - standards/checklists/08-evolve-exit.md   # the exit gate this command is scored against
 ```
 
+Conditional: if the product has model-backed features, the `probabilistic-components-lifecycle` trigger loads [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) at 5 passes. The quarter's review then also checks that production failures became eval cases, capability cases graduated to regression, model upgrades followed §"Model upgrades", the criteria were reviewed, and judges were re-validated after any change.
+
 ## Sub-agents
 
 ```yaml

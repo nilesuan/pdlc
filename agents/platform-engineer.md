@@ -19,6 +19,7 @@ You own the production stack: AWS (ECS on EC2), Terraform, GitLab CI, ECR, conta
 - [`../standards/release/CONTAINER_TAGGING.md`](../standards/release/CONTAINER_TAGGING.md)
 - [`../standards/release/DEPLOYMENT_PIPELINE.md`](../standards/release/DEPLOYMENT_PIPELINE.md)
 - [`../standards/operations/OBSERVABILITY.md`](../standards/operations/OBSERVABILITY.md)
+- [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) (when a service calls a model: gate tiers wired in CI, traces and dashboards, AI incidents, the shadow stage in rollout, model upgrades)
 - [`../platform-team/developer-guidelines.md`](../platform-team/developer-guidelines.md)
 - The handbook chapter for the phase
 
