@@ -74,6 +74,20 @@ Then run it. Rules, ported directly from EXPERIMENTATION:
 
 Rule 6 is what connects this standard to [`../testing/TEST_STRATEGY.md`](../testing/TEST_STRATEGY.md): the acceptance threshold that picked the technology becomes a gate in CI, so a later upgrade that silently breaks it fails the build rather than surprising production.
 
+## Probabilistic candidates
+
+When the decision is what does the work in a step whose output a model could produce (an LLM, OCR, speech, a classifier, an embedding or reranker), the protocol above applies with these additions:
+
+- **Shortlist across categories.** Hosted frontier models, small or open-weight models run in-house, specialist models, deterministic code (parsers, rules, search) and hybrids. Public benchmarks help shortlist, not choose, because they do not contain your inputs.
+- **The model is inside the hard constraints.** Where the data may go, the licence of the weights (checked separately from the code's licence), cost per task at expected volume, latency, and the operating burden of serving it.
+- **Truth at the level the product promises.** Score the fields, actions or outcomes the user receives. A pipeline can recover nearly every character of a document and still get most structured fields wrong, and only output-level truth shows it. Derive expected outputs from authoritative records where they exist.
+- **Variety over volume.** Cover every source, format and segment the product will meet. A large corpus from one source measures that source precisely and the others not at all.
+- **One bake-off per stage.** Most pipelines mix methods: code where the answer is exact, a model where judgement is needed. Decide each stage on its own.
+- **Grounding and coverage scored separately** for generative candidates. Grounding: every value emitted is supported by the input. Coverage: every required value is emitted. A plausible wrong value, the typical generative failure, is invisible to a coverage-only metric.
+- **Agreement counts only between methods that fail differently.** Two methods reading the same signal fail on the same cases, so their agreement proves little.
+
+The pre-registration adds a tolerance band and a sample size per segment, and the harness becomes the corpus and threshold register of [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md).
+
 ## The selection ADR
 
 Use the [`ADR.md`](ADR.md) format, with two required additions.
@@ -110,6 +124,7 @@ Used by systems-architect and by the pass-runner during [`../../commands/solve.m
 | Primary metric swapped mid-spike, or decision made on a secondary metric | Major |
 | Candidate benchmarked despite failing a hard constraint | Major (wasted spend, and the result is unusable) |
 | Missing Reversal cost section on a load-bearing selection ADR | Major |
+| Generative candidate scored on coverage with no grounding measure | Major (a plausible wrong value scores as a hit) |
 | Spike code discarded rather than promoted to a regression harness | Minor |
 | Evidence claim with no tier tag | Minor (treated as Tier 0) |
 
@@ -130,3 +145,4 @@ Used by systems-architect and by the pass-runner during [`../../commands/solve.m
 - Evidence schemas and the weasel-grounding auto-reject: [`../EVIDENCE.md`](../EVIDENCE.md).
 - "Cheapest evidence that actually proves it": [`../../research/01-ideation/discovery.md`](../../research/01-ideation/discovery.md) (riskiest-assumption testing).
 - Proportionality of verification effort to stakes: [`../../CLAUDE.md`](../../CLAUDE.md) §6.
+- Probabilistic candidates: the bake-off practice in [`../../handbook/llm-products.md`](../../handbook/llm-products.md) §5 (02.5 Solve). The categories, the grounding-coverage split and the agreement rule are that chapter's synthesis, not a cited external method.

@@ -38,6 +38,8 @@ Every alert links to a runbook with:
 
 A runbook that just says "investigate" is not a runbook.
 
+A service that calls a model also has a runbook for the five AI incidents in [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"AI incidents" (quality regression, exploited prompt injection, runaway cost, provider outage, behaviour change under a stable model name), and its postmortems list the eval cases they added.
+
 ## Blameless postmortem template
 
 ```
@@ -89,6 +91,7 @@ HH:MM — <event>
 | Postmortem with named blame (individuals listed as cause) | Major |
 | Action items with no owner or no due date | Minor |
 | Runbook last updated > 12 months ago | Minor |
+| Postmortem of an AI incident that adds no eval case | Minor |
 
 ## Anti-patterns to flag
 
