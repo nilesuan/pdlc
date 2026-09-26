@@ -123,6 +123,29 @@ PYSPEC
 eq "every trigger-index.json spec file exists" "0" "$bad_specs"
 
 # ---------------------------------------------------------------------------
+section "the probabilistic-components triggers fire on the work, not on the phase"
+# A phase command's own Goal and Done-when text is part of every brief for that
+# phase, so a keyword found there loads the framework on every run of it. This is
+# why the lifecycle entry leaves out "model": /design's Done-when says "data
+# model", "tenancy model" and "threat model".
+selffire=$(python3 <<'PYPC'
+import io, json, re
+hits = []
+for t in json.load(io.open("standards/frameworks/trigger-index.json"))["triggers"]:
+    if not t["id"].startswith("probabilistic-components"):
+        continue
+    for phase in t["phases"]:
+        parts = re.split(r"(?m)^(## .*)$", io.open(f"commands/{phase}.md", encoding="utf-8").read())
+        brief = "".join(parts[i + 1] for i in range(1, len(parts), 2)
+                        if re.match(r"## (Goal|Done when)", parts[i]))
+        hits += [f"{t['id']}:{phase}:{k}" for k in t["keywords"]
+                 if re.search(r"(?i)(?<![\w-])" + re.escape(k) + r"(?![\w-])", brief)]
+print(",".join(hits))
+PYPC
+)
+eq "no probabilistic-components keyword is in its own phases' Goal or Done-when text" "" "$selffire"
+
+# ---------------------------------------------------------------------------
 section "recorded lessons are actually durable"
 # LEARNING.md hard rule 1: a stub is not recorded until it is committed.
 # lessons/ is version-controlled, so an untracked stub is one `git clean` from
