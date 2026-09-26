@@ -4,7 +4,7 @@ This is the index that traces every system artifact back to its source: the pres
 
 If you cannot find an entry here for a claim, the claim is not grounded — open an issue or add the source.
 
-**Weaker grounding, declared.** Phase 02.5 (`handbook/02.5-solve.md`, `commands/solve.md`, `standards/docs/TECH_SELECTION.md`) and `standards/frameworks/PROBABILISTIC_COMPONENTS.md` are system extensions, not distillations of an existing research document. No `research/` file covers technology-selection method or ML evaluation practice. Both are assembled from adjacent verified sources - Nygard on architecturally significant decisions, the pre-registration discipline in `standards/frameworks/EXPERIMENTATION.md`, riskiest-assumption testing in `research/01-ideation/discovery.md`, Cost of Delay in `research/02-planning/prioritization.md`, and the source hierarchy in `techstacks/00-methodology.md`. Each carries an `[UNVERIFIED]` note at the point where the assembly exceeds its sources. Closing this properly means adding `research/` documents on those two topics.
+**Weaker grounding, declared.** Phase 02.5 (`handbook/02.5-solve.md`, `commands/solve.md`, `standards/docs/TECH_SELECTION.md`) and `standards/frameworks/PROBABILISTIC_COMPONENTS.md` are system extensions, not distillations of an existing research document. No `research/` file covers technology-selection method. Both are assembled from adjacent verified sources - Nygard on architecturally significant decisions, the pre-registration discipline in `standards/frameworks/EXPERIMENTATION.md`, riskiest-assumption testing in `research/01-ideation/discovery.md`, Cost of Delay in `research/02-planning/prioritization.md`, and the source hierarchy in `techstacks/00-methodology.md`. Phase 02.5 carries an `[UNVERIFIED]` note in `handbook/02.5-solve.md` where the assembly exceeds its sources; closing it properly means adding a `research/` document on technology selection. The framework's evaluation practice (graders, judge validation, error analysis, capability and regression suites, agent evaluation, the OWASP LLM risks) is now grounded in `research/05-testing/llm-evaluation.md`, whose quotations were re-read against their sources on 2026-09-26; its corpus, threshold and tiering rules remain this system's synthesis.
 
 ## Phase commands
 
@@ -26,7 +26,6 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 |---|---|
 | `commands/review.md` | `platform-team/engineering-policy.md` §8; `standards/development/CODE_REVIEW.md` |
 | `commands/split.md` | `handbook/02-plan.md` (the plan it decomposes); `standards/process/TASK_SIZING.md` |
-| `standards/frameworks/PROBABILISTIC_COMPONENTS.md` | **no research file** (system extension, declared above); assembled from `standards/frameworks/EXPERIMENTATION.md` + `standards/testing/TEST_STRATEGY.md` + `standards/docs/TECH_SELECTION.md` |
 | `standards/development/PRINCIPLES.md` | **no research file.** Cites sibling standards (`SOLID.md`, `CLEAN_ARCHITECTURE.md`, `TDD.md`, `TRUNK_BASED.md`) and `platform-team/engineering-policy.md` §6-§7, §12. KISS, DRY, YAGNI, CQS and PoLE appear nowhere in `research/` or `handbook/` - a third system extension alongside the two declared above. |
 | `standards/process/TEAM_SCALING.md` | `handbook/00-team-lean.md`, `handbook/00-team-full.md`. **Human-reference only** - deliberately not in any command's load list, since team shape is not something a pass scores. |
 | `commands/_shared/pass-loop.md` | This system; orchestration pattern from `SYSTEM.md` analysis of `.claude.old` |
@@ -46,6 +45,8 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 | `standards/checklists/06-ship-exit.md` | `handbook/06-ship.md` + Humble & Farley + `NOTES.md` deployment policy + DORA |
 | `standards/checklists/07-run-exit.md` | `handbook/07-run.md` + Google SRE Book + Allspaw |
 | `standards/checklists/08-evolve-exit.md` | `handbook/08-evolve.md` + Fowler tech-debt quadrant + Strangler Fig + RFC 8594 |
+
+The model-backed item in each checklist comes from `standards/frameworks/PROBABILISTIC_COMPONENTS.md` §"By phase" and `handbook/llm-products.md`.
 
 ## Domain standards
 
@@ -88,7 +89,7 @@ If you cannot find an entry here for a claim, the claim is not grounded — open
 
 | Standard | Source |
 |---|---|
-| `standards/security/OWASP.md` | `platform-team/developer-guidelines.md` §10 (Security baseline); `research/03-design/security-design.md`; `research/05-testing/non-functional-testing.md`; OWASP Top 10; OWASP ASVS; NIST SP 800-218 |
+| `standards/security/OWASP.md` | `platform-team/developer-guidelines.md` §10 (Security baseline); `research/03-design/security-design.md`; `research/05-testing/non-functional-testing.md`; OWASP Top 10; OWASP ASVS; NIST SP 800-218; OWASP Top 10 for LLM Applications 2025 (risk names verified in `research/05-testing/llm-evaluation.md`; the controls column is `[SYNTHESIS]`) |
 | `standards/security/AUTH.md` | `platform-team/developer-guidelines.md` §10 (Security baseline); `research/03-design/security-design.md`; OWASP ASVS V2/V3/V4; NIST SP 800-63B; RFC 6749 / 7636 / 7519 / 8252 / 8725; OIDC Core 1.0 |
 
 ### Platform
@@ -135,6 +136,7 @@ These specs are loaded by `pass-runner` only when a brief contains the activatio
 | `standards/frameworks/PERFORMANCE_BUDGET.md` | `latency`, `p99`, `p95`, `hot-path`, `bundle-size`, `database-query`, `load-test` | `research/05-testing/non-functional-testing.md`; Grafana k6 docs (verified) |
 | `standards/frameworks/FAILURE_INJECTION.md` | `external-service`, `retry`, `circuit-breaker`, `availability`, `chaos`, `fault-injection` | `research/05-testing/chaos-and-production-testing.md`; Principles of Chaos (verified) |
 | `standards/frameworks/COMPOSITION_VERIFICATION.md` | `wire`, `entry-point`, `daemon`, `lifecycle`, `register`, `multi-component`, `main()` | This system; pattern from `~/.claude.old/commands/build.md` Composition Verification |
+| `standards/frameworks/PROBABILISTIC_COMPONENTS.md` | `LLM`, `model`, `OCR`, `embedding`, `classifier`, `extraction`, `transcription`, `nondeterministic`, `probabilistic`, `prompt`, `inference`, `RAG`, `AI`, `GenAI`, `LLMOps`, `agentic`, `evals`, `fine-tuning` for solve, build, test and run; the same without `model` for discover, plan, design, ship and evolve | `research/05-testing/llm-evaluation.md` (evaluation practice, quotations re-read 2026-09-26); `handbook/llm-products.md`; corpus, threshold and tiering rules assembled from `standards/frameworks/EXPERIMENTATION.md` + `standards/testing/TEST_STRATEGY.md` + `standards/docs/TECH_SELECTION.md` (system extension, declared above) |
 | `standards/frameworks/EXPERIMENTATION.md` | `A/B-test`, `experiment`, `hypothesis`, `primary-metric`, `hypothesis-ledger`, `holdout` | `handbook/06-ship.md`; `handbook/08-evolve.md`; `handbook/08-evolve-processes.md` §4; `research/06-release/deployment-strategies.md` (Fowler "CanaryRelease"); `research/05-testing/chaos-and-production-testing.md` (A/B definition); Hodgson "Feature Toggles" 2017 (cross-ref `FEATURE_FLAGS.md`) |
 
 ## Foundation files
