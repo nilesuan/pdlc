@@ -73,6 +73,10 @@ CPU/memory alerts belong in capacity dashboards, not on-call pages.
 4. Domain events (signups, checkouts, errors-by-class) as metrics, not logs.
 5. Saturation: connection pools, queue depths, lock waits.
 
+## Model-backed services
+
+A service that calls a model also traces, per request, the model and prompt versions, token counts, cost, retrieved context, tool calls and guardrail decisions, and pages on quality, not only on errors: an online pass rate past its tolerance band, a cost spike, a guardrail spike, and human-review queue depth. The trace fields, dashboards and alerts are in [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"Traces, dashboards and alerts".
+
 ## Anti-patterns to flag
 
 - "We log everything" → log volume buries the signal. Log decisions, errors, and boundaries; not every loop iteration.

@@ -42,6 +42,25 @@ ASVS = Application Security Verification Standard (OWASP). Three levels:
 
 Pick a target ASVS level per service in the design doc (Phase 03). The security-reviewer audits against it.
 
+## OWASP Top 10 for LLM Applications 2025
+
+Applies to any component that sends input to a model or acts on a model's output, in addition to the list above. Anything the model reads can try to steer it, because instructions and data share one channel.
+
+| Risk | Main controls |
+|---|---|
+| LLM01:2025 Prompt Injection | Treat all external content (retrieved documents, tool output, user files) as data, kept apart from instructions; least-privilege tools; confirmation for sensitive actions; injection cases in the eval set |
+| LLM02:2025 Sensitive Information Disclosure | The data rules settled in `/discover`; logs scrubbed before write; output filters; no secrets in prompts |
+| LLM03:2025 Supply Chain | Pinned models and libraries; licences checked for code and weights separately; provenance of weights verified |
+| LLM04:2025 Data and Model Poisoning | Controlled sources for training, fine-tuning and retrieval data |
+| LLM05:2025 Improper Output Handling | Model output validated and escaped before it reaches code, SQL, HTML or a shell |
+| LLM06:2025 Excessive Agency | Least privilege, scoped credentials, confirmation before irreversible actions |
+| LLM07:2025 System Prompt Leakage | Assume the prompt will be read; keep secrets and access rules out of it |
+| LLM08:2025 Vector and Embedding Weaknesses | Access control on retrieval indexes; separation per tenant |
+| LLM09:2025 Misinformation | Grounding checks, citations, a review route for high-stakes answers |
+| LLM10:2025 Unbounded Consumption | Rate limits, budgets, step caps, timeouts |
+
+The threat model for such a component (Phase 03) walks LLM01-LLM10 as well as STRIDE. In Phase 05 the red-team works through the same list, and every attack that works becomes an eval case per [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md).
+
 ## Auto-rejection (used by security-reviewer)
 
 | Trigger | Severity |
@@ -58,6 +77,14 @@ Pick a target ASVS level per service in the design doc (Phase 03). The security-
 | Missing security headers on prod web service | Minor → Major depending on header |
 | Default creds / debug endpoint reachable in prod | Major (A05) |
 | Auth event with no audit log | Major (A09) |
+| Model output reaches code, SQL, HTML or a shell without validation or escaping | Blocker (LLM05) |
+| Retrieval index shared across tenants without per-tenant access control | Blocker (LLM08) |
+| Personal or regulated data sent to a model provider outside the recorded data rules | Blocker (LLM02) |
+| Model can call a tool with a write or irreversible effect without least privilege and confirmation | Major (LLM06) |
+| Access rules or secrets placed in a system prompt | Major (LLM07); a secret there is also a committed secret |
+| External content placed in the instruction channel with no separation, and no injection cases in the eval set | Major (LLM01) |
+| Model calls with no rate limit, budget, step cap or timeout | Major (LLM10) |
+| Model weights, fine-tuning or retrieval data from an unverified source | Major (LLM03, LLM04) |
 
 ## Mapping to PDLC phase
 
@@ -83,5 +110,6 @@ Pick a target ASVS level per service in the design doc (Phase 03). The security-
 - OWASP Top 10 (owasp.org/Top10/) — verify current edition when citing.
 - OWASP ASVS (owasp.org/www-project-application-security-verification-standard/).
 - NIST SP 800-218 (Secure Software Development Framework).
+- OWASP Top 10 for LLM Applications 2025 (genai.owasp.org/llm-top-10/); risk names verified in [`../../research/05-testing/llm-evaluation.md`](../../research/05-testing/llm-evaluation.md). The controls column is this system's summary, not OWASP's text.
 - [`../../platform-team/developer-guidelines.md`](../../platform-team/developer-guidelines.md) §10 (Security baseline).
 - Research: [`../../research/03-design/security-design.md`](../../research/03-design/security-design.md), [`../../research/05-testing/non-functional-testing.md`](../../research/05-testing/non-functional-testing.md).
