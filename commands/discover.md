@@ -85,6 +85,8 @@ standards:
   - standards/checklists/01-discover-exit.md   # the exit gate this command is scored against
 ```
 
+Conditional: if the opportunity would put a model, LLM or agent in the product, the `probabilistic-components-lifecycle` trigger loads [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) at 5 passes. The decision then also records whether AI is the right tool: the cost of a wrong answer and the autonomy level it allows, whether an expert can grade the outputs, the non-AI option, and the data rules, in `discovery/<slug>/ai-fit.md` (§"By phase").
+
 ## Sub-agents
 
 ```yaml

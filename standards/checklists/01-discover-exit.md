@@ -16,6 +16,7 @@ This checklist is run at the end of `/discover`. A finding is raised for any unc
 - [ ] **Hypotheses listed with falsifiable tests** — at least one per identified risk.
 - [ ] **Decision artifact** written: pursue / kill / refine, with rationale.
 - [ ] **Open questions / unknowns documented** in the discovery doc.
+- [ ] **If the product would use a model:** `ai-fit.md` records the cost of a wrong answer, the autonomy level it allows, whether an expert can grade outputs, the non-AI option, and the data rules. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"By phase".
 
 ## Auto-rejection
 

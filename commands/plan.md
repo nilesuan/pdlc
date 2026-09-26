@@ -90,6 +90,8 @@ standards:
   - standards/checklists/02-plan-exit.md   # the exit gate this command is scored against
 ```
 
+Conditional: if the MVP puts a model in the product, the `probabilistic-components-lifecycle` trigger loads [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) at 5 passes. The plan then also names the quality owner and writes eval set v0 and a threshold register dated before any run, under `eval/<component>/` (§"By phase"). Evals come before the first prompt.
+
 ## Sub-agents
 
 ```yaml

@@ -16,6 +16,7 @@ This checklist is run at the end of `/plan`.
 - [ ] **Risks register** with mitigation owner per risk.
 - [ ] **Stakeholders identified** with engagement model (informed / consulted / accountable).
 - [ ] **Definition of Done** for the team's work agreed.
+- [ ] **If the MVP uses a model:** quality owner named; eval set v0 of 20-50 real inputs with pass/fail criteria, including must-not cases; threshold register dated before any run; held-out slice split off; the suite runs against a stub. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"By phase".
 
 ## Auto-rejection
 

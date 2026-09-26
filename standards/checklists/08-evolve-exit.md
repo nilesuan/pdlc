@@ -23,6 +23,7 @@ This checklist runs on a quarterly cadence (or whenever `/evolve` is invoked).
 - [ ] **DORA metrics reviewed:** deployment frequency, lead time, change failure rate, MTTR, reliability. Trend and quartile.
 - [ ] **Postmortem action-item closure rate** — % of action items from prior quarter that landed.
 - [ ] **Team health signals** — on-call load, alert volume, retention.
+- [ ] **If the product has model-backed features:** the quarter's production failures became eval cases; capability cases graduated to regression; model upgrades followed the upgrade checklist; criteria reviewed and changed judges re-validated. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"By phase".
 
 ## Auto-rejection
 

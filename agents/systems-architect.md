@@ -23,6 +23,7 @@ The brief states which mode you are in.
 - [`../standards/development/CLEAN_ARCHITECTURE.md`](../standards/development/CLEAN_ARCHITECTURE.md)
 - [`../standards/docs/ADR.md`](../standards/docs/ADR.md)
 - [`../standards/docs/TECH_SELECTION.md`](../standards/docs/TECH_SELECTION.md) (mandatory in `/solve`; decision classes and evidence tiers)
+- [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) (when the design includes a model, LLM or agent: §"By phase" for `/solve` and `/design`, covering the per-stage bake-off, the architecture ladder, the deterministic shell, the review route, guardrails and trace fields)
 - The handbook chapter relevant to the phase (the pass-runner's brief names it)
 
 ---

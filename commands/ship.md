@@ -129,6 +129,8 @@ standards:
 
 Conditional: if the release fronts two or more product frontends behind one DNS name, also load [`../standards/platform/MULTI_PRODUCT_FRONTEND.md`](../standards/platform/MULTI_PRODUCT_FRONTEND.md) for the platform-managed ALB / CloudFront / WAF and Route53 posture.
 
+Conditional: if the release contains a model-backed feature, the `probabilistic-components-lifecycle` trigger loads [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) at 5 passes. Rollout then goes dogfood, shadow, canary, then an A/B test against control; rollback is the flag or the previous pinned prompt and model; traces and release notes record the model and prompt versions (§"By phase").
+
 ## Sub-agents
 
 ```yaml

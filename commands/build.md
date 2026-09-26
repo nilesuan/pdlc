@@ -137,6 +137,8 @@ standards:
 
 Conditional: if the diff adds or changes user-facing documentation, also load [`../standards/docs/DIATAXIS.md`](../standards/docs/DIATAXIS.md) - mixing tutorial, how-to, reference and explanation in one document is the failure it exists to catch.
 
+Conditional: if the diff touches a model-backed component, the `probabilistic-components` trigger loads [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) at 5 passes: a baseline first, then error analysis and one change at a time, a failure taxonomy with counts behind every prompt or model change, and a PR that carries the score change per segment plus the cost and latency change.
+
 ## Sub-agents
 
 ```yaml

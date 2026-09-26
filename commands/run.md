@@ -113,6 +113,8 @@ standards:
 
 Conditional: when auditing or authoring runbooks, also load [`../standards/docs/DIATAXIS.md`](../standards/docs/DIATAXIS.md). A runbook is a how-to; a runbook that has drifted into explanation is the documented failure mode.
 
+Conditional: if a service calls a model, the `probabilistic-components` trigger loads [`../standards/frameworks/PROBABILISTIC_COMPONENTS.md`](../standards/frameworks/PROBABILISTIC_COMPONENTS.md) at 5 passes: online evals, the human-review queue, the dashboards and alerts, and a runbook for each AI incident (§"Production drift" and its subsections).
+
 ## Sub-agents
 
 ```yaml

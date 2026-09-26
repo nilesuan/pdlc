@@ -23,6 +23,7 @@ This checklist is run at the end of `/build` (per work item / per merge).
 - [ ] **New config, secrets, and IAM permissions added to prod**, not only dev - assertion 2 of the gate catches this, but it is the author's job to have done it.
 - [ ] **Logs / metrics / traces wired** before merge, not after. See [`../operations/OBSERVABILITY.md`](../operations/OBSERVABILITY.md).
 - [ ] **Migrations are expand/contract** if schema changes. See [`../release/CONTINUOUS_DELIVERY.md`](../release/CONTINUOUS_DELIVERY.md).
+- [ ] **If the diff touches a model-backed component:** failure taxonomy with counts behind each prompt or model change; dev-set thresholds met in every segment with no zero-tolerance failures; the PR shows the score change per segment plus the cost and latency change. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md).
 
 ## Auto-rejection
 

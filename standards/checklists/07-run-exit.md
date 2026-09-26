@@ -21,6 +21,7 @@ This checklist is run at "ready to operate" milestone (a service entering prod) 
 - [ ] **Audit logs** for sensitive operations (auth events, data access, admin actions).
 - [ ] **Backups + restore tested.** A backup not exercised is not a backup.
 - [ ] **Capacity headroom** ≥ 30% under expected peak for typical workloads.
+- [ ] **If a service calls a model:** online evals running on sampled traffic; alerts on quality, cost, guardrail spikes and review-queue depth; a runbook for each AI incident. See [`../frameworks/PROBABILISTIC_COMPONENTS.md`](../frameworks/PROBABILISTIC_COMPONENTS.md) §"Production drift".
 
 ## Auto-rejection
 
