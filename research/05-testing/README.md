@@ -24,6 +24,7 @@ This stage covers the full testing discipline as it is practiced in contemporary
 - Code coverage — what it does and does not measure
 - Exploratory testing and context-driven testing
 - Test data management and environments
+- Evaluating LLM and other model-backed components (graders, judge validation, error analysis, capability and regression suites)
 
 The detailed content is split across the following files so each topic has enough space to cite primary sources without padding.
 
@@ -40,6 +41,7 @@ The detailed content is split across the following files so each topic has enoug
 - `chaos-and-production-testing.md` — chaos engineering, canary, dark launch, A/B testing.
 - `exploratory-and-context-driven.md` — exploratory testing, context-driven school.
 - `test-data-and-environments.md` — test data management, synthetic data, PII handling.
+- `llm-evaluation.md` - evals as spec, gate and monitor for model-backed components; OWASP Top 10 for LLM Applications 2025; GenAI trace conventions.
 
 ---
 

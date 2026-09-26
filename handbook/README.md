@@ -48,6 +48,8 @@ If you're building something very different (console games, safety-critical syst
 
 The handbook treats the first trip through Phase 01 → 08 as the "from idea to loved product" journey, and then Phase 01 ↔ 08 continuously thereafter.
 
+**Building with an LLM or another model?** [Building LLM-powered products](llm-products.md) runs the same phases with one substitution: a set of evals serves as the spec, the test suite and the production monitor, and production failures keep being added to it.
+
 ---
 
 ## Before you start: foundations
