@@ -169,7 +169,44 @@
         "probabilistic",
         "prompt",
         "inference",
-        "RAG"
+        "RAG",
+        "AI",
+        "GenAI",
+        "LLMOps",
+        "agentic",
+        "evals",
+        "fine-tuning"
+      ],
+      "spec": "standards/frameworks/PROBABILISTIC_COMPONENTS.md",
+      "escalate_to_passes": 5
+    },
+    {
+      "id": "probabilistic-components-lifecycle",
+      "phases": [
+        "discover",
+        "plan",
+        "design",
+        "ship",
+        "evolve"
+      ],
+      "keywords": [
+        "LLM",
+        "OCR",
+        "embedding",
+        "classifier",
+        "extraction",
+        "transcription",
+        "nondeterministic",
+        "probabilistic",
+        "prompt",
+        "inference",
+        "RAG",
+        "AI",
+        "GenAI",
+        "LLMOps",
+        "agentic",
+        "evals",
+        "fine-tuning"
       ],
       "spec": "standards/frameworks/PROBABILISTIC_COMPONENTS.md",
       "escalate_to_passes": 5
