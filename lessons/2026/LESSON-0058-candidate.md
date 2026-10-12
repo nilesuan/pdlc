@@ -24,3 +24,7 @@ A check that looks for something must be shown to find it once before its silenc
 ## Verification
 
 The rule held if the next such check in a session is preceded by a run on a known positive that reports at least one hit.
+
+## Recurrence
+
+2026-09-29, karaoke `design/spot-and-signin`: a dash scan ran as `xargs grep -n -P '\x{2014}|\x{2013}' 2>/dev/null | head; echo "dash-scan-done"`. BSD grep rejected `-P`, the error went to `/dev/null`, and the echo printed as if the scan had run. Caught in the same session before any report; the Python scan that replaced it found 0 dash lines in the 25 changed files, after finding 2 in a known-positive file.
